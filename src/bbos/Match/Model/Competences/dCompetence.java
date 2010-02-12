@@ -68,7 +68,7 @@ public abstract class dCompetence implements Serializable
     public abstract boolean canReroll(int RollType,rmiPlayer player);
     public abstract int getOpponentRollModifier(int rollType,rmiPlayer opponent, rmiPlayer myPlayer);
     //public abstract int getRollModifier(int rollType,int actionType);
-    public abstract Vector modifyActionList(Vector actionList,rmiMatch model, rmiPlayer player, rmiTeam opponent, rmiTeam myTeam, Vector opponentPlayers, Vector myPlayers,boolean challenger);
+    public abstract Vector modifyActionList(Vector actionList,rmiMatch model, rmiPlayer player);  
 
 
 }

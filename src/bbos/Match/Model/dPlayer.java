@@ -549,15 +549,15 @@ public class dPlayer implements rmiPlayer, Serializable {
     public void setState(int state) {
         _state = state;
 
-        if ((state == dPlayer.C_STATE_BADLY_HURT) ||
-                (state == dPlayer.C_STATE_DEAD) ||
-                (state == dPlayer.C_STATE_KO) ||
-                (state == dPlayer.C_STATE_SENT_OFF) ||
-                (state == dPlayer.C_STATE_SERIOUSLY_INJURED_AG) ||
-                (state == dPlayer.C_STATE_SERIOUSLY_INJURED_AR) ||
-                (state == dPlayer.C_STATE_SERIOUSLY_INJURED_MISS) ||
-                (state == dPlayer.C_STATE_SERIOUSLY_INJURED_PERS) ||
-                (state == dPlayer.C_STATE_SERIOUSLY_INJURED_ST)) {
+        if ((state == dPlayer.C_STATE_BADLY_HURT)
+                || (state == dPlayer.C_STATE_DEAD)
+                || (state == dPlayer.C_STATE_KO)
+                || (state == dPlayer.C_STATE_SENT_OFF)
+                || (state == dPlayer.C_STATE_SERIOUSLY_INJURED_AG)
+                || (state == dPlayer.C_STATE_SERIOUSLY_INJURED_AR)
+                || (state == dPlayer.C_STATE_SERIOUSLY_INJURED_MISS)
+                || (state == dPlayer.C_STATE_SERIOUSLY_INJURED_PERS)
+                || (state == dPlayer.C_STATE_SERIOUSLY_INJURED_ST)) {
             _onPitch = false;
         }
     }
@@ -578,8 +578,8 @@ public class dPlayer implements rmiPlayer, Serializable {
                 rmiPlayer opponent = (rmiPlayer) opponentPlayers.get(i);
 
                 if (opponent.isOnPitch()) {
-                    if ((opponent.getState() == C_STATE_OK) ||
-                            (opponent.getState() == C_STATE_ROOTED)) {
+                    if ((opponent.getState() == C_STATE_OK)
+                            || (opponent.getState() == C_STATE_ROOTED)) {
                         int dX = Math.abs(opponent.getX() - _X);
                         int dY = Math.abs(opponent.getY() - _Y);
                         int d = dX * dX + dY * dY;
@@ -611,8 +611,8 @@ public class dPlayer implements rmiPlayer, Serializable {
                 rmiPlayer opponent = (rmiPlayer) opponentPlayers.get(i);
 
                 if (opponent.isOnPitch()) {
-                    if ((opponent.getState() == C_STATE_OK) ||
-                            (opponent.getState() == C_STATE_ROOTED)) {
+                    if ((opponent.getState() == C_STATE_OK)
+                            || (opponent.getState() == C_STATE_ROOTED)) {
                         int dX = Math.abs(opponent.getX() - s.getX());
                         int dY = Math.abs(opponent.getY() - s.getY());
                         int d = dX * dX + dY * dY;
@@ -645,8 +645,8 @@ public class dPlayer implements rmiPlayer, Serializable {
                 rmiPlayer opponent = (rmiPlayer) opponentPlayers.get(i);
 
                 if (opponent.isOnPitch()) {
-                    if ((opponent.getState() == C_STATE_OK) ||
-                            (opponent.getState() == C_STATE_ROOTED) || (opponent.getState() == C_STATE_NO_ZONE)) {
+                    if ((opponent.getState() == C_STATE_OK)
+                            || (opponent.getState() == C_STATE_ROOTED) || (opponent.getState() == C_STATE_NO_ZONE)) {
                         int dX = Math.abs(opponent.getX() - _X);
                         int dY = Math.abs(opponent.getY() - _Y);
                         int d = dX * dX + dY * dY;
@@ -678,9 +678,9 @@ public class dPlayer implements rmiPlayer, Serializable {
 
         if (opponentTeam.isAPlayer(s)) {
             dPlayer defender = opponentTeam.getPlayer(s);
-            if ((defender.getState() == C_STATE_NO_ZONE) ||
-                    (defender.getState() == C_STATE_OK) ||
-                    (defender.getState() == C_STATE_ROOTED)) {
+            if ((defender.getState() == C_STATE_NO_ZONE)
+                    || (defender.getState() == C_STATE_OK)
+                    || (defender.getState() == C_STATE_ROOTED)) {
                 int forceA = this.getStrength();
                 int forceD = defender.getStrength();
 
@@ -749,8 +749,8 @@ public class dPlayer implements rmiPlayer, Serializable {
 
         if (opponentTeam.isAPlayer(s)) {
             dPlayer defender = opponentTeam.getPlayer(s);
-            if ((defender.getState() == C_STATE_PRONE) ||
-                    (defender.getState() == C_STATE_STUNNED)) {
+            if ((defender.getState() == C_STATE_PRONE)
+                    || (defender.getState() == C_STATE_STUNNED)) {
                 foul = true;
 
             }
@@ -795,8 +795,8 @@ public class dPlayer implements rmiPlayer, Serializable {
 
         if (myTeam.isAPlayer(s)) {
             dPlayer partner = myTeam.getPlayer(s);
-            if ((partner.getState() == C_STATE_OK) ||
-                    (partner.getState() == C_STATE_ROOTED)) {
+            if ((partner.getState() == C_STATE_OK)
+                    || (partner.getState() == C_STATE_ROOTED)) {
                 handoff = true;
 
             }
@@ -983,9 +983,14 @@ public class dPlayer implements rmiPlayer, Serializable {
         v.add(dAction.C_BLITZ);
 
         if (getAdjacentOpponentNumber() > 0) {
-            v.add(dAction.C_BLOCK);
+            if (this._state != C_STATE_PRONE) {
+                v.add(dAction.C_BLOCK);
+            }
         }
 
+        for (int i = 0; i < _competences.size(); i++) {
+            v = _competences.get(i).modifyActionList(v,_match,this);
+        }
         int[] tab = new int[v.size()];
 
         for (int i = 0; i < v.size(); i++) {
@@ -1018,8 +1023,8 @@ public class dPlayer implements rmiPlayer, Serializable {
 
         _competences =
                 new Vector();
-        for (short j = 0; j <
-                3; j++) {
+        for (short j = 0; j
+                < 3; j++) {
         }
     }
 
@@ -1183,10 +1188,10 @@ public class dPlayer implements rmiPlayer, Serializable {
     }
 
     public double getDistance(rmiPlayer p) {
-        double dist=0;
+        double dist = 0;
         try {
             dist = (p.getX() - getX()) * (p.getX() - getX()) + ((p.getY() - getY()) * (p.getY() - getY()));
-            dist=Math.sqrt(dist);
+            dist = Math.sqrt(dist);
         } catch (RemoteException e) {
             System.out.println(e.getLocalizedMessage());
         }

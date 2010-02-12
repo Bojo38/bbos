@@ -8,6 +8,7 @@
  */
 package bbos.Match.Model.Competences.Strength;
 
+import bbos.Match.Model.Actions.dAction;
 import bbos.Match.Model.Actions.daBlitzStab;
 import bbos.Match.Model.Actions.daBlockStab;
 import bbos.Match.Model.Actions.daThrowTeamMate;
@@ -36,25 +37,18 @@ public class dcThrowATeamMate extends bbos.Match.Model.Competences.dCompetence {
         return false;
     }
 
-    public Vector modifyActionList(Vector actionList, rmiMatch model, rmiPlayer player, rmiTeam opponent, rmiTeam myTeam, Vector opponentPlayers, Vector myPlayers, boolean challenger) {
-        for (int i = 0; i < myPlayers.size(); i++) {
-            rmiPlayer p = (rmiPlayer) myPlayers.get(i);
+    public Vector modifyActionList(Vector actionList, rmiMatch model, rmiPlayer player) {
 
-            try {
-                if ((p.isOnPitch()) && (p.getState() == dPlayer.C_STATE_OK)) {
-
-                    Vector comp = p.getCompetences();
-                    for (int j = 0; j < comp.size(); j++) {
-                        if (((dCompetence) comp.get(j)).getName().equals("Right Stuff")) {
-                            daThrowTeamMate a2 = new daThrowTeamMate(model, player, opponent, myTeam, opponentPlayers, myPlayers, challenger);
-                            actionList.add(a2);
-                            break;
-                        }
-                    }
-                }
-            } catch (RemoteException e) {
-                System.out.println(e.getStackTrace());
-            }
+        try
+        {
+        if (model.hasThrowableTeammate(player.getX(),player.getY()))
+        {
+            actionList.add(dAction.C_THROW_TEAM_MATE);
+        }
+        }
+        catch(RemoteException e)
+        {
+            e.printStackTrace();
         }
 
         return actionList;

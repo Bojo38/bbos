@@ -298,7 +298,7 @@ public class dMatch implements rmiMatch, Serializable {
 
     public void resetSquarePass() {
         _squares.removePass();
-        _drawPass=false;
+        _drawPass = false;
     }
 
     public void resetSquareFoul() {
@@ -385,31 +385,49 @@ public class dMatch implements rmiMatch, Serializable {
     public int getDiceBlockChooser() {
         return _blockChooser;
     }
-    
     protected boolean _drawPass;
-    
-     public void displayPassRule(boolean value)
-     {
-         _drawPass=value;
-     }
-     
-    public boolean displayPassRule()
-    {
+
+    public void displayPassRule(boolean value) {
+        _drawPass = value;
+    }
+
+    public boolean displayPassRule() {
         return _drawPass;
     }
-    
-    
-    public int getAllowedPassRange()
-    {
+
+    public int getAllowedPassRange() {
         return 4;
     }
-            
-    boolean _waitingInterceptorChoice=false;
+    boolean _waitingInterceptorChoice = false;
     int _interceptionChooser;
-    public void WaitForInterceptionChoice(int chooser)
-    {
-        _interceptionChooser=chooser;
-        _waitingInterceptorChoice=true;
+
+    public void WaitForInterceptionChoice(int chooser) {
+        _interceptionChooser = chooser;
+        _waitingInterceptorChoice = true;
+    }
+
+    public boolean hasThrowableTeammate(int x, int y) {
+        boolean yes = false;
+        dTeam team = null;
+
+        if (_teamLeft.getPlayerNumber(x, y) > -1) {
+            team = _teamLeft;
+        }
+        if (_teamRight.getPlayerNumber(x, y) > -1) {
+            team = _teamRight;
+        }
+
+        if (team != null) {
+            for (int i = 0; i < team.getPlayersNumber(); i++) {
+                dPlayer p = team.getPlayer(i);
+                if ((p.isOnPitch()) && (p.getState() == dPlayer.C_STATE_OK)) {
+                    yes = true;
+                    break;
+                }
+            }
+        }
+
+        return yes;
     }
     /**
      * OLD MODEL
@@ -417,7 +435,6 @@ public class dMatch implements rmiMatch, Serializable {
     /**
      * Creates a new instance of dMatch
      */
-    
     /*dsWholeMatch _matchSequence;*/
     public boolean _validated = false;
     /* public Vector _blocSquares;*/
@@ -438,32 +455,32 @@ public class dMatch implements rmiMatch, Serializable {
     public boolean _touchdownScored;
 
     public void initTeamTurn() {
-    /*
-     * Init Teams
-     */
-    /* for (int i = 0; i < _activeTeam._players.size(); i++) {
-    dPlayer player = (dPlayer) _activeTeam._players.get(i);
-    if (player.isOnThePitch()) {
-    player._hasPlayed = false;
-    /*                if (player._State == dPlayer.C_PLAYER_STATE_STUNNED) {
-    player._havePlayed = true;
-    player._State = dPlayer.C_PLAYER_STATE_PRONE;
-    }*/
-    /* }
-    }
-    /* for (int i = 0; i < _opposingTeam._players.size(); i++) {
-    dPlayer player = (dPlayer) _opposingTeam._players.get(i);
-    if (player.isOnThePitch()) {
-    player._hasPlayed = false;
-    }
-    }-+*/
+        /*
+         * Init Teams
+         */
+        /* for (int i = 0; i < _activeTeam._players.size(); i++) {
+        dPlayer player = (dPlayer) _activeTeam._players.get(i);
+        if (player.isOnThePitch()) {
+        player._hasPlayed = false;
+        /*                if (player._State == dPlayer.C_PLAYER_STATE_STUNNED) {
+        player._havePlayed = true;
+        player._State = dPlayer.C_PLAYER_STATE_PRONE;
+        }*/
+        /* }
+        }
+        /* for (int i = 0; i < _opposingTeam._players.size(); i++) {
+        dPlayer player = (dPlayer) _opposingTeam._players.get(i);
+        if (player.isOnThePitch()) {
+        player._hasPlayed = false;
+        }
+        }-+*/
     }
 
     public void swapTeam() {
-    /*  dTeam tmp;
-    tmp = _activeTeam;
-    _activeTeam = _opposingTeam;
-    _opposingTeam = tmp;*/
+        /*  dTeam tmp;
+        tmp = _activeTeam;
+        _activeTeam = _opposingTeam;
+        _opposingTeam = tmp;*/
     }
 
     /*    public void newMatch() {
@@ -565,17 +582,17 @@ public class dMatch implements rmiMatch, Serializable {
          */
         for (short i = 0; i < _teamLeft._players.size(); i++) {
             dPlayer player = (dPlayer) _teamLeft._players.get(i);
-        /*player._reserveX = i - (i / 8) * 8;
-        player._reserveY = i / 8;
-        player._reserve = true;*/
+            /*player._reserveX = i - (i / 8) * 8;
+            player._reserveY = i / 8;
+            player._reserve = true;*/
         }
 
 
         for (short i = 0; i < _teamRight._players.size(); i++) {
             dPlayer player = (dPlayer) _teamRight._players.get(i);
-        /*            player._reserveX = i - (i / 8) * 8;
-        player._reserveY = i / 8;
-        player._reserve = true;*/
+            /*            player._reserveX = i - (i / 8) * 8;
+            player._reserveY = i / 8;
+            player._reserve = true;*/
         }
     }
 
@@ -584,40 +601,40 @@ public class dMatch implements rmiMatch, Serializable {
     }
 
     public void selectPlayer(int x_coord, int y_coord) {
-    /*
-     * Boucle sur les joueurs
-     */
+        /*
+         * Boucle sur les joueurs
+         */
 
-    /*dTeam team = _activeTeam;
-    for (short i = 0; i < team._players.size(); i++) {
-    /*
-     * Recherche en X
-     */
-    /*   if ((((dPlayer) team._players.get(i)).getX() * 30 <= x_coord) && ((((dPlayer) team._players.get(i)).getX() * 30 + 30 > x_coord))) {
-    /*
-     * Recherche en Y
-     */
-    /*       if ((((dPlayer) team._players.get(i)).getY() * 30 <= y_coord) && ((((dPlayer) team._players.get(i)).getY() * 30 + 30 > y_coord))) {
-    /*                    if ((((dPlayer) team._players.get(i)).isPlayable()) && (!((dPlayer) team._players.get(i))._havePlayed)) {
-    if (((dPlayer) team._players.get(i))._isActive) {
-    ((dPlayer) team._players.get(i))._isActive = false;
-    _selectedPlayer = null;
-    } else {
-    if (((dPlayer) team._players.get(i)).isSelectable()) {
-    _selectedPlayer = ((dPlayer) team._players.get(i));
-    _selectedPlayer._isActive = true;
-    }
-    }
-    }*/
+        /*dTeam team = _activeTeam;
+        for (short i = 0; i < team._players.size(); i++) {
+        /*
+         * Recherche en X
+         */
+        /*   if ((((dPlayer) team._players.get(i)).getX() * 30 <= x_coord) && ((((dPlayer) team._players.get(i)).getX() * 30 + 30 > x_coord))) {
+        /*
+         * Recherche en Y
+         */
+        /*       if ((((dPlayer) team._players.get(i)).getY() * 30 <= y_coord) && ((((dPlayer) team._players.get(i)).getY() * 30 + 30 > y_coord))) {
+        /*                    if ((((dPlayer) team._players.get(i)).isPlayable()) && (!((dPlayer) team._players.get(i))._havePlayed)) {
+        if (((dPlayer) team._players.get(i))._isActive) {
+        ((dPlayer) team._players.get(i))._isActive = false;
+        _selectedPlayer = null;
+        } else {
+        if (((dPlayer) team._players.get(i)).isSelectable()) {
+        _selectedPlayer = ((dPlayer) team._players.get(i));
+        _selectedPlayer._isActive = true;
+        }
+        }
+        }*/
 
-    /*           for (short j = 0; j < team._players.size(); j++) {
-    if (j != i) {
-    ((dPlayer) team._players.get(j))._isActive = false;
-    }
-    }
-    }
-    }
-    }*/
+        /*           for (short j = 0; j < team._players.size(); j++) {
+        if (j != i) {
+        ((dPlayer) team._players.get(j))._isActive = false;
+        }
+        }
+        }
+        }
+        }*/
     }
     public dSquare _selectedSquare;
 
@@ -627,42 +644,42 @@ public class dMatch implements rmiMatch, Serializable {
         _selectedSquare = null;
 
         for (int i = 0; i < v.size(); i++) {
-            if (((((dSquare) (v.get(i)))._X == x_coord / 30) &&
-                    (((dSquare) (v.get(i)))._Y == y_coord / 30))) {
+            if (((((dSquare) (v.get(i)))._X == x_coord / 30)
+                    && (((dSquare) (v.get(i)))._Y == y_coord / 30))) {
                 _selectedSquare = new dSquare(x_coord / 30, y_coord / 30);
             }
         }
-    /*       if (_selectedPlayer != null) {
-    if ((_selectedPlayer.getX() == x_coord / 30) &&
-    (_selectedPlayer.getY() == y_coord / 30)) {
-    _selectedSquare = new dSquare(x_coord / 30, y_coord / 30);
-    }
-    }*/
+        /*       if (_selectedPlayer != null) {
+        if ((_selectedPlayer.getX() == x_coord / 30) &&
+        (_selectedPlayer.getY() == y_coord / 30)) {
+        _selectedSquare = new dSquare(x_coord / 30, y_coord / 30);
+        }
+        }*/
     }
 
     public void selectSquareBlock(int x_coord, int y_coord) {
         Vector v = _squares.getBlockSquares();
 
         for (int i = 0; i < v.size(); i++) {
-            if (((((dSquare) (v.get(i))).getX() == x_coord / 30) &&
-                    (((dSquare) (v.get(i))).getY() == y_coord / 30))) {
+            if (((((dSquare) (v.get(i))).getX() == x_coord / 30)
+                    && (((dSquare) (v.get(i))).getY() == y_coord / 30))) {
                 _selectedSquare = new dSquare(x_coord / 30, y_coord / 30);
             }
         }
     }
 
     public void unselectPlayer(int x_coord, int y_coord) {
-    /* if (_selectedPlayer != null) {
-    if ((_selectedPlayer._X == x_coord / 30) && (_selectedPlayer._Y == y_coord / 30)) {
-    _selectedPlayer._hasPlayed = true;
-    _selectedPlayer._isActive = false;
-    _selectedPlayer = null;
-    }
-    }*/
+        /* if (_selectedPlayer != null) {
+        if ((_selectedPlayer._X == x_coord / 30) && (_selectedPlayer._Y == y_coord / 30)) {
+        _selectedPlayer._hasPlayed = true;
+        _selectedPlayer._isActive = false;
+        _selectedPlayer = null;
+        }
+        }*/
     }
 
     public void selectFlyingSquare(int x_coord, int y_coord) {
-    //_onFlySquare = new dSquare(x_coord / 30, y_coord / 30);
+        //_onFlySquare = new dSquare(x_coord / 30, y_coord / 30);
     }
 
     public boolean selectFlyingPlayer(int x_coord, int y_coord) {

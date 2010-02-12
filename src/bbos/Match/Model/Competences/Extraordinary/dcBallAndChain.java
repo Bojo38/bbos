@@ -9,6 +9,7 @@
 
 package bbos.Match.Model.Competences.Extraordinary;
 
+import bbos.Match.Model.Actions.dAction;
 import bbos.Match.Model.Actions.daFanatic;
 import bbos.Match.Model.Competences.dCompetence;
 import bbos.Match.Model.Competences.dCompetencesFactory;
@@ -37,11 +38,10 @@ public class dcBallAndChain extends bbos.Match.Model.Competences.dCompetence
         return false;
     }
 
-    public Vector modifyActionList(Vector actionList,rmiMatch model, rmiPlayer player, rmiTeam opponent, rmiTeam myTeam, Vector opponentPlayers, Vector myPlayers,boolean challenger)
+    public Vector modifyActionList(Vector actionList,rmiMatch model, rmiPlayer player)
     {
-        Vector v=new Vector();
-        daFanatic action=new daFanatic(model, player, opponent, myTeam, opponentPlayers, myPlayers, challenger);
-        v.add(action);
+        Vector v=new Vector();        
+        v.add(dAction.C_FANATIC);
         return v;
     }
 

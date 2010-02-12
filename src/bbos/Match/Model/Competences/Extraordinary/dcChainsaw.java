@@ -42,19 +42,17 @@ public class dcChainsaw extends bbos.Match.Model.Competences.dCompetence {
         return false;
     }
 
-    public Vector modifyActionList(Vector actionList, rmiMatch model, rmiPlayer player, rmiTeam opponent, rmiTeam myTeam, Vector opponentPlayers, Vector myPlayers, boolean challenger) {
+    public Vector modifyActionList(Vector actionList, rmiMatch model, rmiPlayer player) {
         for (int i = 0; i < actionList.size(); i++) {
-            dAction d = (dAction) actionList.get(i);
-            if ((d instanceof daBlock) || (d instanceof daBlitz)) {
-                actionList.remove(d);
+            int action = (Integer)actionList.get(i);
+            if ((action==dAction.C_BLITZ) || (action==dAction.C_BLOCK)) {
+                actionList.remove(i);
             }
         }
 
-        daBlockStab a1 = new daBlockStab(model, player, opponent, myTeam, opponentPlayers, myPlayers, challenger);
-        daBlitzStab a2 = new daBlitzStab(model, player, opponent, myTeam, opponentPlayers, myPlayers, challenger);
-
-        actionList.add(a1);
-        actionList.add(a2);
+        
+        actionList.add(dAction.C_BLITZ_STAB);
+        actionList.add(dAction.C_BLOCK_STAB);
 
         return actionList;
     }

@@ -483,7 +483,7 @@ public class jdgMatch extends JDialog {
         jpnRerolls.setPreferredSize(new java.awt.Dimension(50, 60));
         jpnRerolls.setLayout(new java.awt.BorderLayout());
 
-        jlbRerollLeft.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jlbRerollLeft.setFont(new java.awt.Font("Tahoma", 1, 12));
         jlbRerollLeft.setForeground(new java.awt.Color(255, 0, 0));
         jlbRerollLeft.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jlbRerollLeft.setText("0"); // NOI18N
@@ -494,7 +494,7 @@ public class jdgMatch extends JDialog {
         jlbMinus2.setText("-"); // NOI18N
         jpnRerolls.add(jlbMinus2, java.awt.BorderLayout.CENTER);
 
-        jlbRerollRight.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jlbRerollRight.setFont(new java.awt.Font("Tahoma", 1, 12));
         jlbRerollRight.setForeground(new java.awt.Color(0, 0, 255));
         jlbRerollRight.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jlbRerollRight.setText("0"); // NOI18N
@@ -506,7 +506,7 @@ public class jdgMatch extends JDialog {
         jpnTurn.setPreferredSize(new java.awt.Dimension(50, 60));
         jpnTurn.setLayout(new java.awt.BorderLayout());
 
-        jlbTurnLeft.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jlbTurnLeft.setFont(new java.awt.Font("Tahoma", 1, 12));
         jlbTurnLeft.setForeground(new java.awt.Color(255, 0, 0));
         jlbTurnLeft.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jlbTurnLeft.setText("0"); // NOI18N
@@ -517,7 +517,7 @@ public class jdgMatch extends JDialog {
         jlbMinus1.setText("-"); // NOI18N
         jpnTurn.add(jlbMinus1, java.awt.BorderLayout.CENTER);
 
-        jlbTurnRight.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jlbTurnRight.setFont(new java.awt.Font("Tahoma", 1, 12));
         jlbTurnRight.setForeground(new java.awt.Color(0, 0, 255));
         jlbTurnRight.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jlbTurnRight.setText("0"); // NOI18N
@@ -529,7 +529,7 @@ public class jdgMatch extends JDialog {
         jpnScore.setPreferredSize(new java.awt.Dimension(50, 60));
         jpnScore.setLayout(new java.awt.BorderLayout());
 
-        jlbScoreLeft.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jlbScoreLeft.setFont(new java.awt.Font("Tahoma", 1, 12));
         jlbScoreLeft.setForeground(new java.awt.Color(255, 0, 0));
         jlbScoreLeft.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jlbScoreLeft.setText("0"); // NOI18N
@@ -540,7 +540,7 @@ public class jdgMatch extends JDialog {
         jlbMinus.setText("-"); // NOI18N
         jpnScore.add(jlbMinus, java.awt.BorderLayout.CENTER);
 
-        jlbScoreRight.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jlbScoreRight.setFont(new java.awt.Font("Tahoma", 1, 12));
         jlbScoreRight.setForeground(new java.awt.Color(0, 0, 255));
         jlbScoreRight.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jlbScoreRight.setText("0"); // NOI18N
@@ -552,7 +552,7 @@ public class jdgMatch extends JDialog {
         jpnFAME.setPreferredSize(new java.awt.Dimension(50, 60));
         jpnFAME.setLayout(new java.awt.BorderLayout());
 
-        jlbFAMELeft.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jlbFAMELeft.setFont(new java.awt.Font("Tahoma", 1, 12));
         jlbFAMELeft.setForeground(new java.awt.Color(255, 0, 0));
         jlbFAMELeft.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jlbFAMELeft.setText("0"); // NOI18N
@@ -563,7 +563,7 @@ public class jdgMatch extends JDialog {
         jlbMinus3.setText("-"); // NOI18N
         jpnFAME.add(jlbMinus3, java.awt.BorderLayout.CENTER);
 
-        jlbFAMERight.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jlbFAMERight.setFont(new java.awt.Font("Tahoma", 1, 12));
         jlbFAMERight.setForeground(new java.awt.Color(0, 0, 255));
         jlbFAMERight.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jlbFAMERight.setText("0"); // NOI18N
@@ -579,7 +579,7 @@ public class jdgMatch extends JDialog {
         jpnAverage.setPreferredSize(new java.awt.Dimension(50, 60));
         jpnAverage.setLayout(new java.awt.BorderLayout());
 
-        jlbTurnLeft1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jlbTurnLeft1.setFont(new java.awt.Font("Tahoma", 1, 12));
         jlbTurnLeft1.setForeground(new java.awt.Color(255, 0, 0));
         jlbTurnLeft1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jlbTurnLeft1.setText("3,5"); // NOI18N
@@ -590,7 +590,7 @@ public class jdgMatch extends JDialog {
         jlbMinus4.setText("-"); // NOI18N
         jpnAverage.add(jlbMinus4, java.awt.BorderLayout.CENTER);
 
-        jlbTurnRight1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jlbTurnRight1.setFont(new java.awt.Font("Tahoma", 1, 12));
         jlbTurnRight1.setForeground(new java.awt.Color(0, 0, 255));
         jlbTurnRight1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jlbTurnRight1.setText("3,5"); // NOI18N
@@ -655,7 +655,6 @@ public class jdgMatch extends JDialog {
         jPanel3.setPreferredSize(new java.awt.Dimension(80, 60));
         jPanel3.setLayout(new java.awt.GridLayout(3, 3));
 
-        jtbAction1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/images/actions/move.gif"))); // NOI18N
         jtbAction1.setToolTipText("Movement"); // NOI18N
         jtbAction1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -664,7 +663,6 @@ public class jdgMatch extends JDialog {
         });
         jPanel3.add(jtbAction1);
 
-        jtbAction2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/images/actions/block.gif"))); // NOI18N
         jtbAction2.setToolTipText("Block"); // NOI18N
         jtbAction2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -673,7 +671,6 @@ public class jdgMatch extends JDialog {
         });
         jPanel3.add(jtbAction2);
 
-        jtbAction3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/images/actions/blitz.gif"))); // NOI18N
         jtbAction3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jtbAction3ActionPerformed(evt);
@@ -681,7 +678,6 @@ public class jdgMatch extends JDialog {
         });
         jPanel3.add(jtbAction3);
 
-        jtbAction4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/images/actions/pass.gif"))); // NOI18N
         jtbAction4.setToolTipText("Pass"); // NOI18N
         jtbAction4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -690,7 +686,6 @@ public class jdgMatch extends JDialog {
         });
         jPanel3.add(jtbAction4);
 
-        jtbAction5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/images/actions/handoff.gif"))); // NOI18N
         jtbAction5.setToolTipText("HandOff"); // NOI18N
         jtbAction5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -699,7 +694,6 @@ public class jdgMatch extends JDialog {
         });
         jPanel3.add(jtbAction5);
 
-        jtbAction6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/images/actions/foul.gif"))); // NOI18N
         jtbAction6.setToolTipText("Foul"); // NOI18N
         jtbAction6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -708,7 +702,6 @@ public class jdgMatch extends JDialog {
         });
         jPanel3.add(jtbAction6);
 
-        jtbAction7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/images/actions/throwteammate.gif"))); // NOI18N
         jtbAction7.setToolTipText("Throw a team mate"); // NOI18N
         jtbAction7.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -717,7 +710,6 @@ public class jdgMatch extends JDialog {
         });
         jPanel3.add(jtbAction7);
 
-        jtbAction8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/images/actions/chainsaw.gif"))); // NOI18N
         jtbAction8.setToolTipText("Block with Chainsaw/Stab"); // NOI18N
         jtbAction8.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -726,7 +718,6 @@ public class jdgMatch extends JDialog {
         });
         jPanel3.add(jtbAction8);
 
-        jtbAction9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/images/actions/chainsawblitz.gif"))); // NOI18N
         jtbAction9.setToolTipText("Blitz with Chainsaw/Stab"); // NOI18N
         jtbAction9.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -980,59 +971,80 @@ public class jdgMatch extends JDialog {
 
         jpnLeftPlayer1.setLayout(new java.awt.BorderLayout());
 
+        jpnTopLeftPlayer1.setBackground(java.awt.SystemColor.inactiveCaption);
         jpnTopLeftPlayer1.setPreferredSize(new java.awt.Dimension(90, 30));
         jpnTopLeftPlayer1.setLayout(new java.awt.GridLayout(2, 0));
 
         jlbFlyingPlayerName.setBackground(new java.awt.Color(255, 255, 153));
+        jlbFlyingPlayerName.setForeground(java.awt.SystemColor.inactiveCaptionText);
         jlbFlyingPlayerName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jlbFlyingPlayerName.setText("Player Name"); // NOI18N
         jpnTopLeftPlayer1.add(jlbFlyingPlayerName);
 
         jlbFlyingPlayerPosition.setBackground(new java.awt.Color(255, 255, 153));
+        jlbFlyingPlayerPosition.setForeground(java.awt.SystemColor.inactiveCaptionText);
         jlbFlyingPlayerPosition.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jlbFlyingPlayerPosition.setText("Player position"); // NOI18N
         jpnTopLeftPlayer1.add(jlbFlyingPlayerPosition);
 
         jpnLeftPlayer1.add(jpnTopLeftPlayer1, java.awt.BorderLayout.NORTH);
 
+        jpnBottomLeftPlayer1.setBackground(java.awt.SystemColor.inactiveCaption);
+        jpnBottomLeftPlayer1.setForeground(java.awt.SystemColor.inactiveCaptionText);
         jpnBottomLeftPlayer1.setPreferredSize(new java.awt.Dimension(90, 30));
         jpnBottomLeftPlayer1.setLayout(new java.awt.GridLayout(2, 4));
 
+        jlbTextMovement1.setBackground(java.awt.SystemColor.inactiveCaption);
+        jlbTextMovement1.setForeground(java.awt.SystemColor.inactiveCaptionText);
         jlbTextMovement1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jlbTextMovement1.setText("Mo"); // NOI18N
         jlbTextMovement1.setToolTipText("Movement"); // NOI18N
         jpnBottomLeftPlayer1.add(jlbTextMovement1);
 
+        jlbTextStrength1.setBackground(java.awt.SystemColor.inactiveCaption);
+        jlbTextStrength1.setForeground(java.awt.SystemColor.inactiveCaptionText);
         jlbTextStrength1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jlbTextStrength1.setText("St"); // NOI18N
         jlbTextStrength1.setToolTipText("Strength"); // NOI18N
         jpnBottomLeftPlayer1.add(jlbTextStrength1);
 
+        jlbTextAgility1.setBackground(java.awt.SystemColor.inactiveCaption);
+        jlbTextAgility1.setForeground(java.awt.SystemColor.inactiveCaptionText);
         jlbTextAgility1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jlbTextAgility1.setText("Ag"); // NOI18N
         jlbTextAgility1.setToolTipText("Agility"); // NOI18N
         jpnBottomLeftPlayer1.add(jlbTextAgility1);
 
+        jlbTextArmor1.setBackground(java.awt.SystemColor.inactiveCaption);
+        jlbTextArmor1.setForeground(java.awt.SystemColor.inactiveCaptionText);
         jlbTextArmor1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jlbTextArmor1.setText("Ar"); // NOI18N
         jlbTextArmor1.setToolTipText("Armor"); // NOI18N
         jpnBottomLeftPlayer1.add(jlbTextArmor1);
 
+        jlbFlyingMovement.setBackground(java.awt.SystemColor.inactiveCaption);
+        jlbFlyingMovement.setForeground(java.awt.SystemColor.inactiveCaptionText);
         jlbFlyingMovement.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jlbFlyingMovement.setText("6"); // NOI18N
         jlbFlyingMovement.setToolTipText("Movement : 6"); // NOI18N
         jpnBottomLeftPlayer1.add(jlbFlyingMovement);
 
+        jlbFlyingStrength.setBackground(java.awt.SystemColor.inactiveCaption);
+        jlbFlyingStrength.setForeground(java.awt.SystemColor.inactiveCaptionText);
         jlbFlyingStrength.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jlbFlyingStrength.setText("3"); // NOI18N
         jlbFlyingStrength.setToolTipText("Strength : 3"); // NOI18N
         jpnBottomLeftPlayer1.add(jlbFlyingStrength);
 
+        jlbFlyingAgility.setBackground(java.awt.SystemColor.inactiveCaption);
+        jlbFlyingAgility.setForeground(java.awt.SystemColor.inactiveCaptionText);
         jlbFlyingAgility.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jlbFlyingAgility.setText("3"); // NOI18N
         jlbFlyingAgility.setToolTipText("Agility : 3"); // NOI18N
         jpnBottomLeftPlayer1.add(jlbFlyingAgility);
 
+        jlbFlyingArmor.setBackground(java.awt.SystemColor.inactiveCaption);
+        jlbFlyingArmor.setForeground(java.awt.SystemColor.inactiveCaptionText);
         jlbFlyingArmor.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jlbFlyingArmor.setText("8"); // NOI18N
         jlbFlyingArmor.setToolTipText("Armor : 8"); // NOI18N
@@ -1042,6 +1054,8 @@ public class jdgMatch extends JDialog {
 
         jpnPlayerFlying.add(jpnLeftPlayer1);
 
+        jlsFlyingCompetences.setBackground(java.awt.SystemColor.inactiveCaption);
+        jlsFlyingCompetences.setForeground(java.awt.SystemColor.inactiveCaptionText);
         jlsFlyingCompetences.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Block", "Dodge" };
             public int getSize() { return strings.length; }
@@ -1084,57 +1098,71 @@ public class jdgMatch extends JDialog {
         jpnLeftPlayer.setBackground(new java.awt.Color(204, 204, 204));
         jpnLeftPlayer.setLayout(new java.awt.BorderLayout());
 
+        jpnTopLeftPlayer.setBackground(java.awt.SystemColor.activeCaption);
+        jpnTopLeftPlayer.setForeground(java.awt.SystemColor.activeCaptionText);
         jpnTopLeftPlayer.setPreferredSize(new java.awt.Dimension(90, 30));
         jpnTopLeftPlayer.setLayout(new java.awt.GridLayout(2, 0));
 
+        jlbPlayerName.setForeground(java.awt.SystemColor.activeCaptionText);
         jlbPlayerName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jlbPlayerName.setText("Player Name"); // NOI18N
         jpnTopLeftPlayer.add(jlbPlayerName);
 
+        jlbPlayerPosition.setForeground(java.awt.SystemColor.activeCaptionText);
         jlbPlayerPosition.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jlbPlayerPosition.setText("Player position"); // NOI18N
         jpnTopLeftPlayer.add(jlbPlayerPosition);
 
         jpnLeftPlayer.add(jpnTopLeftPlayer, java.awt.BorderLayout.NORTH);
 
+        jpnBottomLeftPlayer.setBackground(java.awt.SystemColor.activeCaption);
+        jpnBottomLeftPlayer.setForeground(java.awt.SystemColor.activeCaptionText);
         jpnBottomLeftPlayer.setPreferredSize(new java.awt.Dimension(90, 30));
         jpnBottomLeftPlayer.setLayout(new java.awt.GridLayout(2, 4));
 
+        jlbTextMovement.setForeground(java.awt.SystemColor.activeCaptionText);
         jlbTextMovement.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jlbTextMovement.setText("Mo"); // NOI18N
         jlbTextMovement.setToolTipText("Movement"); // NOI18N
         jpnBottomLeftPlayer.add(jlbTextMovement);
 
+        jlbTextStrength.setForeground(java.awt.SystemColor.activeCaptionText);
         jlbTextStrength.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jlbTextStrength.setText("St"); // NOI18N
         jlbTextStrength.setToolTipText("Strength"); // NOI18N
         jpnBottomLeftPlayer.add(jlbTextStrength);
 
+        jlbTextAgility.setForeground(java.awt.SystemColor.activeCaptionText);
         jlbTextAgility.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jlbTextAgility.setText("Ag"); // NOI18N
         jlbTextAgility.setToolTipText("Agility"); // NOI18N
         jpnBottomLeftPlayer.add(jlbTextAgility);
 
+        jlbTextArmor.setForeground(java.awt.SystemColor.activeCaptionText);
         jlbTextArmor.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jlbTextArmor.setText("Ar"); // NOI18N
         jlbTextArmor.setToolTipText("Armor"); // NOI18N
         jpnBottomLeftPlayer.add(jlbTextArmor);
 
+        jlbMovement.setForeground(java.awt.SystemColor.activeCaptionText);
         jlbMovement.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jlbMovement.setText("6"); // NOI18N
         jlbMovement.setToolTipText("Movement : 6"); // NOI18N
         jpnBottomLeftPlayer.add(jlbMovement);
 
+        jlbStrength.setForeground(java.awt.SystemColor.activeCaptionText);
         jlbStrength.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jlbStrength.setText("3"); // NOI18N
         jlbStrength.setToolTipText("Strength : 3"); // NOI18N
         jpnBottomLeftPlayer.add(jlbStrength);
 
+        jlbAgility.setForeground(java.awt.SystemColor.activeCaptionText);
         jlbAgility.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jlbAgility.setText("3"); // NOI18N
         jlbAgility.setToolTipText("Agility : 3"); // NOI18N
         jpnBottomLeftPlayer.add(jlbAgility);
 
+        jlbArmor.setForeground(java.awt.SystemColor.activeCaptionText);
         jlbArmor.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jlbArmor.setText("8"); // NOI18N
         jlbArmor.setToolTipText("Armor : 8"); // NOI18N
@@ -1146,6 +1174,8 @@ public class jdgMatch extends JDialog {
 
         jspCompetences.setBackground(new java.awt.Color(204, 204, 204));
 
+        jlsCompetences.setBackground(java.awt.SystemColor.activeCaption);
+        jlsCompetences.setForeground(java.awt.SystemColor.activeCaptionText);
         jlsCompetences.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Block", "Dodge" };
             public int getSize() { return strings.length; }

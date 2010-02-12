@@ -72,80 +72,30 @@ public interface rmiMatch extends Remote {
 
     public int getSquareState(dSquare s) throws RemoteException;
 
-    
-    
+    ;
 
-       ;  
+    public boolean isAPlayer(dSquare s) throws RemoteException;
 
-    public     
+    public void removeBall() throws RemoteException;
 
-     boolean isAPlayer( dSquare     s
+    public boolean isBallPlacedOnThePitch(
+            int side) throws RemoteException;
 
-      
+    public dSquare getBallSquare() throws RemoteException;
 
-      ) throws RemoteException;
+    public int getCurrentStepData() throws RemoteException;
 
-    public     
+    public void setCurrentStepData(int value) throws RemoteException;
 
-     void removeBall( ) throws RemoteException;
+    public void setSquareState(dSquare square, int state) throws RemoteException;
 
-    public        
+    public void setSquareSpecialState(dSquare square,
+            boolean state) throws RemoteException;
+    public boolean hasThrowableTeammate(int x, int y) throws RemoteException;
 
-        boolean isBallPlacedOnThePitch  
+    public void resetSquareMove() throws RemoteException;
 
-        
-
-      (  
-
-        
-
-        
-
-        
-
-          
-
-        
-
-        
-
-        
-
-        int side) throws RemoteException;
-
-    public   dSquare getBallSquare  
-
-        
-
-      () throws RemoteException;
-
-    public   int getCurrentStepData  
-
-        
-
-      () throws RemoteException;
-
-    public  void setCurrentStepData(int value        ) throws RemoteException;
-
-    public  void setSquareState( dSquare     square, int state    ) throws RemoteException;
-
-    public  void setSquareSpecialState( dSquare     square,    
-
-               
-
-                 
-
-        
-
-        
-
-                 
-
-     boolean state) throws RemoteException;
-
-    public  void resetSquareMove() throws RemoteException;
-
-public void resetSquareBlock() throws RemoteException;
+    public void resetSquareBlock() throws RemoteException;
 
     public void resetSquarePass() throws RemoteException;
 
@@ -172,18 +122,30 @@ public void resetSquareBlock() throws RemoteException;
     public void AddBlockRollHistory(int dice1, int dice2, int dice3, int owner, String description) throws RemoteException;
 
     public Vector getDiceHistory() throws RemoteException;
+
     public int getDiceHistorySize() throws RemoteException;
-    
+
     public void waitForDiceChoice(int chooser, int _dices, int _dice1, int _dice2, int _dice3) throws RemoteException;
-    public void WaitForInterceptionChoice(int chooser)throws RemoteException;
-    
+
+    public void WaitForInterceptionChoice(int chooser) throws RemoteException;
+
     public boolean isWaitingForDiceChoice() throws RemoteException;
+
     public int getDiceBlockChooser() throws RemoteException;
+
     public void stopWaitingForDiceChoice(int choice) throws RemoteException;
+
     public int getBlockDiceChosen() throws RemoteException;
-    public int getBlockDiceNumber()throws RemoteException;
-    public int getBlockDiceValue(int i)throws RemoteException;
+
+    public int getBlockDiceNumber() throws RemoteException;
+
+    public int getBlockDiceValue(int i) throws RemoteException;
+
     public void displayPassRule(boolean value) throws RemoteException;
+
     public boolean displayPassRule() throws RemoteException;
-    public int getAllowedPassRange() throws RemoteException;;
+
+    public int getAllowedPassRange() throws RemoteException;
+
+    ;
 }

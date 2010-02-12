@@ -9,6 +9,7 @@
 
 package bbos.Match.Model.Competences.Extraordinary;
 
+import bbos.Match.Model.Actions.dAction;
 import bbos.Match.Model.Actions.daHypnoticGaze;
 import bbos.Match.Model.Competences.dCompetence;
 import bbos.Match.Model.Competences.dCompetencesFactory;
@@ -37,10 +38,9 @@ public class dcHypnoticGaze extends bbos.Match.Model.Competences.dCompetence
         return false;
     }
 
-    public Vector modifyActionList(Vector actionList,rmiMatch model, rmiPlayer player, rmiTeam opponent, rmiTeam myTeam, Vector opponentPlayers, Vector myPlayers,boolean challenger)
+    public Vector modifyActionList(Vector actionList,rmiMatch model, rmiPlayer player)
     {
-        daHypnoticGaze a2=new daHypnoticGaze(model, player, opponent, myTeam, opponentPlayers, myPlayers,challenger);
-        actionList.add(a2);
+        actionList.add(dAction.C_HYPNOTIC_GAZE);
         return actionList;
     }
 

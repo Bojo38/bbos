@@ -9,6 +9,7 @@
 
 package bbos.Match.Model.Competences.Extraordinary;
 
+import bbos.Match.Model.Actions.dAction;
 import bbos.Match.Model.Actions.daBomber;
 import bbos.Match.Model.Competences.dCompetence;
 import bbos.Match.Model.Competences.dCompetencesFactory;
@@ -37,11 +38,9 @@ public class dcBombardier extends bbos.Match.Model.Competences.dCompetence
         return false;
     }
 
-    public Vector modifyActionList(Vector actionList,rmiMatch model, rmiPlayer player, rmiTeam opponent, rmiTeam myTeam, Vector opponentPlayers, Vector myPlayers,boolean challenger)
+    public Vector modifyActionList(Vector actionList,rmiMatch model, rmiPlayer player)
     {
-        daBomber action=new daBomber(model,player,opponent,myTeam,opponentPlayers,myPlayers,challenger);
-        actionList.add(action);
-
+        actionList.add(dAction.C_BOMBER);
         return actionList;
     }
 

@@ -553,9 +553,6 @@
               <SubComponents>
                 <Component class="javax.swing.JToggleButton" name="jtbAction1">
                   <Properties>
-                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="/resources/images/actions/move.gif"/>
-                    </Property>
                     <Property name="toolTipText" type="java.lang.String" value="Movement" noResource="true"/>
                   </Properties>
                   <Events>
@@ -564,9 +561,6 @@
                 </Component>
                 <Component class="javax.swing.JToggleButton" name="jtbAction2">
                   <Properties>
-                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="/resources/images/actions/block.gif"/>
-                    </Property>
                     <Property name="toolTipText" type="java.lang.String" value="Block" noResource="true"/>
                   </Properties>
                   <Events>
@@ -574,20 +568,12 @@
                   </Events>
                 </Component>
                 <Component class="javax.swing.JToggleButton" name="jtbAction3">
-                  <Properties>
-                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="/resources/images/actions/blitz.gif"/>
-                    </Property>
-                  </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jtbAction3ActionPerformed"/>
                   </Events>
                 </Component>
                 <Component class="javax.swing.JToggleButton" name="jtbAction4">
                   <Properties>
-                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="/resources/images/actions/pass.gif"/>
-                    </Property>
                     <Property name="toolTipText" type="java.lang.String" value="Pass" noResource="true"/>
                   </Properties>
                   <Events>
@@ -596,9 +582,6 @@
                 </Component>
                 <Component class="javax.swing.JToggleButton" name="jtbAction5">
                   <Properties>
-                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="/resources/images/actions/handoff.gif"/>
-                    </Property>
                     <Property name="toolTipText" type="java.lang.String" value="HandOff" noResource="true"/>
                   </Properties>
                   <Events>
@@ -607,9 +590,6 @@
                 </Component>
                 <Component class="javax.swing.JToggleButton" name="jtbAction6">
                   <Properties>
-                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="/resources/images/actions/foul.gif"/>
-                    </Property>
                     <Property name="toolTipText" type="java.lang.String" value="Foul" noResource="true"/>
                   </Properties>
                   <Events>
@@ -618,9 +598,6 @@
                 </Component>
                 <Component class="javax.swing.JToggleButton" name="jtbAction7">
                   <Properties>
-                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="/resources/images/actions/throwteammate.gif"/>
-                    </Property>
                     <Property name="toolTipText" type="java.lang.String" value="Throw a team mate" noResource="true"/>
                   </Properties>
                   <Events>
@@ -629,9 +606,6 @@
                 </Component>
                 <Component class="javax.swing.JToggleButton" name="jtbAction8">
                   <Properties>
-                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="/resources/images/actions/chainsaw.gif"/>
-                    </Property>
                     <Property name="toolTipText" type="java.lang.String" value="Block with Chainsaw/Stab" noResource="true"/>
                   </Properties>
                   <Events>
@@ -640,9 +614,6 @@
                 </Component>
                 <Component class="javax.swing.JToggleButton" name="jtbAction9">
                   <Properties>
-                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="/resources/images/actions/chainsawblitz.gif"/>
-                    </Property>
                     <Property name="toolTipText" type="java.lang.String" value="Blitz with Chainsaw/Stab" noResource="true"/>
                   </Properties>
                   <Events>

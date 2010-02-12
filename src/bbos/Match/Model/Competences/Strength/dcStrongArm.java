@@ -37,7 +37,7 @@ public class dcStrongArm extends bbos.Match.Model.Competences.dCompetence
         return false;
     }
 
-     public Vector modifyActionList(Vector actionList,rmiMatch model, rmiPlayer player, rmiTeam opponent, rmiTeam myTeam, Vector opponentPlayers, Vector myPlayers,boolean challenger)
+     public Vector modifyActionList(Vector actionList,rmiMatch model, rmiPlayer player)
     {
         return actionList;
     }

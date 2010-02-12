@@ -9,6 +9,7 @@
 
 package bbos.Match.Model.Competences.Extraordinary;
 
+import bbos.Match.Model.Actions.dAction;
 import bbos.Match.Model.Actions.daBlitzStab;
 import bbos.Match.Model.Actions.daBlockStab;
 import bbos.Match.Model.Competences.dCompetencesFactory;
@@ -38,12 +39,11 @@ public class dcStab extends dCompetence
         return false;
     }
 
-    public Vector modifyActionList(Vector actionList,rmiMatch model, rmiPlayer player, rmiTeam opponent, rmiTeam myTeam, Vector opponentPlayers, Vector myPlayers,boolean challenger)
+    public Vector modifyActionList(Vector actionList,rmiMatch model, rmiPlayer player)
     {
-        daBlitzStab a2=new daBlitzStab(model, player, opponent, myTeam, opponentPlayers, myPlayers,challenger);
-        actionList.add(a2);
-        daBlockStab a1=new daBlockStab(model, player, opponent, myTeam, opponentPlayers, myPlayers,challenger);
-        actionList.add(a1);
+        
+        actionList.add(dAction.C_BLITZ_STAB);
+        actionList.add(dAction.C_BLOCK_STAB);
         return actionList;
     }
 

@@ -39,8 +39,18 @@ public class dcJumpUp extends dCompetence
         return false;
     }
 
-    public Vector modifyActionList(Vector actionList,rmiMatch model, rmiPlayer player, rmiTeam opponent, rmiTeam myTeam, Vector opponentPlayers, Vector myPlayers,boolean challenger)
+    public Vector modifyActionList(Vector actionList,rmiMatch model, rmiPlayer player)
     {
+        try
+        {
+         if (player.getState() == dPlayer.C_STATE_PRONE) {
+                actionList.add(dAction.C_BLOCK);
+            }
+        }
+        catch (RemoteException e)
+        {
+            e.printStackTrace();
+        }
         return actionList;
     }
     

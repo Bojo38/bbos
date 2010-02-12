@@ -39,18 +39,16 @@ public class dcNoHand extends bbos.Match.Model.Competences.dCompetence
         return false;
     }
 
-     public Vector modifyActionList(Vector actionList,rmiMatch model, rmiPlayer player, rmiTeam opponent, rmiTeam myTeam, Vector opponentPlayers, Vector myPlayers,boolean challenger)
+     public Vector modifyActionList(Vector actionList,rmiMatch model, rmiPlayer player)
     {
         for (int i=0; i<actionList.size(); i++)
         {
-            dAction d=(dAction)actionList.get(i);
-            if ((d instanceof daHandOff)||(d instanceof daPass))
+            int d=(Integer)actionList.get(i);
+            if ((d ==dAction.C_HANDOFF)||(d ==dAction.C_PASS))
             {
                 actionList.remove(d);
             }
         }
-
-
         return actionList;
     }
 
