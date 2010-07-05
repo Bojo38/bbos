@@ -16,7 +16,7 @@ import javax.xml.ws.WebServiceClient;
  * 
  */
 //@WebServiceClient(name = "Webbos", targetNamespace = "http://Webbos/Webbos", wsdlLocation = "http://bbos.ainpacte.org/service_test.php?wsdl")
-@WebServiceClient(name = "Webbos", targetNamespace = "http://Webbos/Webbos", wsdlLocation = "http://localhost/bbos/service_test.php?wsdl")
+@WebServiceClient(name = "Webbos", targetNamespace = "http://Webbos/Webbos", wsdlLocation = "http://localhost/service_test.php?wsdl")
 public class Webbos
     extends Service
 {
@@ -27,7 +27,7 @@ public class Webbos
         URL url = null;
         try {
             //url = new URL("http://bbos.ainpacte.org/service_test.php?wsdl");
-            url = new URL("http://localhost/bbos/service_test.php?wsdl");
+            url = new URL("http://localhost/service_test.php?wsdl");
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
