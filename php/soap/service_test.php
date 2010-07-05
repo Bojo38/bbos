@@ -82,7 +82,7 @@ $serveur->wsdl->addComplexType(
 	*/
 	'ActionType' => array('name'=>'ActionType','type'=>'xsd:int'),
 	'Id' => array('name'=>'Id','type'=>'xsd:int'),
-    'PlayerId' => array('name'=>'PlayerId','type'=>'xsd:int'),
+    	'PlayerId' => array('name'=>'PlayerId','type'=>'xsd:int'),
 	'PlayerName' => array('name'=>'PlayerName','type'=>'xsd:string'),
 	'PlayerNumber' => array('name'=>'PlayerNumber','type'=>'xsd:int'),
 	'TeamId' => array('name'=>'TeamId','type'=>'xsd:int'),
@@ -130,8 +130,7 @@ $serveur->wsdl->addComplexType(
 	'MyWinnings' => array('name'=>'MyWinnings','type'=>'xsd:int'),
 	'OpponentWinnings' => array('name'=>'OpponentWinnings','type'=>'xsd:int'),
 	'Actions' => array('name'=>'Actions','type'=>'tns:ActionArray'),
-	'ChallengerId' => array('name'=>'ChallengerId','type'=>'xsd:int'),
-	'Data' => array('name'=>'Data','type'=>'xsd:hexBinary')
+	'ChallengerId' => array('name'=>'ChallengerId','type'=>'xsd:int')
     )
 );
 
@@ -181,7 +180,6 @@ $serveur->wsdl->addComplexType(
 	'Injuries' => array('name'=>'Injuries','type'=>'tns:StringArray'),
 	'Retired' => array('name'=>'Retired','type'=>'xsd:boolean'),
 	'Dead' => array('name'=>'Dead','type'=>'xsd:boolean'),
-	'Icon' => array('name'=>'Icon','type'=>'xsd:string')
     )
 );
 
@@ -269,7 +267,7 @@ $serveur->register('isValidUser',
 	   $webserver.'/service#isValidUser', // soapaction (fonction)
 	   'rpc',                              // style
 	   'literal',                          // use
-	   'Return 1 if coach login-password is valid'         // documentation
+	   'Return icon URL'         // documentation
 );
 
 
@@ -364,42 +362,10 @@ $serveur->register('newChallenge',
 	   'create new challenge'         // documentation
 );
 
-$serveur->register('cancelMatch',
-		array('matchId' => 'xsd:int'),      // input parameters
-   		array('return' => 'xsd:int'),    // output parameters
-		$webserver.'/service',          // namespace (espace de nommage unique)
-		$webserver.'/service#cancelMatch', // soapaction (fonction)
-	   'rpc',                              // style
-	   'literal',                          // use
-	   'cancel match'         // documentation
-);
-
-$serveur->register('acceptMatch',
-		array('matchId' => 'xsd:int'),      // input parameters
-   		array('return' => 'xsd:int'),    // output parameters
-		$webserver.'/service',          // namespace (espace de nommage unique)
-		$webserver.'/service#acceptMatch', // soapaction (fonction)
-	   'rpc',                              // style
-	   'literal',                          // use
-	   'accept match'         // documentation
-);
-
-$serveur->register('saveMatchData',
-		array('matchId' => 'xsd:int', 'Data' => 'xsd:hexBinary'),      // input parameters
-   		array('return' => 'xsd:int'),    // output parameters
-		$webserver.'/service',          // namespace (espace de nommage unique)
-		$webserver.'/service#acceptMatch', // soapaction (fonction)
-	   'rpc',                              // style
-	   'literal',                          // use
-	   'save match data'         // documentation
-);
-
-require_once('soap/include.php');
-
-
-if (!isset($HTTP_RAW_POST_DATA)){
-    $HTTP_RAW_POST_DATA = file_get_contents('php://input');
-}
+include('soap/roster.php');
+include('soap/team.php');
+include('soap/soap.php');
+include('soap/player.php');
 
 $serveur->service($HTTP_RAW_POST_DATA);
 exit();

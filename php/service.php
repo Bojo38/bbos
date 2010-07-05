@@ -302,7 +302,7 @@ function addTeam($user,$team)
 	$donnees = mysql_fetch_array($result);
 	$user_id=$donnees[0];
 
-	$team_request='INSERT INTO team (idTeam ,idLeague ,Team_Type_idTeam_Type ,Coach_idCoach ,Name ,Popularity ,Assists ,Cheerleaders ,Apothecary ,Treasury ,Reroll) VALUES (NULL ,';
+	$team_request='INSERT INTO bbos_team (idTeam ,idLeague ,Team_Type_idTeam_Type ,Coach_idCoach ,Name ,Popularity ,Assists ,Cheerleaders ,Apothecary ,Treasury ,Reroll) VALUES (NULL ,';
 	$team_request=$team_request.'3, '.$team['RaceId'].', '.$user_id.', \''.$team['Name'].'\', '.$team['Popularity'].', '.$team['Assists'].', '.$team['Cheerleaders'].', '.$team['Apothecary'].', '.$team['Treasury'].', '.$team['Reroll'].')';
 	$result=mysql_query($team_request);
 	if (!$result) 
@@ -319,7 +319,7 @@ function addTeam($user,$team)
 	{
 		// Create chapter
 		$player=$players[$i];
-		$player_request='INSERT INTO player (idPlayer, Player_Type_idPlayer_Type, Team_idTeam, Name, Ranking, MissNextGame, Completion, Touchdowns, Casualties, Interceptions, MVP, Persistant, Number, Status) VALUES ';
+		$player_request='INSERT INTO bbos_player (idPlayer, Player_Type_idPlayer_Type, Team_idTeam, Name, Ranking, MissNextGame, Completion, Touchdowns, Casualties, Interceptions, MVP, Persistant, Number, Status) VALUES ';
 		$player_request=$player_request.'(NULL , '.$player['TypeId'].', '.$team_id.', \''.$player['Name'].'\', \''.$player['Ranking'].'\', '.$player['MissNextGame'].', '.$player['Completion'].', '.$player['Touchdowns'].', '.$player['Casualties'].', '.$player['Interception'].', '.$player['MVP'].', '.$player['Persistant'].', '.$player['Number'].', \''.$player['Status'].'\')';
 		$result=mysql_query($player_request);
 		if (!$result) 
@@ -339,7 +339,7 @@ function isValidUser($user,$pass)
 	$resultat=0;
 	mysql_connect($db_server,$db_login,$db_pass);
 	mysql_select_db($db_name);
-	$request='select COUNT(*) from coach where nickname=\''.$user.'\' and PWD=\''.$pass.'\'';
+	$request='select COUNT(*) from bbos_coach where nickname=\''.$user.'\' and PWD=\''.$pass.'\'';
 	$result=mysql_query($request);
 	$donnees = mysql_fetch_array($result);
 	if ($donnees[0]==1)
@@ -358,7 +358,7 @@ function getMyTeams($user)
 	mysql_connect($db_server,$db_login,$db_pass);
 	mysql_select_db($db_name);
 	
-	$result=mysql_query('SELECT team.*, coach.Name FROM team, coach WHERE ( team.Coach_idCoach = coach.idCoach ) AND (coach.Nickname=\''.$user.'\')');
+	$result=mysql_query('SELECT bbos_team.*, bbos_coach.Name FROM bbos_team, bbos_coach WHERE ( bbos_team.Coach_idCoach = bbos_coach.idCoach ) AND (bbos_coach.Nickname=\''.$user.'\')');
 	$num_team=mysql_num_rows ($result);
 	if ($num_team>0)
 	{
@@ -369,10 +369,10 @@ function getMyTeams($user)
 			$result_2= null;
 
 			/* Get the players */
-			$result_2=mysql_query('SELECT * FROM player WHERE team_idTeam='.$donnees[0]);
+			$result_2=mysql_query('SELECT * FROM bbos_player WHERE team_idTeam='.$donnees[0]);
 			while ($donnees_2=mysql_fetch_array($result_2))
 			{
-				$result_3=mysql_query('SELECT injuries.name FROM injuries,player_has_injuries WHERE (injuries.idInjuries= player_has_injuries.Injuries_idInjuries) AND (player_has_injuries.Player_idPlayer='.$donnees_2[0].')');
+				$result_3=mysql_query('SELECT bbos_injuries.name FROM bbos_injuries,bbos_player_has_injuries WHERE (bbos_injuries.idInjuries= bbos_player_has_injuries.Injuries_idInjuries) AND (bbos_player_has_injuries.Player_idPlayer='.$donnees_2[0].')');
 				$injury = array();
 				while($donnees_3=mysql_fetch_array($result_3))
 				{
@@ -380,7 +380,7 @@ function getMyTeams($user)
 				}
 				$injuries=array('String'=> $injury);
 				
-				$result_4=mysql_query('SELECT competence.name FROM competence,player_has_competence WHERE (player_has_competence.player_idPlayer='.$donnees_2[0].') AND (competence.idCompetence=player_has_competence.competence_idCompetence)');
+				$result_4=mysql_query('SELECT bbos_competence.name FROM bbos_competence,bbos_player_has_competence WHERE (bbos_player_has_competence.player_idPlayer='.$donnees_2[0].') AND (bbos_competence.idCompetence=bbos_player_has_competence.competence_idCompetence)');
 				$competence = array();
 				while($donnees_4=mysql_fetch_array($result_4))
 				{
@@ -411,7 +411,7 @@ function getMyTeams($user)
 			$matches=array();
 			/* Get the matches */
 			
-			$result_2=mysql_query('SELECT *,DATE_FORMAT(`date`, \'%M %e, %Y, %l:%i%p\') as newdate FROM `match` WHERE (Team_idTeam_1='.$donnees[0].') OR (Team_idTeam_2='.$donnees[0].')');
+			$result_2=mysql_query('SELECT *,DATE_FORMAT(`date`, \'%M %e, %Y, %l:%i%p\') as newdate FROM `bbos_match` WHERE (Team_idTeam_1='.$donnees[0].') OR (Team_idTeam_2='.$donnees[0].')');
 			$num_matches=mysql_num_rows ($result_2);
 			if ($num_matches>0)
 			{
@@ -443,7 +443,7 @@ function getMyTeams($user)
 						$opponentWinnings=$donnees_2[14];
 					}
 					
-					$result_3=mysql_query('SELECT name FROM team where idTeam='.$opponentId);
+					$result_3=mysql_query('SELECT name FROM bbos_team where idTeam='.$opponentId);
 					$num_names=mysql_num_rows ($result_3);
 					
 					$opponentName="";
@@ -454,7 +454,7 @@ function getMyTeams($user)
 					}
 					
 					$actions=array();
-					$result_4=mysql_query('SELECT action.*,action_type.Name,p.Name,o.Name FROM action, action_type, player p, player o where (Match_idMatch='.$donnees_2[0].') AND (action_type.idAction_type=action.Action_type_idAction_type) and (o.idPlayer=action.Opponent_idPlayer) AND (p.idPlayer=action.Player_idPlayer)');
+					$result_4=mysql_query('SELECT action.*,action_type.Name,p.Name,o.Name FROM bbos_action, bbos_action_type, bbos_player p, bbos_player o where (Match_idMatch='.$donnees_2[0].') AND (bbos_action_type.idAction_type=bbos_action.Action_type_idAction_type) and (o.idPlayer=action.Opponent_idPlayer) AND (p.idPlayer=action.Player_idPlayer)');
 					$num_actions=mysql_num_rows ($result_4);
 					if ($num_actions>0)
 					{
@@ -529,20 +529,20 @@ function getAllTeamTypes()
 	$resultat = array();
 	mysql_connect($db_server,$db_login,$db_pass);
 	mysql_select_db($db_name);
-	$result=mysql_query('SELECT * from team_type;');
+	$result=mysql_query('SELECT * from bbos_team_type;');
 	while ($donnees = mysql_fetch_array($result) )
 	{
 		$player=array();
 		$players=array();
 		$result_2= null;
-		$result_2=mysql_query('SELECT * FROM team_type_has_player_type WHERE team_type_idTeam_Type='.$donnees[0]);
+		$result_2=mysql_query('SELECT * FROM bbos_team_type_has_player_type WHERE team_type_idTeam_Type='.$donnees[0]);
 		while ($donnees_2=mysql_fetch_array($result_2))
 		{
 
-			$result_3=mysql_query('SELECT * FROM player_type WHERE idPlayer_Type='.$donnees_2[1]);
+			$result_3=mysql_query('SELECT * FROM bbos_player_type WHERE idPlayer_Type='.$donnees_2[1]);
 			$donnees_3=mysql_fetch_array($result_3);
 
-			$result_4=mysql_query('SELECT competence.name FROM competence,player_type_has_competence WHERE player_type_idPlayer_Type='.$donnees_2[1].' and competence.idCompetence=player_type_has_competence.competence_idCompetence');
+			$result_4=mysql_query('SELECT competence.name FROM bbos_competence,bbos_player_type_has_competence WHERE player_type_idPlayer_Type='.$donnees_2[1].' and bbos_competence.idCompetence=player_type_has_competence.competence_idCompetence');
 
 			$competence = array();
 			while($donnees_4=mysql_fetch_array($result_4))
@@ -551,7 +551,7 @@ function getAllTeamTypes()
 			}
 			$competences=array('String'=> $competence);
 
-			$result_5=mysql_query('SELECT competence_type.Name FROM competence_type,player_type_has_simplecompetence_type WHERE player_type_idPlayer_Type='.$donnees_2[1].' and competence_type.idCompetence_type=player_type_has_simplecompetence_type.competence_type_idCompetence_type');
+			$result_5=mysql_query('SELECT bbos_competence_type.Name FROM bbos_competence_type,bbos_player_type_has_simplecompetence_type WHERE player_type_idPlayer_Type='.$donnees_2[1].' and bbos_competence_type.idCompetence_type=bbos_player_type_has_simplecompetence_type.competence_type_idCompetence_type');
 
 			$simpleroll = array();
 			while($donnees_5=mysql_fetch_array($result_5))
@@ -560,7 +560,7 @@ function getAllTeamTypes()
 			}
 			$simplerolls=array('String'=> $simpleroll);
 
-			$result_6=mysql_query('SELECT competence_type.Name FROM competence_type,player_type_has_doublecompetence_type WHERE player_type_idPlayer_Type='.$donnees_2[1].' and competence_type.idCompetence_type=player_type_has_doublecompetence_type.competence_type_idCompetence_type');
+			$result_6=mysql_query('SELECT bbos_competence_type.Name FROM bbos_competence_type,bbos_player_type_has_doublecompetence_type WHERE player_type_idPlayer_Type='.$donnees_2[1].' and bbos_competence_type.idCompetence_type=bbos_player_type_has_doublecompetence_type.competence_type_idCompetence_type');
 
 			$doubleroll = array();
 			while($donnees_6=mysql_fetch_array($result_6))

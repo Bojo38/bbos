@@ -2,10 +2,10 @@
 -- version OVH
 -- http://www.phpmyadmin.net
 --
--- Serveur: mysql5-29
--- Généré le : Mar 16 Décembre 2008 à 14:49
--- Version du serveur: 5.0.68
--- Version de PHP: 4.4.9
+-- Serveur: mysql5-29.90
+-- Généré le : Mer 03 Mars 2010 à 14:20
+-- Version du serveur: 5.0.90
+-- Version de PHP: 5.2.6-1+lenny4
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
@@ -16,10 +16,11 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 -- --------------------------------------------------------
 
 --
--- Structure de la table `action`
+-- Structure de la table `bbos_action`
 --
 
-CREATE TABLE IF NOT EXISTS `action` (
+DROP TABLE IF EXISTS `bbos_action`;
+CREATE TABLE IF NOT EXISTS `bbos_action` (
   `idAction` int(10) unsigned NOT NULL auto_increment,
   `Match_idMatch` int(10) unsigned NOT NULL,
   `Player_idPlayer` int(10) unsigned default NULL,
@@ -37,29 +38,30 @@ CREATE TABLE IF NOT EXISTS `action` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_bin AUTO_INCREMENT=2 ;
 
 --
--- Contenu de la table `action`
+-- Contenu de la table `bbos_action`
 --
 
-INSERT INTO `action` (`idAction`, `Match_idMatch`, `Player_idPlayer`, `Action_type_idAction_type`, `Opponent_idPlayer`, `Team_idTeam`, `Turn`, `Divers`) VALUES
+INSERT INTO `bbos_action` (`idAction`, `Match_idMatch`, `Player_idPlayer`, `Action_type_idAction_type`, `Opponent_idPlayer`, `Team_idTeam`, `Turn`, `Divers`) VALUES
 (1, 2, 1, 1, 2, 1, 2, NULL);
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `action_type`
+-- Structure de la table `bbos_action_type`
 --
 
-CREATE TABLE IF NOT EXISTS `action_type` (
+DROP TABLE IF EXISTS `bbos_action_type`;
+CREATE TABLE IF NOT EXISTS `bbos_action_type` (
   `idAction_type` int(10) unsigned NOT NULL auto_increment,
   `Name` text character set latin1 NOT NULL,
   PRIMARY KEY  (`idAction_type`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_bin AUTO_INCREMENT=9 ;
 
 --
--- Contenu de la table `action_type`
+-- Contenu de la table `bbos_action_type`
 --
 
-INSERT INTO `action_type` (`idAction_type`, `Name`) VALUES
+INSERT INTO `bbos_action_type` (`idAction_type`, `Name`) VALUES
 (1, 'Pass'),
 (2, 'Catch'),
 (3, 'Touchdown'),
@@ -72,10 +74,11 @@ INSERT INTO `action_type` (`idAction_type`, `Name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Structure de la table `card`
+-- Structure de la table `bbos_card`
 --
 
-CREATE TABLE IF NOT EXISTS `card` (
+DROP TABLE IF EXISTS `bbos_card`;
+CREATE TABLE IF NOT EXISTS `bbos_card` (
   `idCard` int(10) unsigned NOT NULL auto_increment,
   `Card_type_idCard_type` int(10) unsigned NOT NULL,
   `Name` text collate latin1_bin NOT NULL,
@@ -84,17 +87,18 @@ CREATE TABLE IF NOT EXISTS `card` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_bin AUTO_INCREMENT=1 ;
 
 --
--- Contenu de la table `card`
+-- Contenu de la table `bbos_card`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `card_type`
+-- Structure de la table `bbos_card_type`
 --
 
-CREATE TABLE IF NOT EXISTS `card_type` (
+DROP TABLE IF EXISTS `bbos_card_type`;
+CREATE TABLE IF NOT EXISTS `bbos_card_type` (
   `idCardType` int(10) unsigned NOT NULL auto_increment,
   `Name` text character set latin1 NOT NULL,
   `Cost` int(10) NOT NULL,
@@ -102,10 +106,10 @@ CREATE TABLE IF NOT EXISTS `card_type` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_bin AUTO_INCREMENT=16 ;
 
 --
--- Contenu de la table `card_type`
+-- Contenu de la table `bbos_card_type`
 --
 
-INSERT INTO `card_type` (`idCardType`, `Name`, `Cost`) VALUES
+INSERT INTO `bbos_card_type` (`idCardType`, `Name`, `Cost`) VALUES
 (9, 'Miscellaneous mayhem', 50000),
 (10, 'Special play', 50000),
 (11, 'Magic item', 50000),
@@ -117,10 +121,11 @@ INSERT INTO `card_type` (`idCardType`, `Name`, `Cost`) VALUES
 -- --------------------------------------------------------
 
 --
--- Structure de la table `coach`
+-- Structure de la table `bbos_coach`
 --
 
-CREATE TABLE IF NOT EXISTS `coach` (
+DROP TABLE IF EXISTS `bbos_coach`;
+CREATE TABLE IF NOT EXISTS `bbos_coach` (
   `idCoach` int(10) unsigned NOT NULL auto_increment,
   `Name` text character set latin1,
   `NickName` text character set latin1,
@@ -129,10 +134,10 @@ CREATE TABLE IF NOT EXISTS `coach` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_bin AUTO_INCREMENT=6 ;
 
 --
--- Contenu de la table `coach`
+-- Contenu de la table `bbos_coach`
 --
 
-INSERT INTO `coach` (`idCoach`, `Name`, `NickName`, `PWD`) VALUES
+INSERT INTO `bbos_coach` (`idCoach`, `Name`, `NickName`, `PWD`) VALUES
 (1, 'Frederic Berger', 'lord bojo', 'lancie'),
 (2, 'Frederic Poupet', 'poups', 'poups'),
 (3, 'test_poups', 'test_poups', 'test'),
@@ -142,10 +147,11 @@ INSERT INTO `coach` (`idCoach`, `Name`, `NickName`, `PWD`) VALUES
 -- --------------------------------------------------------
 
 --
--- Structure de la table `competence`
+-- Structure de la table `bbos_competence`
 --
 
-CREATE TABLE IF NOT EXISTS `competence` (
+DROP TABLE IF EXISTS `bbos_competence`;
+CREATE TABLE IF NOT EXISTS `bbos_competence` (
   `idCompetence` int(10) unsigned NOT NULL auto_increment,
   `Competence_Type_idCompetence_Type` tinyint(3) unsigned NOT NULL,
   `Name` text,
@@ -154,10 +160,10 @@ CREATE TABLE IF NOT EXISTS `competence` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=80 ;
 
 --
--- Contenu de la table `competence`
+-- Contenu de la table `bbos_competence`
 --
 
-INSERT INTO `competence` (`idCompetence`, `Competence_Type_idCompetence_Type`, `Name`) VALUES
+INSERT INTO `bbos_competence` (`idCompetence`, `Competence_Type_idCompetence_Type`, `Name`) VALUES
 (1, 1, 'Jump up'),
 (2, 1, 'Sure feet'),
 (3, 1, 'Dodge'),
@@ -241,20 +247,21 @@ INSERT INTO `competence` (`idCompetence`, `Competence_Type_idCompetence_Type`, `
 -- --------------------------------------------------------
 
 --
--- Structure de la table `competence_type`
+-- Structure de la table `bbos_competence_type`
 --
 
-CREATE TABLE IF NOT EXISTS `competence_type` (
+DROP TABLE IF EXISTS `bbos_competence_type`;
+CREATE TABLE IF NOT EXISTS `bbos_competence_type` (
   `idCompetence_Type` tinyint(3) unsigned NOT NULL auto_increment,
   `Name` text,
   PRIMARY KEY  (`idCompetence_Type`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
 
 --
--- Contenu de la table `competence_type`
+-- Contenu de la table `bbos_competence_type`
 --
 
-INSERT INTO `competence_type` (`idCompetence_Type`, `Name`) VALUES
+INSERT INTO `bbos_competence_type` (`idCompetence_Type`, `Name`) VALUES
 (1, 'Agility'),
 (2, 'Strength'),
 (3, 'General'),
@@ -266,10 +273,11 @@ INSERT INTO `competence_type` (`idCompetence_Type`, `Name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Structure de la table `inducement_type`
+-- Structure de la table `bbos_inducement_type`
 --
 
-CREATE TABLE IF NOT EXISTS `inducement_type` (
+DROP TABLE IF EXISTS `bbos_inducement_type`;
+CREATE TABLE IF NOT EXISTS `bbos_inducement_type` (
   `idInducement_type` int(10) unsigned NOT NULL auto_increment,
   `Name` text character set latin1 NOT NULL,
   `Limit` tinyint(4) NOT NULL,
@@ -277,10 +285,10 @@ CREATE TABLE IF NOT EXISTS `inducement_type` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_bin AUTO_INCREMENT=11 ;
 
 --
--- Contenu de la table `inducement_type`
+-- Contenu de la table `bbos_inducement_type`
 --
 
-INSERT INTO `inducement_type` (`idInducement_type`, `Name`, `Limit`) VALUES
+INSERT INTO `bbos_inducement_type` (`idInducement_type`, `Name`, `Limit`) VALUES
 (1, 'Bloodweiser babes', 2),
 (2, 'Bribe the ref', 3),
 (3, 'Extra team training', 4),
@@ -295,10 +303,11 @@ INSERT INTO `inducement_type` (`idInducement_type`, `Name`, `Limit`) VALUES
 -- --------------------------------------------------------
 
 --
--- Structure de la table `injuries`
+-- Structure de la table `bbos_injuries`
 --
 
-CREATE TABLE IF NOT EXISTS `injuries` (
+DROP TABLE IF EXISTS `bbos_injuries`;
+CREATE TABLE IF NOT EXISTS `bbos_injuries` (
   `idInjuries` int(10) unsigned NOT NULL auto_increment,
   `Name` varchar(255) default NULL,
   `Code` tinyint(3) unsigned default NULL,
@@ -306,10 +315,10 @@ CREATE TABLE IF NOT EXISTS `injuries` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
 
 --
--- Contenu de la table `injuries`
+-- Contenu de la table `bbos_injuries`
 --
 
-INSERT INTO `injuries` (`idInjuries`, `Name`, `Code`) VALUES
+INSERT INTO `bbos_injuries` (`idInjuries`, `Name`, `Code`) VALUES
 (3, '-1 Movement', 3),
 (4, '-1 Strength', 4),
 (5, '-1 Agility', 5),
@@ -318,10 +327,11 @@ INSERT INTO `injuries` (`idInjuries`, `Name`, `Code`) VALUES
 -- --------------------------------------------------------
 
 --
--- Structure de la table `league`
+-- Structure de la table `bbos_league`
 --
 
-CREATE TABLE IF NOT EXISTS `league` (
+DROP TABLE IF EXISTS `bbos_league`;
+CREATE TABLE IF NOT EXISTS `bbos_league` (
   `idLeague` int(10) unsigned NOT NULL auto_increment,
   `idCoach` int(10) unsigned NOT NULL,
   `idLeague_type` int(10) unsigned NOT NULL,
@@ -334,10 +344,10 @@ CREATE TABLE IF NOT EXISTS `league` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_bin AUTO_INCREMENT=4 ;
 
 --
--- Contenu de la table `league`
+-- Contenu de la table `bbos_league`
 --
 
-INSERT INTO `league` (`idLeague`, `idCoach`, `idLeague_type`, `Name`, `Season`, `TeamNumber`, `StartingPrince`, `Opened`) VALUES
+INSERT INTO `bbos_league` (`idLeague`, `idCoach`, `idLeague_type`, `Name`, `Season`, `TeamNumber`, `StartingPrince`, `Opened`) VALUES
 (1, 1, 1, 'Test Cup', 1, 4, 1100000, NULL),
 (2, 1, 2, 'Test League', 1, 4, 1100000, NULL),
 (3, 1, 4, 'Eternal', 1, 0, 1000000, NULL);
@@ -345,20 +355,21 @@ INSERT INTO `league` (`idLeague`, `idCoach`, `idLeague_type`, `Name`, `Season`, 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `league_type`
+-- Structure de la table `bbos_league_type`
 --
 
-CREATE TABLE IF NOT EXISTS `league_type` (
+DROP TABLE IF EXISTS `bbos_league_type`;
+CREATE TABLE IF NOT EXISTS `bbos_league_type` (
   `idLeague_type` int(10) unsigned NOT NULL auto_increment,
   `Name` varchar(20) default NULL,
   PRIMARY KEY  (`idLeague_type`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
 
 --
--- Contenu de la table `league_type`
+-- Contenu de la table `bbos_league_type`
 --
 
-INSERT INTO `league_type` (`idLeague_type`, `Name`) VALUES
+INSERT INTO `bbos_league_type` (`idLeague_type`, `Name`) VALUES
 (1, 'Cup'),
 (2, 'Pool'),
 (3, 'Mixed'),
@@ -367,10 +378,11 @@ INSERT INTO `league_type` (`idLeague_type`, `Name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Structure de la table `match`
+-- Structure de la table `bbos_match`
 --
 
-CREATE TABLE IF NOT EXISTS `match` (
+DROP TABLE IF EXISTS `bbos_match`;
+CREATE TABLE IF NOT EXISTS `bbos_match` (
   `idMatch` int(10) unsigned NOT NULL auto_increment,
   `date` datetime NOT NULL,
   `League_idLeague` int(10) unsigned NOT NULL,
@@ -397,10 +409,10 @@ CREATE TABLE IF NOT EXISTS `match` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_bin AUTO_INCREMENT=52 ;
 
 --
--- Contenu de la table `match`
+-- Contenu de la table `bbos_match`
 --
 
-INSERT INTO `match` (`idMatch`, `date`, `League_idLeague`, `Team_idTeam_1`, `Team_idTeam_2`, `State`, `Score_1`, `Score_2`, `Winner_idTeam`, `Round`, `ExtraTime`, `Public`, `FAME_1`, `FAME_2`, `Winnings_1`, `Winnings_2`, `challengerId`, `Data`) VALUES
+INSERT INTO `bbos_match` (`idMatch`, `date`, `League_idLeague`, `Team_idTeam_1`, `Team_idTeam_2`, `State`, `Score_1`, `Score_2`, `Winner_idTeam`, `Round`, `ExtraTime`, `Public`, `FAME_1`, `FAME_2`, `Winnings_1`, `Winnings_2`, `challengerId`, `Data`) VALUES
 (2, '2008-08-04 10:28:16', 3, 1, 25, 3, 1, 0, 1, 1, 0, 12000, 2, 0, 50000, 20000, 25, NULL),
 (3, '2008-07-08 10:30:43', 3, 1, 26, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL),
 (4, '2008-08-10 10:31:52', 3, 1, 19, 3, 0, 1, 19, 1, 1, 25000, 1, 0, 50000, 60000, 1, NULL),
@@ -412,10 +424,11 @@ INSERT INTO `match` (`idMatch`, `date`, `League_idLeague`, `Team_idTeam_1`, `Tea
 -- --------------------------------------------------------
 
 --
--- Structure de la table `match_has_inducement`
+-- Structure de la table `bbos_match_has_inducement`
 --
 
-CREATE TABLE IF NOT EXISTS `match_has_inducement` (
+DROP TABLE IF EXISTS `bbos_match_has_inducement`;
+CREATE TABLE IF NOT EXISTS `bbos_match_has_inducement` (
   `idMatch_has_inducement` int(10) unsigned NOT NULL auto_increment,
   `Match_idMatch` int(10) unsigned NOT NULL,
   `Team_idTeam` int(10) unsigned NOT NULL,
@@ -431,17 +444,18 @@ CREATE TABLE IF NOT EXISTS `match_has_inducement` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_bin AUTO_INCREMENT=1 ;
 
 --
--- Contenu de la table `match_has_inducement`
+-- Contenu de la table `bbos_match_has_inducement`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `player`
+-- Structure de la table `bbos_player`
 --
 
-CREATE TABLE IF NOT EXISTS `player` (
+DROP TABLE IF EXISTS `bbos_player`;
+CREATE TABLE IF NOT EXISTS `bbos_player` (
   `idPlayer` int(10) unsigned NOT NULL auto_increment,
   `Player_Type_idPlayer_Type` mediumint(8) unsigned NOT NULL,
   `Team_idTeam` int(10) unsigned NOT NULL,
@@ -465,14 +479,14 @@ CREATE TABLE IF NOT EXISTS `player` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=350 ;
 
 --
--- Contenu de la table `player`
+-- Contenu de la table `bbos_player`
 --
 
-INSERT INTO `player` (`idPlayer`, `Player_Type_idPlayer_Type`, `Team_idTeam`, `Name`, `Ranking`, `MissNextGame`, `Completion`, `Touchdowns`, `Casualties`, `Interceptions`, `MVP`, `Persistant`, `Number`, `Status`, `Retired`, `Dead`, `icon_address`) VALUES
+INSERT INTO `bbos_player` (`idPlayer`, `Player_Type_idPlayer_Type`, `Team_idTeam`, `Name`, `Ranking`, `MissNextGame`, `Completion`, `Touchdowns`, `Casualties`, `Interceptions`, `MVP`, `Persistant`, `Number`, `Status`, `Retired`, `Dead`, `icon_address`) VALUES
 (1, 52, 1, 'Teigneux', 'Teigneux', 0, 1, 2, 0, 0, 0, 1, 1, 'Active', 0, 0, ''),
-(2, 52, 1, 'Morveux', 'Morveux', 1, 0, 0, 2, 0, 0, 0, 2, 'Active', 0, 0, ''),
+(2, 52, 1, 'Morveux', 'Morveux', 0, 0, 0, 2, 0, 0, 0, 2, 'Active', 0, 0, ''),
 (3, 51, 1, 'Cogneur', 'Cogneur', 1, 1, 1, 3, 4, 2, 1, 3, 'Active', 0, 0, ''),
-(4, 51, 1, 'Têtu', 'Têtu', 0, 0, 0, 0, 2, 1, 0, 4, 'Active', 1, 0, ''),
+(4, 51, 1, 'Têtu', 'Têtu', 0, 0, 0, 0, 2, 0, 0, 16, 'Active', 0, 0, ''),
 (5, 50, 1, 'Hurleur', 'Hurleur', 0, 0, 0, 0, 0, 0, 0, 5, 'Active', 0, 0, ''),
 (6, 50, 1, 'Râleur', 'Râleur', 0, 0, 0, 0, 0, 0, 0, 6, 'Active', 0, 0, ''),
 (7, 49, 1, 'A', 'A', 0, 0, 0, 0, 0, 0, 0, 7, 'Active', 0, 0, ''),
@@ -611,7 +625,6 @@ INSERT INTO `player` (`idPlayer`, `Player_Type_idPlayer_Type`, `Team_idTeam`, `N
 (309, 28, 28, 'oipy', 'Rookie', 0, 0, 0, 0, 0, 0, 0, 16, 'Active', 0, 0, ''),
 (311, 53, 1, '53', 'Rookie', 0, 0, 0, 0, 0, 0, 0, 13, 'Active', 1, 0, ''),
 (312, 49, 1, '49', 'Rookie', 0, 0, 0, 0, 0, 0, 0, 14, 'Active', 1, 0, ''),
-(313, 49, 1, '49', 'Rookie', 0, 0, 0, 0, 0, 0, 0, 16, 'Active', 1, 0, ''),
 (314, 53, 1, 'Atchoum', 'Rookie', 0, 0, 0, 0, 0, 0, 0, 15, 'Active', 1, 0, ''),
 (315, 93, 29, 'A', 'Rookie', 0, 0, 0, 0, 0, 0, 0, 1, '', 0, 0, ''),
 (316, 86, 29, 'B', 'Rookie', 0, 0, 0, 0, 0, 0, 0, 2, '', 0, 0, ''),
@@ -629,7 +642,6 @@ INSERT INTO `player` (`idPlayer`, `Player_Type_idPlayer_Type`, `Team_idTeam`, `N
 (328, 83, 29, 'N', 'Rookie', 0, 0, 0, 0, 0, 0, 0, 14, '', 0, 0, ''),
 (329, 83, 29, 'O', 'Rookie', 0, 0, 0, 0, 0, 0, 0, 15, '', 0, 0, ''),
 (330, 49, 1, 'TOTO', 'Rookie', 0, 0, 0, 0, 0, 0, 0, 13, 'Active', 0, 0, ''),
-(331, 51, 1, 'Têtu Junior', 'Rookie', 0, 0, 0, 0, 0, 0, 0, 16, 'Active', 0, 0, ''),
 (332, 92, 30, 'A', 'Rookie', 0, 0, 0, 0, 0, 0, 0, 1, '', 0, 0, ''),
 (333, 150, 30, 'B', 'Rookie', 0, 0, 0, 0, 0, 0, 0, 2, '', 0, 0, ''),
 (334, 91, 30, 'C', 'Rookie', 0, 0, 0, 0, 0, 0, 0, 3, '', 1, 0, ''),
@@ -652,10 +664,11 @@ INSERT INTO `player` (`idPlayer`, `Player_Type_idPlayer_Type`, `Team_idTeam`, `N
 -- --------------------------------------------------------
 
 --
--- Structure de la table `player_has_competence`
+-- Structure de la table `bbos_player_has_competence`
 --
 
-CREATE TABLE IF NOT EXISTS `player_has_competence` (
+DROP TABLE IF EXISTS `bbos_player_has_competence`;
+CREATE TABLE IF NOT EXISTS `bbos_player_has_competence` (
   `Player_idPlayer` int(10) unsigned NOT NULL,
   `Competence_idCompetence` int(10) unsigned NOT NULL,
   PRIMARY KEY  (`Player_idPlayer`,`Competence_idCompetence`),
@@ -664,25 +677,102 @@ CREATE TABLE IF NOT EXISTS `player_has_competence` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Contenu de la table `player_has_competence`
+-- Contenu de la table `bbos_player_has_competence`
 --
 
-INSERT INTO `player_has_competence` (`Player_idPlayer`, `Competence_idCompetence`) VALUES
+INSERT INTO `bbos_player_has_competence` (`Player_idPlayer`, `Competence_idCompetence`) VALUES
+(1, 1),
+(1, 2),
+(1, 3),
+(1, 4),
+(1, 5),
+(1, 6),
+(1, 7),
+(1, 8),
+(1, 9),
+(1, 10),
+(1, 11),
+(1, 12),
+(2, 13),
+(2, 14),
+(2, 15),
+(2, 16),
+(2, 17),
+(2, 18),
+(2, 19),
+(2, 20),
+(2, 21),
+(2, 22),
+(4, 23),
+(4, 24),
+(4, 25),
+(4, 26),
+(4, 27),
+(4, 28),
+(4, 29),
+(4, 30),
+(5, 31),
+(5, 32),
+(5, 33),
+(5, 34),
 (5, 35),
+(5, 36),
+(5, 37),
+(5, 38),
+(5, 39),
+(5, 40),
+(6, 41),
+(6, 42),
+(6, 43),
+(6, 44),
+(6, 45),
+(6, 47),
+(6, 48),
+(6, 49),
+(6, 50),
 (7, 15),
+(7, 51),
+(7, 52),
+(7, 53),
+(7, 54),
+(7, 55),
+(7, 56),
+(7, 57),
+(7, 58),
+(7, 59),
+(7, 60),
+(8, 61),
+(8, 62),
+(8, 63),
+(8, 64),
+(8, 65),
+(8, 67),
+(8, 68),
+(8, 69),
+(8, 70),
 (8, 76),
+(9, 71),
 (9, 77),
+(10, 76),
+(10, 77),
 (10, 78),
+(10, 79),
+(11, 66),
+(11, 72),
+(11, 73),
+(11, 74),
+(11, 75),
 (11, 79),
 (12, 30);
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `player_has_injuries`
+-- Structure de la table `bbos_player_has_injuries`
 --
 
-CREATE TABLE IF NOT EXISTS `player_has_injuries` (
+DROP TABLE IF EXISTS `bbos_player_has_injuries`;
+CREATE TABLE IF NOT EXISTS `bbos_player_has_injuries` (
   `Injuries_idInjuries` int(10) unsigned NOT NULL,
   `Player_idPlayer` int(10) unsigned NOT NULL,
   PRIMARY KEY  (`Injuries_idInjuries`,`Player_idPlayer`),
@@ -691,10 +781,10 @@ CREATE TABLE IF NOT EXISTS `player_has_injuries` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Contenu de la table `player_has_injuries`
+-- Contenu de la table `bbos_player_has_injuries`
 --
 
-INSERT INTO `player_has_injuries` (`Injuries_idInjuries`, `Player_idPlayer`) VALUES
+INSERT INTO `bbos_player_has_injuries` (`Injuries_idInjuries`, `Player_idPlayer`) VALUES
 (3, 3),
 (4, 4),
 (5, 5),
@@ -703,10 +793,11 @@ INSERT INTO `player_has_injuries` (`Injuries_idInjuries`, `Player_idPlayer`) VAL
 -- --------------------------------------------------------
 
 --
--- Structure de la table `player_type`
+-- Structure de la table `bbos_player_type`
 --
 
-CREATE TABLE IF NOT EXISTS `player_type` (
+DROP TABLE IF EXISTS `bbos_player_type`;
+CREATE TABLE IF NOT EXISTS `bbos_player_type` (
   `idPlayer_Type` mediumint(8) unsigned NOT NULL auto_increment,
   `Name` text,
   `Ma` tinyint(4) default NULL,
@@ -720,10 +811,10 @@ CREATE TABLE IF NOT EXISTS `player_type` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=151 ;
 
 --
--- Contenu de la table `player_type`
+-- Contenu de la table `bbos_player_type`
 --
 
-INSERT INTO `player_type` (`idPlayer_Type`, `Name`, `Ma`, `St`, `Ag`, `Ar`, `Cost`, `Position`, `isStar`) VALUES
+INSERT INTO `bbos_player_type` (`idPlayer_Type`, `Name`, `Ma`, `St`, `Ag`, `Ar`, `Cost`, `Position`, `isStar`) VALUES
 (1, 'Amazon Linewoman', 6, 3, 3, 7, 50000, 'Linewoman', 0),
 (2, 'Amazon Thrower', 6, 3, 3, 7, 70000, 'Thrower', 0),
 (3, 'Amazon Catcher', 6, 3, 3, 7, 70000, 'Catcher', 0),
@@ -878,10 +969,11 @@ INSERT INTO `player_type` (`idPlayer_Type`, `Name`, `Ma`, `St`, `Ag`, `Ar`, `Cos
 -- --------------------------------------------------------
 
 --
--- Structure de la table `player_type_has_competence`
+-- Structure de la table `bbos_player_type_has_competence`
 --
 
-CREATE TABLE IF NOT EXISTS `player_type_has_competence` (
+DROP TABLE IF EXISTS `bbos_player_type_has_competence`;
+CREATE TABLE IF NOT EXISTS `bbos_player_type_has_competence` (
   `Player_Type_idPlayer_Type` mediumint(8) unsigned NOT NULL,
   `Competence_idCompetence` int(10) unsigned NOT NULL,
   PRIMARY KEY  (`Player_Type_idPlayer_Type`,`Competence_idCompetence`),
@@ -890,10 +982,10 @@ CREATE TABLE IF NOT EXISTS `player_type_has_competence` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Contenu de la table `player_type_has_competence`
+-- Contenu de la table `bbos_player_type_has_competence`
 --
 
-INSERT INTO `player_type_has_competence` (`Player_Type_idPlayer_Type`, `Competence_idCompetence`) VALUES
+INSERT INTO `bbos_player_type_has_competence` (`Player_Type_idPlayer_Type`, `Competence_idCompetence`) VALUES
 (1, 3),
 (2, 3),
 (2, 39),
@@ -1456,10 +1548,11 @@ INSERT INTO `player_type_has_competence` (`Player_Type_idPlayer_Type`, `Competen
 -- --------------------------------------------------------
 
 --
--- Structure de la table `player_type_has_doublecompetence_type`
+-- Structure de la table `bbos_player_type_has_doublecompetence_type`
 --
 
-CREATE TABLE IF NOT EXISTS `player_type_has_doublecompetence_type` (
+DROP TABLE IF EXISTS `bbos_player_type_has_doublecompetence_type`;
+CREATE TABLE IF NOT EXISTS `bbos_player_type_has_doublecompetence_type` (
   `Player_Type_idPlayer_Type` mediumint(8) unsigned NOT NULL,
   `Competence_Type_idCompetence_Type` tinyint(3) unsigned NOT NULL,
   PRIMARY KEY  (`Player_Type_idPlayer_Type`,`Competence_Type_idCompetence_Type`),
@@ -1468,10 +1561,10 @@ CREATE TABLE IF NOT EXISTS `player_type_has_doublecompetence_type` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Contenu de la table `player_type_has_doublecompetence_type`
+-- Contenu de la table `bbos_player_type_has_doublecompetence_type`
 --
 
-INSERT INTO `player_type_has_doublecompetence_type` (`Player_Type_idPlayer_Type`, `Competence_Type_idCompetence_Type`) VALUES
+INSERT INTO `bbos_player_type_has_doublecompetence_type` (`Player_Type_idPlayer_Type`, `Competence_Type_idCompetence_Type`) VALUES
 (1, 1),
 (2, 1),
 (4, 1),
@@ -1704,10 +1797,11 @@ INSERT INTO `player_type_has_doublecompetence_type` (`Player_Type_idPlayer_Type`
 -- --------------------------------------------------------
 
 --
--- Structure de la table `player_type_has_simplecompetence_type`
+-- Structure de la table `bbos_player_type_has_simplecompetence_type`
 --
 
-CREATE TABLE IF NOT EXISTS `player_type_has_simplecompetence_type` (
+DROP TABLE IF EXISTS `bbos_player_type_has_simplecompetence_type`;
+CREATE TABLE IF NOT EXISTS `bbos_player_type_has_simplecompetence_type` (
   `Player_Type_idPlayer_Type` mediumint(8) unsigned NOT NULL,
   `Competence_Type_idCompetence_Type` tinyint(3) unsigned NOT NULL,
   PRIMARY KEY  (`Player_Type_idPlayer_Type`,`Competence_Type_idCompetence_Type`),
@@ -1716,10 +1810,10 @@ CREATE TABLE IF NOT EXISTS `player_type_has_simplecompetence_type` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Contenu de la table `player_type_has_simplecompetence_type`
+-- Contenu de la table `bbos_player_type_has_simplecompetence_type`
 --
 
-INSERT INTO `player_type_has_simplecompetence_type` (`Player_Type_idPlayer_Type`, `Competence_Type_idCompetence_Type`) VALUES
+INSERT INTO `bbos_player_type_has_simplecompetence_type` (`Player_Type_idPlayer_Type`, `Competence_Type_idCompetence_Type`) VALUES
 (3, 1),
 (8, 1),
 (9, 1),
@@ -1895,10 +1989,11 @@ INSERT INTO `player_type_has_simplecompetence_type` (`Player_Type_idPlayer_Type`
 -- --------------------------------------------------------
 
 --
--- Structure de la table `team`
+-- Structure de la table `bbos_team`
 --
 
-CREATE TABLE IF NOT EXISTS `team` (
+DROP TABLE IF EXISTS `bbos_team`;
+CREATE TABLE IF NOT EXISTS `bbos_team` (
   `idTeam` int(10) unsigned NOT NULL auto_increment,
   `idLeague` int(10) unsigned NOT NULL,
   `Team_Type_idTeam_Type` mediumint(8) unsigned NOT NULL,
@@ -1917,10 +2012,10 @@ CREATE TABLE IF NOT EXISTS `team` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=31 ;
 
 --
--- Contenu de la table `team`
+-- Contenu de la table `bbos_team`
 --
 
-INSERT INTO `team` (`idTeam`, `idLeague`, `Team_Type_idTeam_Type`, `Coach_idCoach`, `Name`, `Popularity`, `Assists`, `Cheerleaders`, `Apothecary`, `Treasury`, `Reroll`, `Active`) VALUES
+INSERT INTO `bbos_team` (`idTeam`, `idLeague`, `Team_Type_idTeam_Type`, `Coach_idCoach`, `Name`, `Popularity`, `Assists`, `Cheerleaders`, `Apothecary`, `Treasury`, `Reroll`, `Active`) VALUES
 (1, 3, 13, 1, 'Dwarfs punks', 3, 10, 10, 1, 500000, 10, 1),
 (19, 3, 4, 1, 'Ombres', 0, 2, 2, 1, 4330000, 5, 1),
 (20, 3, 5, 1, 'A poil dans la forêt', 0, 0, 0, 0, 0, 2, 1),
@@ -1938,10 +2033,11 @@ INSERT INTO `team` (`idTeam`, `idLeague`, `Team_Type_idTeam_Type`, `Coach_idCoac
 -- --------------------------------------------------------
 
 --
--- Structure de la table `team_type`
+-- Structure de la table `bbos_team_type`
 --
 
-CREATE TABLE IF NOT EXISTS `team_type` (
+DROP TABLE IF EXISTS `bbos_team_type`;
+CREATE TABLE IF NOT EXISTS `bbos_team_type` (
   `idTeam_Type` mediumint(8) unsigned NOT NULL auto_increment,
   `Name` text,
   `RerollCost` int(10) unsigned default NULL,
@@ -1957,10 +2053,10 @@ CREATE TABLE IF NOT EXISTS `team_type` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=25 ;
 
 --
--- Contenu de la table `team_type`
+-- Contenu de la table `bbos_team_type`
 --
 
-INSERT INTO `team_type` (`idTeam_Type`, `Name`, `RerollCost`, `Apothecary`, `ApothecaryCost`, `WizardCost`, `CanRaise`, `BribeCost`, `ChefCost`, `LogoURL`, `Description`) VALUES
+INSERT INTO `bbos_team_type` (`idTeam_Type`, `Name`, `RerollCost`, `Apothecary`, `ApothecaryCost`, `WizardCost`, `CanRaise`, `BribeCost`, `ChefCost`, `LogoURL`, `Description`) VALUES
 (1, 'Amazon', 50000, 1, 50000, 150000, 0, 100000, 300000, 'http://bbos.ainpacte.org/images/team_logos/amazon.png', NULL),
 (2, 'Chaos', 60000, 1, 50000, 150000, 0, 100000, 300000, 'http://bbos.ainpacte.org/images/team_logos/chaos.png', NULL),
 (3, 'Elf', 50000, 1, 50000, 150000, 0, 100000, 300000, 'http://bbos.ainpacte.org/images/team_logos/elf.png', NULL),
@@ -1989,10 +2085,11 @@ INSERT INTO `team_type` (`idTeam_Type`, `Name`, `RerollCost`, `Apothecary`, `Apo
 -- --------------------------------------------------------
 
 --
--- Structure de la table `team_type_has_player_type`
+-- Structure de la table `bbos_team_type_has_player_type`
 --
 
-CREATE TABLE IF NOT EXISTS `team_type_has_player_type` (
+DROP TABLE IF EXISTS `bbos_team_type_has_player_type`;
+CREATE TABLE IF NOT EXISTS `bbos_team_type_has_player_type` (
   `Team_Type_idTeam_Type` mediumint(8) unsigned NOT NULL,
   `Player_Type_idPlayer_Type` mediumint(8) unsigned NOT NULL,
   `MaxNumber` tinyint(3) unsigned default NULL,
@@ -2002,10 +2099,10 @@ CREATE TABLE IF NOT EXISTS `team_type_has_player_type` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Contenu de la table `team_type_has_player_type`
+-- Contenu de la table `bbos_team_type_has_player_type`
 --
 
-INSERT INTO `team_type_has_player_type` (`Team_Type_idTeam_Type`, `Player_Type_idPlayer_Type`, `MaxNumber`) VALUES
+INSERT INTO `bbos_team_type_has_player_type` (`Team_Type_idTeam_Type`, `Player_Type_idPlayer_Type`, `MaxNumber`) VALUES
 (1, 1, 16),
 (1, 2, 2),
 (1, 3, 2),
@@ -2263,95 +2360,95 @@ INSERT INTO `team_type_has_player_type` (`Team_Type_idTeam_Type`, `Player_Type_i
 --
 
 --
--- Contraintes pour la table `action`
+-- Contraintes pour la table `bbos_action`
 --
-ALTER TABLE `action`
-  ADD CONSTRAINT `action_ibfk_1` FOREIGN KEY (`Match_idMatch`) REFERENCES `match` (`idMatch`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `action_ibfk_2` FOREIGN KEY (`Player_idPlayer`) REFERENCES `player` (`idPlayer`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `action_ibfk_4` FOREIGN KEY (`Opponent_idPlayer`) REFERENCES `player` (`idPlayer`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `action_ibfk_5` FOREIGN KEY (`Team_idTeam`) REFERENCES `team` (`idTeam`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `action_ibfk_6` FOREIGN KEY (`Action_type_idAction_type`) REFERENCES `action_type` (`idAction_type`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `bbos_action`
+  ADD CONSTRAINT `action_ibfk_1` FOREIGN KEY (`Match_idMatch`) REFERENCES `bbos_match` (`idMatch`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `action_ibfk_2` FOREIGN KEY (`Player_idPlayer`) REFERENCES `bbos_player` (`idPlayer`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `action_ibfk_4` FOREIGN KEY (`Opponent_idPlayer`) REFERENCES `bbos_player` (`idPlayer`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `action_ibfk_5` FOREIGN KEY (`Team_idTeam`) REFERENCES `bbos_team` (`idTeam`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `action_ibfk_6` FOREIGN KEY (`Action_type_idAction_type`) REFERENCES `bbos_action_type` (`idAction_type`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
--- Contraintes pour la table `card`
+-- Contraintes pour la table `bbos_card`
 --
-ALTER TABLE `card`
-  ADD CONSTRAINT `card_ibfk_1` FOREIGN KEY (`Card_type_idCard_type`) REFERENCES `card_type` (`idCardType`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `bbos_card`
+  ADD CONSTRAINT `card_ibfk_1` FOREIGN KEY (`Card_type_idCard_type`) REFERENCES `bbos_card_type` (`idCardType`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
--- Contraintes pour la table `competence`
+-- Contraintes pour la table `bbos_competence`
 --
-ALTER TABLE `competence`
-  ADD CONSTRAINT `competence_ibfk_1` FOREIGN KEY (`Competence_Type_idCompetence_Type`) REFERENCES `competence_type` (`idCompetence_Type`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `bbos_competence`
+  ADD CONSTRAINT `competence_ibfk_1` FOREIGN KEY (`Competence_Type_idCompetence_Type`) REFERENCES `bbos_competence_type` (`idCompetence_Type`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
--- Contraintes pour la table `match`
+-- Contraintes pour la table `bbos_match`
 --
-ALTER TABLE `match`
-  ADD CONSTRAINT `match_ibfk_2` FOREIGN KEY (`Team_idTeam_1`) REFERENCES `team` (`idTeam`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `match_ibfk_3` FOREIGN KEY (`Team_idTeam_2`) REFERENCES `team` (`idTeam`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `match_ibfk_4` FOREIGN KEY (`League_idLeague`) REFERENCES `league` (`idLeague`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `bbos_match`
+  ADD CONSTRAINT `match_ibfk_2` FOREIGN KEY (`Team_idTeam_1`) REFERENCES `bbos_team` (`idTeam`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `match_ibfk_3` FOREIGN KEY (`Team_idTeam_2`) REFERENCES `bbos_team` (`idTeam`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `match_ibfk_4` FOREIGN KEY (`League_idLeague`) REFERENCES `bbos_league` (`idLeague`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
--- Contraintes pour la table `match_has_inducement`
+-- Contraintes pour la table `bbos_match_has_inducement`
 --
-ALTER TABLE `match_has_inducement`
-  ADD CONSTRAINT `match_has_inducement_ibfk_1` FOREIGN KEY (`Match_idMatch`) REFERENCES `match` (`idMatch`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `match_has_inducement_ibfk_2` FOREIGN KEY (`Team_idTeam`) REFERENCES `team` (`idTeam`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `match_has_inducement_ibfk_3` FOREIGN KEY (`Inducement_type_idInducementType`) REFERENCES `inducement_type` (`idInducement_type`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `bbos_match_has_inducement`
+  ADD CONSTRAINT `match_has_inducement_ibfk_1` FOREIGN KEY (`Match_idMatch`) REFERENCES `bbos_match` (`idMatch`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `match_has_inducement_ibfk_2` FOREIGN KEY (`Team_idTeam`) REFERENCES `bbos_team` (`idTeam`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `match_has_inducement_ibfk_3` FOREIGN KEY (`Inducement_type_idInducementType`) REFERENCES `bbos_inducement_type` (`idInducement_type`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
--- Contraintes pour la table `player`
+-- Contraintes pour la table `bbos_player`
 --
-ALTER TABLE `player`
-  ADD CONSTRAINT `player_ibfk_1` FOREIGN KEY (`Team_idTeam`) REFERENCES `team` (`idTeam`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `player_ibfk_2` FOREIGN KEY (`Player_Type_idPlayer_Type`) REFERENCES `player_type` (`idPlayer_Type`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `bbos_player`
+  ADD CONSTRAINT `player_ibfk_1` FOREIGN KEY (`Team_idTeam`) REFERENCES `bbos_team` (`idTeam`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `player_ibfk_2` FOREIGN KEY (`Player_Type_idPlayer_Type`) REFERENCES `bbos_player_type` (`idPlayer_Type`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
--- Contraintes pour la table `player_has_competence`
+-- Contraintes pour la table `bbos_player_has_competence`
 --
-ALTER TABLE `player_has_competence`
-  ADD CONSTRAINT `player_has_competence_ibfk_1` FOREIGN KEY (`Player_idPlayer`) REFERENCES `player` (`idPlayer`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `player_has_competence_ibfk_2` FOREIGN KEY (`Competence_idCompetence`) REFERENCES `competence` (`idCompetence`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `bbos_player_has_competence`
+  ADD CONSTRAINT `player_has_competence_ibfk_1` FOREIGN KEY (`Player_idPlayer`) REFERENCES `bbos_player` (`idPlayer`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `player_has_competence_ibfk_2` FOREIGN KEY (`Competence_idCompetence`) REFERENCES `bbos_competence` (`idCompetence`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
--- Contraintes pour la table `player_has_injuries`
+-- Contraintes pour la table `bbos_player_has_injuries`
 --
-ALTER TABLE `player_has_injuries`
-  ADD CONSTRAINT `player_has_injuries_ibfk_1` FOREIGN KEY (`Injuries_idInjuries`) REFERENCES `injuries` (`idInjuries`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `player_has_injuries_ibfk_2` FOREIGN KEY (`Player_idPlayer`) REFERENCES `player` (`idPlayer`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `bbos_player_has_injuries`
+  ADD CONSTRAINT `player_has_injuries_ibfk_1` FOREIGN KEY (`Injuries_idInjuries`) REFERENCES `bbos_injuries` (`idInjuries`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `player_has_injuries_ibfk_2` FOREIGN KEY (`Player_idPlayer`) REFERENCES `bbos_player` (`idPlayer`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
--- Contraintes pour la table `player_type_has_competence`
+-- Contraintes pour la table `bbos_player_type_has_competence`
 --
-ALTER TABLE `player_type_has_competence`
-  ADD CONSTRAINT `player_type_has_competence_ibfk_1` FOREIGN KEY (`Player_Type_idPlayer_Type`) REFERENCES `player_type` (`idPlayer_Type`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `player_type_has_competence_ibfk_2` FOREIGN KEY (`Competence_idCompetence`) REFERENCES `competence` (`idCompetence`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `bbos_player_type_has_competence`
+  ADD CONSTRAINT `player_type_has_competence_ibfk_1` FOREIGN KEY (`Player_Type_idPlayer_Type`) REFERENCES `bbos_player_type` (`idPlayer_Type`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `player_type_has_competence_ibfk_2` FOREIGN KEY (`Competence_idCompetence`) REFERENCES `bbos_competence` (`idCompetence`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
--- Contraintes pour la table `player_type_has_doublecompetence_type`
+-- Contraintes pour la table `bbos_player_type_has_doublecompetence_type`
 --
-ALTER TABLE `player_type_has_doublecompetence_type`
-  ADD CONSTRAINT `player_type_has_doublecompetence_type_ibfk_1` FOREIGN KEY (`Player_Type_idPlayer_Type`) REFERENCES `player_type` (`idPlayer_Type`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `player_type_has_doublecompetence_type_ibfk_2` FOREIGN KEY (`Competence_Type_idCompetence_Type`) REFERENCES `competence_type` (`idCompetence_Type`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `bbos_player_type_has_doublecompetence_type`
+  ADD CONSTRAINT `player_type_has_doublecompetence_type_ibfk_1` FOREIGN KEY (`Player_Type_idPlayer_Type`) REFERENCES `bbos_player_type` (`idPlayer_Type`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `player_type_has_doublecompetence_type_ibfk_2` FOREIGN KEY (`Competence_Type_idCompetence_Type`) REFERENCES `bbos_competence_type` (`idCompetence_Type`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
--- Contraintes pour la table `player_type_has_simplecompetence_type`
+-- Contraintes pour la table `bbos_player_type_has_simplecompetence_type`
 --
-ALTER TABLE `player_type_has_simplecompetence_type`
-  ADD CONSTRAINT `player_type_has_simplecompetence_type_ibfk_1` FOREIGN KEY (`Player_Type_idPlayer_Type`) REFERENCES `player_type` (`idPlayer_Type`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `player_type_has_simplecompetence_type_ibfk_2` FOREIGN KEY (`Competence_Type_idCompetence_Type`) REFERENCES `competence_type` (`idCompetence_Type`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `bbos_player_type_has_simplecompetence_type`
+  ADD CONSTRAINT `player_type_has_simplecompetence_type_ibfk_1` FOREIGN KEY (`Player_Type_idPlayer_Type`) REFERENCES `bbos_player_type` (`idPlayer_Type`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `player_type_has_simplecompetence_type_ibfk_2` FOREIGN KEY (`Competence_Type_idCompetence_Type`) REFERENCES `bbos_competence_type` (`idCompetence_Type`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
--- Contraintes pour la table `team`
+-- Contraintes pour la table `bbos_team`
 --
-ALTER TABLE `team`
-  ADD CONSTRAINT `team_ibfk_1` FOREIGN KEY (`Coach_idCoach`) REFERENCES `coach` (`idCoach`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `team_ibfk_2` FOREIGN KEY (`Team_Type_idTeam_Type`) REFERENCES `team_type` (`idTeam_Type`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `bbos_team`
+  ADD CONSTRAINT `team_ibfk_1` FOREIGN KEY (`Coach_idCoach`) REFERENCES `bbos_coach` (`idCoach`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `team_ibfk_2` FOREIGN KEY (`Team_Type_idTeam_Type`) REFERENCES `bbos_team_type` (`idTeam_Type`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
--- Contraintes pour la table `team_type_has_player_type`
+-- Contraintes pour la table `bbos_team_type_has_player_type`
 --
-ALTER TABLE `team_type_has_player_type`
-  ADD CONSTRAINT `team_type_has_player_type_ibfk_1` FOREIGN KEY (`Team_Type_idTeam_Type`) REFERENCES `team_type` (`idTeam_Type`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `team_type_has_player_type_ibfk_2` FOREIGN KEY (`Player_Type_idPlayer_Type`) REFERENCES `player_type` (`idPlayer_Type`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `bbos_team_type_has_player_type`
+  ADD CONSTRAINT `team_type_has_player_type_ibfk_1` FOREIGN KEY (`Team_Type_idTeam_Type`) REFERENCES `bbos_team_type` (`idTeam_Type`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `team_type_has_player_type_ibfk_2` FOREIGN KEY (`Player_Type_idPlayer_Type`) REFERENCES `bbos_player_type` (`idPlayer_Type`) ON DELETE NO ACTION ON UPDATE NO ACTION;
