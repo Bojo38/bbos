@@ -122,11 +122,11 @@ public class dsMatch implements iSequence {
                     if (_rightTeam.arePlayersOnThePitch()) {
                         if (_leftTeam.arePlayersOnThePitch()) {
                             _model.setSubStep(4);
-                            if (_model.getKickinkgTeam() == 2) {
-                                _model.AddDiary("Team Right (" + _rightTeam.getName() + "): set the ball on the pitch");
+                            if (_model.getKickinkgTeam() == 1) {
+                                _model.AddDiary("Team Left (" + _leftTeam.getName() + "): set the ball on the pitch");
                                 _model.setRightRefresh(true);
                             } else {
-                                _model.AddDiary("Team Left (" + _leftTeam.getName() + "): set the ball on the pitch");
+                                _model.AddDiary("Team Right (" + _rightTeam.getName() + "): set the ball on the pitch");
                                 _model.setLeftRefresh(true);
                             }
                         } else {
@@ -185,7 +185,6 @@ public class dsMatch implements iSequence {
                     }
                     break;
                 case 8:
-
                     if (_model.isWaitingForDiceChoice()) {
                         int chooser = _model.getDiceBlockChooser();
                         if (((chooser == 1) && (_isChallenger)) || ((chooser == 2) && (!_isChallenger))) {
@@ -206,7 +205,7 @@ public class dsMatch implements iSequence {
                         }
                     }
 
-                    if (_isChallenger) {
+                    if (_isChallenger || _standalone) {
                         if (_model.getCurrentStepData() == 0) {
                             _model.setCurrentStepData(1);
                             _leftTeam.rollsOver();
@@ -350,7 +349,7 @@ public class dsMatch implements iSequence {
                         }
                     }
 
-                    if (!_isChallenger) {
+                    if (!_isChallenger ||  _standalone) {
                         if (_model.getCurrentStepData() == 0) {
                             _model.setLeftRefresh(true);
                             _model.setRightRefresh(true);

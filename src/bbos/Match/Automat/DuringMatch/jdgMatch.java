@@ -1511,7 +1511,8 @@ public class jdgMatch extends JDialog {
                     }
                 }
                 if (!_isChallenger || _standalone) {
-                    if ((_model.getSubStep() == 9) && (_model.getCurrentStepData() == 1)) {
+                    int stepData=_model.getCurrentStepData();
+                    if ((_model.getSubStep() == 9) && ( stepData== 1)) {
                         _model.turnover(true);
                         _model.setCurrentStepData(0);
                     }
