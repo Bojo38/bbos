@@ -10,6 +10,9 @@ package bbos.Match.Automat.DuringMatch;
 
 import bbos.Match.Model.rmiMatch;
 import bbos.*;
+import bbos.Match.Automat.Steps.StepData.esdKickOff;
+import bbos.Match.Automat.Steps.SubStep.SubSubStep.esssKickOff;
+import bbos.Match.Model.Inducements.diBribeTheRef;
 import bbos.Match.Model.Roll.drInjury;
 import bbos.Match.Model.Roll.drKickOff;
 import bbos.Match.Model.Roll.drMeteo;
@@ -38,7 +41,6 @@ public class dsKickOff implements bbos.Match.Automat.iSequence {
     boolean _standalone;
     int _roll = 0;
 
-   
     /*
      * Steps:
      * 0 - begin
@@ -47,34 +49,34 @@ public class dsKickOff implements bbos.Match.Automat.iSequence {
      * 3 - end
      */
     /** Creates a new instance of dsKickOff */
-    public dsKickOff(rmiMatch match, rmiTeam left, rmiTeam right, boolean isChallenger,boolean standalone) {
+    public dsKickOff(rmiMatch match, rmiTeam left, rmiTeam right, boolean isChallenger, boolean standalone) {
         _model = match;
         _leftTeam = left;
         _rightTeam = right;
         _isChallenger = isChallenger;
-        _standalone=standalone;
+        _standalone = standalone;
 
     }
 
     public void nextStep() {
         try {
-            int subSubStep = _model.getSubSubStep();
+            esssKickOff subSubStep = (esssKickOff) _model.getSubSubStep();
 
             switch (subSubStep) {
-                case 0:
-                    _model.setSubSubStep(1);
+                case NONE:
+                    _model.setSubSubStep(esssKickOff.ROLL);
                     break;
-                case 1:
+                case ROLL:
                     if (!_isChallenger || _standalone) {
                         drKickOff kickroll = new drKickOff();
                         _roll = kickroll.rollDices();
                         _model.AddDiary("Kickoff roll (2D6): " + _roll);
                         kickOffPrint();
-                        _model.setSubSubStep(2);
+                        _model.setSubSubStep(esssKickOff.EFFECT);
                     }
                     break;
-                case 2:
-                    if (!_isChallenger|| _standalone) {
+                case EFFECT:
+                    if (!_isChallenger || _standalone) {
                         kickOffEffect();
                     }
                     break;
@@ -88,20 +90,20 @@ public class dsKickOff implements bbos.Match.Automat.iSequence {
 
     public void resetStep() {
         try {
-            _model.setSubSubStep(0);
+            _model.setSubSubStep(esssKickOff.NONE);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
     }
 
     public boolean isFinished() {
-        int step = 0;
+        esssKickOff step = esssKickOff.NONE;
         try {
-            step = _model.getSubSubStep();
+            step = (esssKickOff) _model.getSubSubStep();
         } catch (RemoteException e) {
             e.printStackTrace();
         }
-        if (step == 3) {
+        if (step == esssKickOff.END) {
             return true;
         }
         return false;
@@ -187,6 +189,7 @@ public class dsKickOff implements bbos.Match.Automat.iSequence {
 
     protected void kickOffEffect() {
         try {
+            esdKickOff stepData=(esdKickOff)_model.getCurrentStepData();
             /**
              * For test
              */
@@ -196,7 +199,7 @@ public class dsKickOff implements bbos.Match.Automat.iSequence {
                     /*
                      * High Kick effect
                      */
-                    if (_model.getCurrentStepData() == 0) {
+                    if (stepData==esdKickOff.NONE) {
 
                         Vector players;
                         if (_model.getKickinkgTeam() == 1) {
@@ -212,7 +215,7 @@ public class dsKickOff implements bbos.Match.Automat.iSequence {
                             }
                         }
                         _model.AddDiary("Select a player to catch the ball.");
-                        _model.setCurrentStepData(1);
+                        _model.setCurrentStepData(esdKickOff.HIGH_KICK);
                         _model.setRightRefresh(true);
                         _model.setLeftRefresh(true);
                     }
@@ -222,20 +225,18 @@ public class dsKickOff implements bbos.Match.Automat.iSequence {
                      * Disable players in tackle zone
                      * Execute turn action
                      */
-                    if (_model.getCurrentStepData() == 0) {
+                    
+                    if (stepData == esdKickOff.NONE) {
                         _model.AddDiary("Kicking team can play.");
 
                         /*
                          * Set players in tackle zone have played
                          */
                         Vector players;
-                        Vector opponents;
                         if (_model.getKickinkgTeam() == 1) {
                             players = tNetworkConnexion.getConnexion().getLeftPlayers();
-                            opponents = tNetworkConnexion.getConnexion().getRightPlayers();
                         } else {
                             players = tNetworkConnexion.getConnexion().getRightPlayers();
-                            opponents = tNetworkConnexion.getConnexion().getLeftPlayers();
                         }
 
                         for (int i = 0; i < players.size(); i++) {
@@ -246,16 +247,18 @@ public class dsKickOff implements bbos.Match.Automat.iSequence {
                         }
                         _model.setRightRefresh(true);
                         _model.setLeftRefresh(true);
-                        _model.setCurrentStepData(4);
+                        _model.setCurrentStepData(esdKickOff.BLITZ);
                     }
                     break;
                 case drKickOff.C_KICK_GET_THE_REF:
                     /*
                      *Get the ref effects
                      */
-                    _leftTeam.canBeSentOff(false);
-                    _rightTeam.canBeSentOff(false);
-                    _model.setSubSubStep(3);
+                    _leftTeam.addInducement(new diBribeTheRef());
+                    _rightTeam.addInducement(new diBribeTheRef());
+                    /*_leftTeam.canBeSentOff(false);
+                    _rightTeam.canBeSentOff(false);*/
+                    _model.setSubSubStep(esssKickOff.END);
                     break;
                 case drKickOff.C_KICK_BRILLIANT_COACH:
                     /*
@@ -283,7 +286,7 @@ public class dsKickOff implements bbos.Match.Automat.iSequence {
                     }
                     _model.setRightRefresh(true);
                     _model.setLeftRefresh(true);
-                    _model.setSubSubStep(3);
+                    _model.setSubSubStep(esssKickOff.END);
                     break;
                 case drKickOff.C_KICK_CHEERING_FANS:
                     /*
@@ -312,7 +315,7 @@ public class dsKickOff implements bbos.Match.Automat.iSequence {
                     }
                     _model.setRightRefresh(true);
                     _model.setLeftRefresh(true);
-                    _model.setSubSubStep(3);
+                    _model.setSubSubStep(esssKickOff.END);
                     break;
                 case drKickOff.C_KICK_METEO:
                     /*
@@ -321,15 +324,15 @@ public class dsKickOff implements bbos.Match.Automat.iSequence {
                     kick_meteo();
                     _model.setRightRefresh(true);
                     _model.setLeftRefresh(true);
-                    _model.setSubSubStep(3);
+                    _model.setSubSubStep(esssKickOff.END);
                     break;
                 case drKickOff.C_KICK_PERFECT_DEFENSE:
                     /*
                      * Perfect defense effect
                      */
-                    if (_model.getCurrentStepData() == 0) {
+                    if (stepData==esdKickOff.NONE) {
                         _model.AddDiary("Defender can reorganize his players.");
-                        _model.setCurrentStepData(2);
+                        _model.setCurrentStepData(esdKickOff.PERFECT_DEFENSE);
                     }
                     break;
                 case drKickOff.C_KICK_PITCH_INVASION:
@@ -339,15 +342,15 @@ public class dsKickOff implements bbos.Match.Automat.iSequence {
                     kick_pitchInvasion();
                     _model.setRightRefresh(true);
                     _model.setLeftRefresh(true);
-                    _model.setSubSubStep(3);
+                    _model.setSubSubStep(esssKickOff.END);
                     break;
                 case drKickOff.C_KICK_QUICK_SNAP:
                     /*
                      * Quick snap effect
                      */
-                    if (_model.getCurrentStepData() == 0) {
+                    if (stepData==esdKickOff.NONE) {
                         _model.AddDiary("Receving team can move every play by one square.");
-                        _model.setCurrentStepData(3);
+                         _model.setCurrentStepData(esdKickOff.QUICK_SNAP);
                     }
                     break;
                 case drKickOff.C_KICK_RIOT:
@@ -357,7 +360,7 @@ public class dsKickOff implements bbos.Match.Automat.iSequence {
                     kick_riot();
                     _model.setRightRefresh(true);
                     _model.setLeftRefresh(true);
-                    _model.setSubSubStep(3);
+                    _model.setSubSubStep(esssKickOff.END);
                     break;
                 case drKickOff.C_KICK_ROCK:
                     /*
@@ -366,7 +369,7 @@ public class dsKickOff implements bbos.Match.Automat.iSequence {
                     kick_rock();
                     _model.setRightRefresh(true);
                     _model.setLeftRefresh(true);
-                    _model.setSubSubStep(3);
+                    _model.setSubSubStep(esssKickOff.END);
                     break;
                 default:
                     break;
@@ -414,10 +417,10 @@ public class dsKickOff implements bbos.Match.Automat.iSequence {
             if (team1_roll > team2_roll) {
                 rmiPlayer player = null;
                 if (_rightTeam.getPlayersOK() > 0) {
-                    Vector players=tNetworkConnexion.getConnexion().getRightPlayers();
-                    while (player == null) {                        
+                    Vector players = tNetworkConnexion.getConnexion().getRightPlayers();
+                    while (player == null) {
                         int number = bbTool.getdN(players.size());
-                        player = (rmiPlayer)players.get(number-1);
+                        player = (rmiPlayer) players.get(number - 1);
                         if (!player.isOnPitch()) {
                             player = null;
                         }
@@ -426,18 +429,18 @@ public class dsKickOff implements bbos.Match.Automat.iSequence {
                     int injury_roll = injury.rollDices();
                     _model.AddDiary("Injury roll: " + injury_roll);
                     int state = injury.applyEffects(injury_roll, player);
-                    player.setState( state);
-                //player.setState(state);
+                    player.setState(state);
+                    //player.setState(state);
                 }
             }
 
             if (team1_roll < team2_roll) {
                 rmiPlayer player = null;
                 if (_leftTeam.getPlayersOK() > 0) {
-                    Vector players=tNetworkConnexion.getConnexion().getLeftPlayers();
-                    while (player == null) {                        
+                    Vector players = tNetworkConnexion.getConnexion().getLeftPlayers();
+                    while (player == null) {
                         int number = bbTool.getdN(players.size());
-                        player = (rmiPlayer)players.get(number-1);
+                        player = (rmiPlayer) players.get(number - 1);
                         if (!player.isOnPitch()) {
                             player = null;
                         }
@@ -446,18 +449,18 @@ public class dsKickOff implements bbos.Match.Automat.iSequence {
                     int injury_roll = injury.rollDices();
                     _model.AddDiary("Injury roll: " + injury_roll);
                     int state = injury.applyEffects(injury_roll, player);
-                    player.setState( state);
-                //player.setState(state);
+                    player.setState(state);
+                    //player.setState(state);
                 }
             }
 
             if (team1_roll == team2_roll) {
                 rmiPlayer player = null;
                 if (_rightTeam.getPlayersOK() > 0) {
-                    Vector players=tNetworkConnexion.getConnexion().getRightPlayers();
-                    while (player == null) {                        
+                    Vector players = tNetworkConnexion.getConnexion().getRightPlayers();
+                    while (player == null) {
                         int number = bbTool.getdN(players.size());
-                        player = (rmiPlayer)players.get(number-1);
+                        player = (rmiPlayer) players.get(number - 1);
                         if (!player.isOnPitch()) {
                             player = null;
                         }
@@ -466,15 +469,15 @@ public class dsKickOff implements bbos.Match.Automat.iSequence {
                     int injury_roll = injury.rollDices();
                     _model.AddDiary("Injury roll: " + injury_roll);
                     int state = injury.applyEffects(injury_roll, player);
-                    player.setState( state);
-                //player.setState(state);
+                    player.setState(state);
+                    //player.setState(state);
                 }
                 player = null;
                 if (_leftTeam.getPlayersOK() > 0) {
-                    Vector players=tNetworkConnexion.getConnexion().getLeftPlayers();
-                    while (player == null) {                        
+                    Vector players = tNetworkConnexion.getConnexion().getLeftPlayers();
+                    while (player == null) {
                         int number = bbTool.getdN(players.size());
-                        player = (rmiPlayer)players.get(number-1);
+                        player = (rmiPlayer) players.get(number - 1);
                         if (!player.isOnPitch()) {
                             player = null;
                         }
@@ -483,8 +486,8 @@ public class dsKickOff implements bbos.Match.Automat.iSequence {
                     int injury_roll = injury.rollDices();
                     _model.AddDiary("Injury roll: " + injury_roll);
                     int state = injury.applyEffects(injury_roll, player);
-                    player.setState( state);
-                //player.setState(state);
+                    player.setState(state);
+                    //player.setState(state);
                 }
             }
         } catch (RemoteException e) {
@@ -503,7 +506,7 @@ public class dsKickOff implements bbos.Match.Automat.iSequence {
                  * the ball scatters 1 square
                  */
                 dSquare s = _model.getBallSquare();
-                drScatter scatterRoll = new drScatter(_model,s, false,false);
+                drScatter scatterRoll = new drScatter(_model, s, false, false);
                 int direction = scatterRoll.rollDices();
                 scatterRoll.applyEffects(direction);
                 s = scatterRoll.getCurrentSquare();
@@ -524,9 +527,9 @@ public class dsKickOff implements bbos.Match.Automat.iSequence {
             /*
              * Team 1
              */
-            Vector players=tNetworkConnexion.getConnexion().getLeftPlayers();
+            Vector players = tNetworkConnexion.getConnexion().getLeftPlayers();
             for (int i = 0; i < players.size(); i++) {
-                rmiPlayer player = (rmiPlayer)players.get(i);
+                rmiPlayer player = (rmiPlayer) players.get(i);
                 if (player.isOnPitch()) {
                     int roll = bbTool.getd6();
                     _model.AddDiary("Player " + i + " - Roll : " + roll);
@@ -541,9 +544,9 @@ public class dsKickOff implements bbos.Match.Automat.iSequence {
             /*
              * Team 2
              */
-            players=tNetworkConnexion.getConnexion().getRightPlayers();
+            players = tNetworkConnexion.getConnexion().getRightPlayers();
             for (int i = 0; i < players.size(); i++) {
-                rmiPlayer player = (rmiPlayer)players.get(i);
+                rmiPlayer player = (rmiPlayer) players.get(i);
                 if (player.isOnPitch()) {
                     int roll = bbTool.getd6();
                     _model.AddDiary("Player " + i + " - Roll : " + roll);

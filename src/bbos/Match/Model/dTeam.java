@@ -488,26 +488,6 @@ public class dTeam implements rmiTeam, Serializable {
     public void setRerollLeft(int rerollLeft) {
         _rerollLeft = rerollLeft;
     }
-    /**
-     * Can be sent off or not
-     */
-    boolean _canBeSentOff;
-
-    /**
-     * Returns if a member of the team can be sent off when fouling
-     * @return Can be sent off
-     */
-    public boolean canBeSentOff() {
-        return _canBeSentOff;
-    }
-
-    /**
-     * Set if a member of the team can be sent off
-     * @param sentoff Set the status of the sent off
-     */
-    public void canBeSentOff(boolean sentoff) {
-        _canBeSentOff = sentoff;
-    }
 
     public void setPlayerState(int i, int state) {
         ((dPlayer) _players.get(i)).setState(state);
@@ -556,7 +536,7 @@ public class dTeam implements rmiTeam, Serializable {
                 player.hasPlayed(true);
             }
         }
-        
+
         setBlitzDone(false);
         setFoulDone(false);
         setPassDone(false);
@@ -620,48 +600,42 @@ public class dTeam implements rmiTeam, Serializable {
             player.isActive(false);
         }
     }
-    
-    
-    boolean _handOffDone=false;
-    boolean _passDone=false;
-    boolean _blitzDone=false;
-    boolean _foulDone=false;
-    
-    public void setHandOffDone(boolean value)
-    {
-        _handOffDone=value;
+    boolean _handOffDone = false;
+    boolean _passDone = false;
+    boolean _blitzDone = false;
+    boolean _foulDone = false;
+
+    public void setHandOffDone(boolean value) {
+        _handOffDone = value;
     }
-    
-    public void setPassDone(boolean value)
-    {
-        _passDone=value;
+
+    public void setPassDone(boolean value) {
+        _passDone = value;
     }
-    public void setBlitzDone(boolean value)
-    {
-        _blitzDone=value;
+
+    public void setBlitzDone(boolean value) {
+        _blitzDone = value;
     }
-    public void setFoulDone(boolean value)
-    {
-        _foulDone=value;
+
+    public void setFoulDone(boolean value) {
+        _foulDone = value;
     }
-    
-    public boolean isHandOffDone()
-    {
+
+    public boolean isHandOffDone() {
         return _handOffDone;
     }
-    public boolean isPassDone()
-    {
+
+    public boolean isPassDone() {
         return _passDone;
     }
-    public boolean isBlitzDone()
-    {
+
+    public boolean isBlitzDone() {
         return _blitzDone;
     }
-    public boolean isFoolDone()
-    {
+
+    public boolean isFoolDone() {
         return _foulDone;
     }
-    
     /**
      * OLD
      */
@@ -686,7 +660,6 @@ public class dTeam implements rmiTeam, Serializable {
      */
     public dTeam(String race) {
         _players = new Vector();
-        _canBeSentOff = true;
     }
 
     /**

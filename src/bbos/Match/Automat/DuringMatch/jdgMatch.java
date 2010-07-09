@@ -9,6 +9,14 @@ import bbos.Match.Automat.BeforeMatch.*;
 import bbos.General.Views.*;
 import bbos.*;
 
+import bbos.Match.Automat.Steps.StepData.esdKickOff;
+import bbos.Match.Automat.Steps.StepData.esdScatter;
+import bbos.Match.Automat.Steps.StepData.esdTurn;
+import bbos.Match.Automat.Steps.SubStep.SubSubStep.esssKickOff;
+import bbos.Match.Automat.Steps.SubStep.SubSubStep.ieSubSubStep;
+import bbos.Match.Automat.Steps.SubStep.essMatch;
+import bbos.Match.Automat.Steps.SubStep.ieSubStep;
+import bbos.Match.Automat.Steps.eMainStep;
 import bbos.Match.Model.Actions.dActionsFactory;
 import bbos.Match.Model.Actions.dAction;
 import bbos.Match.Model.Actions.daBlitz;
@@ -251,8 +259,7 @@ public class jdgMatch extends JDialog {
             _passiveIcons.put(player, icon2);
         }
 
-        for (int i = 0; i
-                < _rightPlayers.size(); i++) {
+        for (int i = 0; i < _rightPlayers.size(); i++) {
 
             rmiPlayer player = (rmiPlayer) _rightPlayers.get(i);
             ImageIcon icon1 = null;
@@ -1292,7 +1299,7 @@ public class jdgMatch extends JDialog {
             try {
                 if (!_isChallenger || _standalone) {
                     /* If step is Match (1)- set right team on the pitch (3) */
-                    if ((_model.getMainStep() == 1) && (_model.getSubStep() == 3)) {
+                    if ((_model.getMainStep() == eMainStep.MATCH) && (_model.getSubStep() == essMatch.SET_PLAYERS_2)) {
                         int X = evt.getX() / C_SQUARE_SIZE;
                         int Y = evt.getY() / C_SQUARE_SIZE;
                         int number = X + Y * (jlbDugoutRight.getWidth() / C_SQUARE_SIZE);
@@ -1324,7 +1331,7 @@ public class jdgMatch extends JDialog {
             try {
                 if (_isChallenger || _standalone) {
                     /* If step is Match (1)- set left team on the pitch (2) */
-                    if ((_model.getMainStep() == 1) && (_model.getSubStep() == 2)) {
+                    if ((_model.getMainStep() == eMainStep.MATCH) && (_model.getSubStep() == essMatch.SET_PLAYERS_1)) {
                         int X = evt.getX() / C_SQUARE_SIZE;
                         int Y = evt.getY() / C_SQUARE_SIZE;
                         int number = X + Y * (jlbDugoutLeft.getWidth() / C_SQUARE_SIZE);
@@ -1355,12 +1362,14 @@ public class jdgMatch extends JDialog {
 
     private void jbtNextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtNextActionPerformed
         try {
-            if (_model.getMainStep() == 1) {
+            if (_model.getMainStep() == eMainStep.MATCH) {
+                essMatch subStep = (essMatch) _model.getSubStep();
+                ieSubSubStep subsubStep = _model.getSubSubStep();
+                ieStepData currentData = _model.getCurrentStepData();
                 /* If step is Match (1)- set left team on the pitch (2) */
                 /* Or perfect defense kick */
                 if (_isChallenger || _standalone) {
-                    if ((_model.getSubStep() == 2)
-                            || ((_model.getSubStep() == 5) && (_model.getSubSubStep() == 2) && (_model.getCurrentStepData() == 2) && (_model.getKickinkgTeam() == 1))) {
+                    if ((subStep == essMatch.SET_PLAYERS_1) || ((subStep == essMatch.KICKOFF) && (currentData == esdKickOff.PERFECT_DEFENSE) && (_model.getSubSubStep() == esssKickOff.EFFECT) && (_model.getKickinkgTeam() == 1))) {
                         //Check if left team is correctly set on the pitch
                         int set = _leftTeam.isSetOnThePitch(1);
                         switch (set) {
@@ -1383,44 +1392,24 @@ public class jdgMatch extends JDialog {
                         }
                     }
 
-                    /* High Kick */
-                    if ((_model.getSubStep() == 5) && (_model.getSubSubStep() == 2) && (_model.getCurrentStepData() == 1)) {
-
-                        for (int i = 0; i < _leftPlayers.size(); i++) {
-                            rmiPlayer player = (rmiPlayer) _leftPlayers.get(i);
-                            player.hasPlayed(false);
+                    /* Kickoff */
+                    if ((subStep == essMatch.KICKOFF) && (_model.getSubSubStep() == esssKickOff.EFFECT)) {
+                        {
+                            for (int i = 0; i < _leftPlayers.size(); i++) {
+                                rmiPlayer player = (rmiPlayer) _leftPlayers.get(i);
+                                player.hasPlayed(false);
+                            }
+                            _model.setSubSubStep(esssKickOff.END);
+                            _model.setCurrentStepData(esdKickOff.NONE);
                         }
-                        _model.setSubSubStep(3);
-                        _model.setCurrentStepData(0);
                     }
-
-                    /* Quick Snap */
-                    if ((_model.getSubStep() == 5) && (_model.getSubSubStep() == 2) && (_model.getCurrentStepData() == 3) && (_model.getKickinkgTeam() == 2)) {
-                        for (int i = 0; i < _leftPlayers.size(); i++) {
-                            rmiPlayer player = (rmiPlayer) _leftPlayers.get(i);
-                            player.hasPlayed(false);
-                        }
-                        _model.setSubSubStep(3);
-                        _model.setCurrentStepData(0);
-                    }
-
-                    /* BLITZ */
-                    if ((_model.getSubStep() == 5) && (_model.getSubSubStep() == 2) && (_model.getCurrentStepData() == 4) && (_model.getKickinkgTeam() == 1)) {
-                        for (int i = 0; i < _leftPlayers.size(); i++) {
-                            rmiPlayer player = (rmiPlayer) _leftPlayers.get(i);
-                            player.hasPlayed(false);
-                        }
-                        _model.setSubSubStep(3);
-                        _model.setCurrentStepData(0);
-                    }
-
                 }
+
                 if (!_isChallenger || _standalone) {
 
                     /* If step is Match (1)- set right team on the pitch (3) */
                     /* Or perfect defense kick */
-                    if ((_model.getSubStep() == 3)
-                            || ((_model.getSubStep() == 5) && (_model.getSubSubStep() == 2) && (_model.getCurrentStepData() == 2) && (_model.getKickinkgTeam() == 2))) {
+                    if ((subStep == essMatch.SET_PLAYERS_2) || ((subStep == essMatch.KICKOFF) && (subsubStep == esssKickOff.EFFECT) && (currentData == esdKickOff.PERFECT_DEFENSE) && (_model.getKickinkgTeam() == 2))) {
                         //Check if left team is correctly set on the pitch
                         int set = _rightTeam.isSetOnThePitch(2);
                         switch (set) {
@@ -1444,41 +1433,40 @@ public class jdgMatch extends JDialog {
                     }
 
                     /* Quick Snap */
-                    if ((_model.getSubStep() == 5) && (_model.getSubSubStep() == 2) && (_model.getCurrentStepData() == 3) && (_model.getKickinkgTeam() == 1)) {
+                    if ((subStep == essMatch.KICKOFF) && (subsubStep == esssKickOff.EFFECT) && (currentData == esdKickOff.QUICK_SNAP) && (_model.getKickinkgTeam() == 1)) {
                         for (int i = 0; i < _rightPlayers.size(); i++) {
                             rmiPlayer player = (rmiPlayer) _rightPlayers.get(i);
                             player.hasPlayed(false);
                         }
-                        _model.setSubSubStep(3);
-                        _model.setCurrentStepData(0);
+                        _model.setSubSubStep(esssKickOff.END);
+                        _model.setCurrentStepData(esdKickOff.NONE);
                     }
 
                     /* BLITZ */
-                    if ((_model.getSubStep() == 5) && (_model.getSubSubStep() == 2) && (_model.getCurrentStepData() == 4) && (_model.getKickinkgTeam() == 2)) {
+                    if ((subStep == essMatch.KICKOFF) && (subsubStep == esssKickOff.EFFECT) && (currentData == esdKickOff.BLITZ) && (_model.getKickinkgTeam() == 2)) {
                         for (int i = 0; i < _rightPlayers.size(); i++) {
                             rmiPlayer player = (rmiPlayer) _rightPlayers.get(i);
                             player.hasPlayed(false);
                         }
-                        _model.setSubSubStep(3);
-                        _model.setCurrentStepData(0);
+                        _model.setSubSubStep(esssKickOff.END);
+                        _model.setCurrentStepData(esdKickOff.NONE);
                     }
 
                     /* High Kick */
-                    if ((_model.getSubStep() == 5) && (_model.getSubSubStep() == 2) && (_model.getCurrentStepData() == 1)) {
+                    if ((subStep == essMatch.KICKOFF) && (subsubStep == esssKickOff.EFFECT) && (currentData == esdKickOff.HIGH_KICK)) {
 
                         for (int i = 0; i < _rightPlayers.size(); i++) {
                             rmiPlayer player = (rmiPlayer) _rightPlayers.get(i);
                             player.hasPlayed(false);
                         }
-                        _model.setSubSubStep(3);
-                        _model.setCurrentStepData(0);
+                        _model.setSubSubStep(esssKickOff.END);
+                        _model.setCurrentStepData(esdKickOff.NONE);
                     }
                 }
 
                 // Ball placed
-                if (_model.getSubStep() == 4) {
-                    boolean condition = ((_model.isBallPlacedOnThePitch(2) && (_model.getKickinkgTeam() == 1))
-                            || (_model.isBallPlacedOnThePitch(1) && (_model.getKickinkgTeam() == 2)));
+                if (subStep == essMatch.PLACE_BALL) {
+                    boolean condition = ((_model.isBallPlacedOnThePitch(2) && (_model.getKickinkgTeam() == 1)) || (_model.isBallPlacedOnThePitch(1) && (_model.getKickinkgTeam() == 2)));
                     if (condition) {
 
                         // Dispersion
@@ -1498,23 +1486,22 @@ public class jdgMatch extends JDialog {
                     }
                 }
 
-                if ((_model.getSubStep() == 5) && (_model.getSubSubStep() == 2) && (_model.getCurrentStepData() == 2)) {
-                    _model.setSubSubStep(3);
-                    _model.setCurrentStepData(0);
-                }
+                /*                if ((subStep == 5) && (subsubStep==essMatch.KICKOFF) && (currentData == 2)) {
+                _model.setSubSubStep(esssKickOff.END);
+                _model.setCurrentStepData(esdKickOff.NONE);
+                }*/
 
                 // Si il s'agissait du tour d'un joueur, déclaration en turnover pour passer au tour suivent
                 if (_isChallenger || _standalone) {
-                    if ((_model.getSubStep() == 8) && (_model.getCurrentStepData() == 1)) {
+                    if ((subStep == essMatch.TURN_TEAM_LEFT) && (currentData == esdTurn.PLAYERS_ROLLED)) {
                         _model.turnover(true);
-                        _model.setCurrentStepData(0);
+                        _model.setCurrentStepData(esdTurn.NONE);
                     }
                 }
                 if (!_isChallenger || _standalone) {
-                    int stepData=_model.getCurrentStepData();
-                    if ((_model.getSubStep() == 9) && ( stepData== 1)) {
+                    if ((subStep == essMatch.TURN_TEAM_RIGHT) && (currentData == esdTurn.PLAYERS_ROLLED)) {
                         _model.turnover(true);
-                        _model.setCurrentStepData(0);
+                        _model.setCurrentStepData(esdTurn.NONE);
                     }
                 }
 
@@ -1544,10 +1531,14 @@ public class jdgMatch extends JDialog {
     private void jlbGroundMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jlbGroundMouseReleased
 
         try {
-            if (_model.getMainStep() == 1) {
+            if (_model.getMainStep() == eMainStep.MATCH) {
+                essMatch subStep = (essMatch) _model.getSubStep();
+                ieSubSubStep subsubStep = _model.getSubSubStep();
+                ieStepData currentData = _model.getCurrentStepData();
                 if (_isChallenger || _standalone) {
                     /* Quick Snap */
-                    if ((_model.getSubStep() == 5) && (_model.getSubSubStep() == 2) && (_model.getCurrentStepData() == 3) && (_model.getKickinkgTeam() == 2)) {
+                    if ((subStep == essMatch.KICKOFF) &&
+                            (subsubStep == esssKickOff.EFFECT) && (currentData == esdKickOff.QUICK_SNAP) && (_model.getKickinkgTeam() == 2)) {
                         int X = evt.getX() / C_SQUARE_SIZE;
                         int Y = evt.getY() / C_SQUARE_SIZE;
                         if (X < 13) {
@@ -1556,16 +1547,19 @@ public class jdgMatch extends JDialog {
                                     _grabbedPlayer.setX(X);
                                     _grabbedPlayer.setY(Y);
                                     _grabbedPlayer.hasPlayed(true);
-                                    _grabbedPlayer = null;
+                                    _grabbedPlayer =
+                                            null;
                                 }
+
                                 refresh();
                             }
+
                         }
                     }
                 }
                 if (!_isChallenger || _standalone) {
                     /* Quick Snap */
-                    if ((_model.getSubStep() == 5) && (_model.getSubSubStep() == 2) && (_model.getCurrentStepData() == 3) && (_model.getKickinkgTeam() == 1)) {
+                    if ((subStep == essMatch.KICKOFF) && (subsubStep == esssKickOff.EFFECT) && (currentData == esdKickOff.QUICK_SNAP) && (_model.getKickinkgTeam() == 1)) {
                         int X = evt.getX() / C_SQUARE_SIZE;
                         int Y = evt.getY() / C_SQUARE_SIZE;
                         if (X > 12) {
@@ -1574,10 +1568,13 @@ public class jdgMatch extends JDialog {
                                     _grabbedPlayer.setX(X);
                                     _grabbedPlayer.setY(Y);
                                     _grabbedPlayer.hasPlayed(true);
-                                    _grabbedPlayer = null;
+                                    _grabbedPlayer =
+                                            null;
                                 }
+
                                 refresh();
                             }
+
                         }
                     }
                 }
@@ -1591,12 +1588,14 @@ public class jdgMatch extends JDialog {
 
     private void jlbGroundMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jlbGroundMousePressed
         try {
-            if (_model.getMainStep() == 1) {
+            if (_model.getMainStep() == eMainStep.MATCH) {
+                essMatch subStep = (essMatch) _model.getSubStep();
+                ieSubSubStep subsubStep = _model.getSubSubStep();
+                ieStepData currentData = _model.getCurrentStepData();
                 if (_isChallenger || _standalone) {
                     /* If step is Match (1)- set left team on the pitch (2) */
                     /* Perfect Defense*/
-                    if ((_model.getSubStep() == 2)
-                            || ((_model.getSubStep() == 5) && (_model.getSubSubStep() == 2) && (_model.getCurrentStepData() == 2) && (_model.getKickinkgTeam() == 1))) {
+                    if ((subStep == essMatch.SET_PLAYERS_1) || ((subStep == essMatch.KICKOFF) && (subsubStep == esssKickOff.EFFECT) && (currentData == esdKickOff.PERFECT_DEFENSE) && (_model.getKickinkgTeam() == 1))) {
                         jbtNext.setEnabled(true);
                         int X = evt.getX() / C_SQUARE_SIZE;
                         int Y = evt.getY() / C_SQUARE_SIZE;
@@ -1604,10 +1603,11 @@ public class jdgMatch extends JDialog {
                         if (number > -1) {
                             _grabbedPlayer = (rmiPlayer) _leftPlayers.get(number);
                         }
+
                     }
 
                     /* If Kickoff is QuickSnap*/
-                    if ((_model.getSubStep() == 5) && (_model.getSubSubStep() == 2) && (_model.getCurrentStepData() == 3) && (_model.getKickinkgTeam() == 2)) {
+                    if ((subStep == essMatch.KICKOFF) && (subsubStep == esssKickOff.EFFECT) && (currentData == esdKickOff.QUICK_SNAP) && (_model.getKickinkgTeam() == 2)) {
                         jbtNext.setEnabled(true);
                         int X = evt.getX() / C_SQUARE_SIZE;
                         int Y = evt.getY() / C_SQUARE_SIZE;
@@ -1617,6 +1617,7 @@ public class jdgMatch extends JDialog {
                             if (_grabbedPlayer.hasPlayed()) {
                                 _grabbedPlayer = null;
                             }
+
                         }
                     }
 
@@ -1627,8 +1628,8 @@ public class jdgMatch extends JDialog {
                     int number = _rightTeam.getPlayerNumber(X, Y);
                     right team on the pitch (3) */
                     /* Or Reorganise defense SubStep (5) - SubSubStep 2 - Data (2) - kicking team 1*/
-                    if ((_model.getSubStep() == 3)
-                            || ((_model.getSubStep() == 5) && (_model.getSubSubStep() == 2) && (_model.getCurrentStepData() == 2) && (_model.getKickinkgTeam() == 2))) {
+                    if ((subStep == essMatch.SET_PLAYERS_2) ||
+                            ((subStep == essMatch.KICKOFF) && (subsubStep == esssKickOff.EFFECT) && (currentData == esdKickOff.PERFECT_DEFENSE) && (_model.getKickinkgTeam() == 2))) {
                         jbtNext.setEnabled(true);
                         int X = evt.getX() / C_SQUARE_SIZE;
                         int Y = evt.getY() / C_SQUARE_SIZE;
@@ -1636,10 +1637,11 @@ public class jdgMatch extends JDialog {
                         if (number > -1) {
                             _grabbedPlayer = (rmiPlayer) _rightPlayers.get(number);
                         }
+
                     }
 
                     /* If Kickoff is QuickSnap*/
-                    if ((_model.getSubStep() == 5) && (_model.getSubSubStep() == 2) && (_model.getCurrentStepData() == 3) && (_model.getKickinkgTeam() == 1)) {
+                    if ((subStep == essMatch.KICKOFF) && (subsubStep == esssKickOff.EFFECT) && (currentData == esdKickOff.QUICK_SNAP) && (_model.getKickinkgTeam() == 1)) {
                         jbtNext.setEnabled(true);
                         int X = evt.getX() / C_SQUARE_SIZE;
                         int Y = evt.getY() / C_SQUARE_SIZE;
@@ -1649,6 +1651,7 @@ public class jdgMatch extends JDialog {
                             if (_grabbedPlayer.hasPlayed()) {
                                 _grabbedPlayer = null;
                             }
+
                         }
                     }
                 }
@@ -1697,15 +1700,19 @@ public class jdgMatch extends JDialog {
     protected void pressAction(int index) {
         if (_selectedPlayer != null) {
             try {
-                if (((_model.getSubStep() == 8) && (_isChallenger || _standalone)) || ((_model.getSubStep() == 9) && (!_isChallenger || _standalone))) {
+                essMatch subStep = (essMatch) _model.getSubStep();
+
+                if (((subStep == essMatch.TURN_TEAM_LEFT) && (_isChallenger || _standalone)) || ((subStep == essMatch.TURN_TEAM_RIGHT) && (!_isChallenger || _standalone))) {
                     if (_currentAction == null) {
                         _currentAction = (dAction) _actions.get(index);
                         _currentAction.preStep();
 
-                        for (int i = 0; i < _actionButtons.size(); i++) {
+                        for (int i = 0; i <
+                                _actionButtons.size(); i++) {
                             if (i != index) {
                                 ((JToggleButton) _actionButtons.get(i)).setEnabled(false);
                             }
+
                         }
                         ((JToggleButton) _actionButtons.get(index)).setSelected(true);
                         _model.AddDiary("Current action is: " + _currentAction.getName());
@@ -1713,38 +1720,49 @@ public class jdgMatch extends JDialog {
                     } else {
                         if (_currentAction.getStep() == 0) {
                             _currentAction.resetStep();
-                            _currentAction = null;
-                            for (int i = 0; i < _actionButtons.size(); i++) {
+                            _currentAction =
+                                    null;
+                            for (int i = 0; i <
+                                    _actionButtons.size(); i++) {
                                 ((JToggleButton) _actionButtons.get(i)).setEnabled(true);
                             }
+
                             ((JToggleButton) _actionButtons.get(index)).setSelected(false);
                         }
+
                     }
 
                     _model.setLeftRefresh(true);
                     _model.setRightRefresh(true);
                 }
+
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
+
         }
     }
 
     protected void groundDrag(MouseEvent evt) {
         try {
+
             if (_grabbedPlayer != null) {
-                if (_model.getMainStep() == 1) {
+                if (_model.getMainStep() == eMainStep.MATCH) {
+                    ieSubStep subStep = _model.getSubStep();
+                    ieStepData currentData = _model.getCurrentStepData();
+                    ieSubSubStep subsubStep = _model.getSubSubStep();
                     /* If step is Match (1)- set left team on the pitch (2) */
                     /* Or Reorganise defense SubStep (5) - SubSubStep 2 - Data (2) - kicking team 1*/
                     if (_isChallenger || _standalone) {
-                        if ((_model.getSubStep() == 2)
-                                || ((_model.getSubStep() == 5) && (_model.getSubSubStep() == 2) && (_model.getCurrentStepData() == 2) && (_model.getKickinkgTeam() == 1))) {
+                        if ((subStep == essMatch.SET_PLAYERS_1) ||
+                                ((subStep == essMatch.KICKOFF) && (subsubStep == esssKickOff.EFFECT) && (currentData == esdKickOff.PERFECT_DEFENSE) && (_model.getKickinkgTeam() == 1))) {
                             int X = evt.getX() / C_SQUARE_SIZE;
                             int Y = evt.getY() / C_SQUARE_SIZE;
                             if (!_model.isAPlayer(new dSquare(X, Y))) {
                                 _grabbedPlayer.setX(X);
                                 _grabbedPlayer.setY(Y);
                             }
+
                             refresh();
                         }
 
@@ -1753,8 +1771,7 @@ public class jdgMatch extends JDialog {
 
                         /* If step is Match (1)- set right team on the pitch (3) */
                         /* Or Reorganise defense SubStep (5) - SubSubStep 2 - Data (2) - kicking team 1*/
-                        if ((_model.getSubStep() == 3)
-                                || ((_model.getSubStep() == 5) && (_model.getSubSubStep() == 2) && (_model.getCurrentStepData() == 2) && (_model.getKickinkgTeam() == 2))) {
+                        if ((subStep == essMatch.SET_PLAYERS_2) || ((subStep == essMatch.KICKOFF) && (subsubStep == esssKickOff.EFFECT) && (currentData == esdKickOff.PERFECT_DEFENSE) && (_model.getKickinkgTeam() == 2))) {
 
                             int X = evt.getX() / C_SQUARE_SIZE;
                             int Y = evt.getY() / C_SQUARE_SIZE;
@@ -1762,6 +1779,7 @@ public class jdgMatch extends JDialog {
                                 _grabbedPlayer.setX(X);
                                 _grabbedPlayer.setY(Y);
                             }
+
                             refresh();
                         }
 
@@ -1780,12 +1798,15 @@ public class jdgMatch extends JDialog {
      */
     protected void groundDoubleClick(MouseEvent evt) {
         try {
-            if (_model.getMainStep() == 1) {
+
+            if (_model.getMainStep() == eMainStep.MATCH) {
+                ieSubStep subStep = _model.getSubStep();
+
                 /* If step is Match (1) */
                 if (_isChallenger || _standalone) {
 
                     /* set left team on the pitch SubStep(2)*/
-                    if (_model.getSubStep() == 2) {
+                    if (subStep == essMatch.SET_PLAYERS_1) {
                         jbtNext.setEnabled(true);
                         int X = evt.getX() / C_SQUARE_SIZE;
                         int Y = evt.getY() / C_SQUARE_SIZE;
@@ -1801,9 +1822,8 @@ public class jdgMatch extends JDialog {
 
                 }
                 if (!_isChallenger || _standalone) {
-
                     /* set right team on the pitch (3) */
-                    if (_model.getSubStep() == 3) {
+                    if (subStep == essMatch.SET_PLAYERS_2) {
                         jbtNext.setEnabled(true);
                         int X = evt.getX() / C_SQUARE_SIZE;
                         int Y = evt.getY() / C_SQUARE_SIZE;
@@ -1829,13 +1849,14 @@ public class jdgMatch extends JDialog {
      */
     protected void groundSimpleClick(MouseEvent evt) {
         try {
-            int mainStep = _model.getMainStep();
-            int subStep = _model.getSubStep();
-            int subSubStep = _model.getSubSubStep();
+            eMainStep mainStep = _model.getMainStep();
+            ieSubStep subStep = _model.getSubStep();
+            ieSubSubStep subSubStep = _model.getSubSubStep();
+            ieStepData currentData = _model.getCurrentStepData();
 
-            if (mainStep == 1) {
+            if (mainStep == eMainStep.MATCH) {
                 /* If step is Match (1)- place the ball (4) */
-                if (subStep == 4) {
+                if (subStep == essMatch.PLACE_BALL) {
 
                     int X = evt.getX() / C_SQUARE_SIZE;
                     int Y = evt.getY() / C_SQUARE_SIZE;
@@ -1846,8 +1867,10 @@ public class jdgMatch extends JDialog {
                             _model.setWaitingBall(new dSquare(X, Y));
                             jbtNext.setEnabled(true);
                         }
+
                         refresh();
                     }
+
                     if ((_model.getKickinkgTeam() == 2) && (!_isChallenger || _standalone)) {
                         if (X < 13) {
                             jbtNext.setEnabled(true);
@@ -1857,15 +1880,17 @@ public class jdgMatch extends JDialog {
 
                         refresh();
                     }
+
                 }
 
                 /* If step is Match (1) - SubStep KickOff (5) - SubSubStep Effects (2) - */
-                if ((subStep == 5) && (subSubStep == 2)) {
+                if ((subStep == essMatch.KICKOFF) && (subSubStep == esssKickOff.EFFECT)) {
                     /* If kickoff is HighKick (1)*/
-                    if (_model.getCurrentStepData() == 1) {
+                    if (currentData == esdKickOff.HIGH_KICK) {
                         int kicking = _model.getKickinkgTeam();
                         rmiTeam team = null;
                         Vector players;
+
                         if (kicking == 1) {
                             team = _rightTeam;
                             players = _rightPlayers;
@@ -1873,6 +1898,7 @@ public class jdgMatch extends JDialog {
                             team = _leftTeam;
                             players = _leftPlayers;
                         }
+
                         if ((kicking == 1) && (!_isChallenger || _standalone)) {
                             dSquare s = _model.getBallSquare();
                             int i = team.getPlayerNumber(s.getX(), s.getY());
@@ -1886,14 +1912,17 @@ public class jdgMatch extends JDialog {
 
                                         player.setX(s.getX());
                                         player.setY(s.getY());
-                                        for (int j = 0; j < players.size(); j++) {
+                                        for (int j = 0; j <
+                                                players.size(); j++) {
                                             rmiPlayer p = (rmiPlayer) players.get(j);
                                             p.hasPlayed(false);
                                         }
+
                                         _model.setRightRefresh(true);
                                         _model.setLeftRefresh(true);
-                                        _model.setSubSubStep(3);
+                                        _model.setSubSubStep(esssKickOff.END);
                                     }
+
                                 }
                             }
                         }
@@ -1910,26 +1939,30 @@ public class jdgMatch extends JDialog {
                                     player.setY(s.getY());
                                     _model.setRightRefresh(true);
                                     _model.setLeftRefresh(true);
-                                    _model.setSubSubStep(3);
+                                    _model.setSubSubStep(esssKickOff.END);
                                 }
+
                             }
                         }
                     }
                 }
 
                 /* If step is Match (1)- Ball falls and bounces (6) - data (1) bad kick */
-                if ((subStep == 6) && (_model.getCurrentStepData() == 1)) {
+                if ((subStep == essMatch.BALL_SCATTER) && (currentData == esdScatter.BAD_KICK)) {
                     int kicking = _model.getKickinkgTeam();
                     rmiTeam team = null;
                     Vector players;
 
                     if (kicking == 1) {
                         team = _rightTeam;
-                        players = _rightPlayers;
+                        players =
+                                _rightPlayers;
                     } else {
                         team = _leftTeam;
-                        players = _leftPlayers;
+                        players =
+                                _leftPlayers;
                     }
+
                     if ((kicking == 2) && (_isChallenger || _standalone)) {
                         int X = evt.getX() / C_SQUARE_SIZE;
                         int Y = evt.getY() / C_SQUARE_SIZE;
@@ -1937,7 +1970,7 @@ public class jdgMatch extends JDialog {
                         if (i > -1) {
                             rmiPlayer player = (rmiPlayer) players.get(i);
                             player.setBall(true);
-                            _model.setSubStep(7);
+                            _model.setSubStep(essMatch.CHOOSE_TEAM);
                         }
 
                     }
@@ -1948,23 +1981,26 @@ public class jdgMatch extends JDialog {
                         if (i > -1) {
                             rmiPlayer player = (rmiPlayer) players.get(i);
                             player.setBall(true);
-                            _model.setSubStep(7);
+                            _model.setSubStep(essMatch.CHOOSE_TEAM);
                         }
+
                     }
                 }
 
                 /* Tour */
-                if ((subStep == 8) && (_isChallenger || _standalone)) {
+                if ((subStep == essMatch.TURN_TEAM_LEFT) && (_isChallenger || _standalone)) {
                     manageTurnGroundClick(evt, _leftTeam, _leftPlayers);
                 }
 
-                if ((subStep == 9) && (!_isChallenger || _standalone)) {
+                if ((subStep == essMatch.TURN_TEAM_RIGHT) && (!_isChallenger || _standalone)) {
                     manageTurnGroundClick(evt, _rightTeam, _rightPlayers);
                 }
+
             }
         } catch (RemoteException e) {
             e.printStackTrace();
         }
+
     }
 
     protected void manageTurnGroundClick(MouseEvent evt, rmiTeam team, Vector players) {
@@ -1983,8 +2019,12 @@ public class jdgMatch extends JDialog {
                         _selectedPlayer = player;
                         _selectedPlayer.isActive(true);
                         refreshActions();
+
                         refresh();
+
                     }
+
+
                 }
             } else {
                 /**
@@ -2001,21 +2041,30 @@ public class jdgMatch extends JDialog {
                             if (player == _selectedPlayer) {
 
                                 _selectedPlayer.isActive(false);
-                                _selectedPlayer = null;
+                                _selectedPlayer =
+                                        null;
                                 if (_currentAction != null) {
                                     _currentAction.resetStep();
-                                    _currentAction = null;
+                                    _currentAction =
+                                            null;
                                 }
+
                                 refreshActions();
                                 refresh();
+
                             } else {
                                 _currentAction = null;
                                 _selectedPlayer.isActive(false);
-                                _selectedPlayer = player;
+                                _selectedPlayer =
+                                        player;
                                 _selectedPlayer.isActive(true);
                                 refreshActions();
+
                                 refresh();
+
                             }
+
+
                         }
                     }
                 } /**
@@ -2031,8 +2080,12 @@ public class jdgMatch extends JDialog {
                                 _selectedPlayer = player;
                                 _selectedPlayer.isActive(true);
                                 refreshActions();
+
                                 refresh();
+
                             }
+
+
                         }
                     } else {
                         /**
@@ -2051,8 +2104,10 @@ public class jdgMatch extends JDialog {
                             _model.resetSquareFoul();
                             _model.resetSquarePass();
 
-                            _currentAction = null;
-                            _selectedPlayer = null;
+                            _currentAction =
+                                    null;
+                            _selectedPlayer =
+                                    null;
                         } else {
                             /**
                              * Execution de l'action dans le rectangle
@@ -2063,19 +2118,26 @@ public class jdgMatch extends JDialog {
                                 _selectedPlayer.hasPlayed(true);
                                 _selectedPlayer.isPlaying(false);
 
-                                _selectedPlayer = null;
-                                _currentAction = null;
+                                _selectedPlayer =
+                                        null;
+                                _currentAction =
+                                        null;
                             }
+
                         }
                     }
                     refreshActions();
                     refresh();
+
                 }
+
+
             }
 
         } catch (RemoteException e) {
             e.printStackTrace();
         }
+
     }
 
     /**
@@ -2083,7 +2145,8 @@ public class jdgMatch extends JDialog {
      */
     protected void refreshActions() {
 
-        for (int i = 0; i < _actionButtons.size(); i++) {
+        for (int i = 0; i <
+                _actionButtons.size(); i++) {
             JToggleButton button = (JToggleButton) _actionButtons.get(i);
             button.setEnabled(false);
             button.setVisible(false);
@@ -2104,60 +2167,76 @@ public class jdgMatch extends JDialog {
                                 jtbAction1.setToolTipText("Blitz");
                                 jtbAction1.setIcon(((daBlitz) _currentAction).getIcon());
                                 break;
+
                             case dAction.C_BLITZ_STAB:
                                 jtbAction1.setToolTipText("Blitz with Stab or Chainsaw");
                                 jtbAction1.setIcon(((daBlitzStab) _currentAction).getIcon());
                                 break;
+
                             case dAction.C_BLOCK:
                                 jtbAction1.setToolTipText("Block");
                                 jtbAction1.setIcon(((daBlock) _currentAction).getIcon());
                                 break;
+
                             case dAction.C_BLOCK_STAB:
                                 jtbAction1.setToolTipText("Block with Stab or Chainsaw");
                                 jtbAction1.setIcon(((daBlockStab) _currentAction).getIcon());
                                 break;
+
                             case dAction.C_FANATIC:
                                 jtbAction1.setToolTipText("Fanatic Move");
                                 jtbAction1.setIcon(((daFanatic) _currentAction).getIcon());
                                 break;
+
                             case dAction.C_FOUL:
                                 jtbAction1.setToolTipText("Foul");
                                 jtbAction1.setIcon(((daFoul) _currentAction).getIcon());
                                 break;
+
                             case dAction.C_HANDOFF:
                                 jtbAction1.setToolTipText("Handoff");
                                 jtbAction1.setIcon(((daHandOff) _currentAction).getIcon());
                                 break;
+
                             case dAction.C_MOVE:
                                 jtbAction1.setToolTipText("Move");
                                 jtbAction1.setIcon(((daMove) _currentAction).getIcon());
                                 break;
+
                             case dAction.C_PASS:
                                 jtbAction1.setToolTipText("Pass");
                                 jtbAction1.setIcon(((daPass) _currentAction).getIcon());
                                 break;
+
                             case dAction.C_THROW_TEAM_MATE:
                                 jtbAction1.setToolTipText("Throw a team mate");
                                 jtbAction1.setIcon(((daThrowTeamMate) _currentAction).getIcon());
                                 break;
+
                             case dAction.C_HYPNOTIC_GAZE:
                                 jtbAction1.setToolTipText("Hypnotic gaze");
                                 jtbAction1.setIcon(((daHypnoticGaze) _currentAction).getIcon());
                                 break;
+
                         }
+
+
                     }
                 } else {
                     if (!_selectedPlayer.hasPlayed()) {
                         int[] actionsTag = _selectedPlayer.getAvailableActions();
-                        _actions = new Vector();
-                        for (int i = 0; i < actionsTag.length; i++) {
+                        _actions =
+                                new Vector();
+                        for (int i = 0; i <
+                                actionsTag.length; i++) {
                             int a = actionsTag[i];
                             dAction action = null;
-                            if (_isChallenger ) {
+                            if (_isChallenger) {
                                 action = dActionsFactory.createAction(a, _model, _selectedPlayer, _rightTeam, _leftTeam, _rightPlayers, _leftPlayers, _isChallenger);
                                 _actions.add(action);
                             }
-                            if (!_isChallenger ) {
+
+                            if (!_isChallenger) {
                                 action = dActionsFactory.createAction(a, _model, _selectedPlayer, _leftTeam, _rightTeam, _leftPlayers, _rightPlayers, _isChallenger);
                                 _actions.add(action);
                             }
@@ -2171,53 +2250,67 @@ public class jdgMatch extends JDialog {
                                     toggle.setToolTipText("Blitz");
                                     toggle.setIcon(((daBlitz) action).getIcon());
                                     break;
+
                                 case dAction.C_BLITZ_STAB:
                                     toggle.setToolTipText("Blitz with Stab or Chainsaw");
                                     toggle.setIcon(((daBlitzStab) action).getIcon());
                                     break;
+
                                 case dAction.C_BLOCK:
                                     toggle.setToolTipText("Block");
                                     toggle.setIcon(((daBlock) action).getIcon());
                                     break;
+
                                 case dAction.C_BLOCK_STAB:
                                     toggle.setToolTipText("Block with Stab or Chainsaw");
                                     toggle.setIcon(((daBlockStab) action).getIcon());
                                     break;
+
                                 case dAction.C_FANATIC:
                                     toggle.setToolTipText("Fanatic Move");
                                     toggle.setIcon(((daFanatic) action).getIcon());
                                     break;
+
                                 case dAction.C_FOUL:
                                     toggle.setToolTipText("Foul");
                                     toggle.setIcon(((daFoul) action).getIcon());
                                     break;
+
                                 case dAction.C_HANDOFF:
                                     toggle.setToolTipText("Handoff");
                                     toggle.setIcon(((daHandOff) action).getIcon());
                                     break;
+
                                 case dAction.C_MOVE:
                                     toggle.setToolTipText("Move");
                                     toggle.setIcon(((daMove) action).getIcon());
                                     break;
+
                                 case dAction.C_PASS:
                                     toggle.setToolTipText("Pass");
                                     toggle.setIcon(((daPass) action).getIcon());
                                     break;
+
                                 case dAction.C_THROW_TEAM_MATE:
                                     toggle.setToolTipText("Throw a team mate");
                                     toggle.setIcon(((daThrowTeamMate) action).getIcon());
                                     break;
+
                                 case dAction.C_HYPNOTIC_GAZE:
                                     toggle.setToolTipText("Hypnotic gaze");
                                     toggle.setIcon(((daHypnoticGaze) action).getIcon());
                                     break;
+
                             }
+
+
                         }
                     }
                 }
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
+
         }
 
     }
@@ -2350,27 +2443,34 @@ public class jdgMatch extends JDialog {
                     jlbWeatherIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/images/weather/nice.png")));
                     jlbWeatherIcon.setToolTipText("Weather: Nice");
                     break;
+
                 case dMeteo.METEO_BLIZZARD:
                     jlbWeatherIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/images/weather/blizzard.png")));
                     jlbWeatherIcon.setToolTipText("Weather: Blizzard");
                     break;
+
                 case dMeteo.METEO_HEAT:
                     jlbWeatherIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/images/weather/heat.png")));
                     jlbWeatherIcon.setToolTipText("Weather: Heat");
                     break;
+
                 case dMeteo.METEO_RAIN:
                     jlbWeatherIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/images/weather/rain.png")));
                     jlbWeatherIcon.setToolTipText("Weather: Rain");
                     break;
+
                 case dMeteo.METEO_SUNNY:
                     jlbWeatherIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/images/weather/sunny.png")));
                     jlbWeatherIcon.setToolTipText("Weather: Sunny");
                     break;
+
             }
 
             /*
              * Turn counter
              */
+
+
             jlbTurnLeft.setText(Integer.toString(_leftTeam.getTurn()));
             jlbTurnRight.setText(Integer.toString(_rightTeam.getTurn()));
             if (_model.getHalf() == 1) {
@@ -2451,8 +2551,8 @@ public class jdgMatch extends JDialog {
             int desperateMeasure = 0;
             int specialPlay = 0;
 
-            for (int i = 0; i
-                    < _leftInducements.size(); i++) {
+            for (int i = 0; i <
+                    _leftInducements.size(); i++) {
                 dInducement induc = (dInducement) _leftInducements.get(i);
                 if (!induc.isUsed()) {
                     int type = induc.getType();
@@ -2460,46 +2560,61 @@ public class jdgMatch extends JDialog {
                         case dInducement.C_WIZARD:
                             wizard++;
                             break;
+
                         case dInducement.C_LOCAL_APOTHECARY:
                             localApothecary++;
                             break;
+
                         case dInducement.C_IGOR:
                             igor++;
                             break;
+
                         case dInducement.C_HALFLING_CHEF:
                             chef++;
                             break;
+
                         case dInducement.C_BRIBE_THE_REF:
                             bribe++;
                             break;
+
                         case dInducement.C_BLOODWEISER_BABE:
                             babes++;
                             break;
+
                         case dInducement.C_CARD:
                             int cardType = ((diCard) induc).getCardType();
                             switch (cardType) {
                                 case diCardFactory.C_DESPERATE_MEASURE:
                                     desperateMeasure++;
                                     break;
+
                                 case diCardFactory.C_DIRTY_TRICK:
                                     dirtytrick++;
                                     break;
+
                                 case diCardFactory.C_GOOD_KARMA:
                                     goodkarma++;
                                     break;
+
                                 case diCardFactory.C_MAGIC_ITEM:
                                     magicItem++;
                                     break;
+
                                 case diCardFactory.C_MISC_MAYHEM:
                                     miscmahyem++;
                                     break;
+
                                 case diCardFactory.C_RANDOM_EVENT:
                                     randomevent++;
                                     break;
+
                                 case diCardFactory.C_SPECIAL_PLAY:
                                     specialPlay++;
                                     break;
+
                             }
+
+
 
                             break;
                     }
@@ -2717,8 +2832,8 @@ public class jdgMatch extends JDialog {
             specialPlay =
                     0;
 
-            for (int i = 0; i
-                    < _rightInducements.size(); i++) {
+            for (int i = 0; i <
+                    _rightInducements.size(); i++) {
                 dInducement induc = (dInducement) _rightInducements.get(i);
                 if (!induc.isUsed()) {
                     int type = induc.getType();
@@ -2726,46 +2841,61 @@ public class jdgMatch extends JDialog {
                         case dInducement.C_WIZARD:
                             wizard++;
                             break;
+
                         case dInducement.C_LOCAL_APOTHECARY:
                             localApothecary++;
                             break;
+
                         case dInducement.C_IGOR:
                             igor++;
                             break;
+
                         case dInducement.C_HALFLING_CHEF:
                             chef++;
                             break;
+
                         case dInducement.C_BRIBE_THE_REF:
                             bribe++;
                             break;
+
                         case dInducement.C_BLOODWEISER_BABE:
                             babes++;
                             break;
+
                         case dInducement.C_CARD:
                             int cardType = ((diCard) induc).getCardType();
                             switch (cardType) {
                                 case diCardFactory.C_DESPERATE_MEASURE:
                                     desperateMeasure++;
                                     break;
+
                                 case diCardFactory.C_DIRTY_TRICK:
                                     dirtytrick++;
                                     break;
+
                                 case diCardFactory.C_GOOD_KARMA:
                                     goodkarma++;
                                     break;
+
                                 case diCardFactory.C_MAGIC_ITEM:
                                     magicItem++;
                                     break;
+
                                 case diCardFactory.C_MISC_MAYHEM:
                                     miscmahyem++;
                                     break;
+
                                 case diCardFactory.C_RANDOM_EVENT:
                                     randomevent++;
                                     break;
+
                                 case diCardFactory.C_SPECIAL_PLAY:
                                     specialPlay++;
                                     break;
+
                             }
+
+
 
                             break;
                     }
@@ -2935,15 +3065,15 @@ public class jdgMatch extends JDialog {
 
     protected void paintPlayers() {
         /* Left Players*/
-        for (int i = 0; i
-                < _leftPlayers.size(); i++) {
+        for (int i = 0; i <
+                _leftPlayers.size(); i++) {
             rmiPlayer player = (rmiPlayer) _leftPlayers.get(i);
             paintPlayer(player, i, true);
         }
 
         /* Left Players*/
-        for (int i = 0; i
-                < _rightPlayers.size(); i++) {
+        for (int i = 0; i <
+                _rightPlayers.size(); i++) {
             rmiPlayer player = (rmiPlayer) _rightPlayers.get(i);
             paintPlayer(player, i, false);
         }
@@ -2984,11 +3114,14 @@ public class jdgMatch extends JDialog {
 
                 if (player.hasBall()) {
                     Image ball_image = dPlayer.getBallIcon().getImage();
-                    width = ball_image.getWidth(this);
-                    height = ball_image.getHeight(this);
+                    width =
+                            ball_image.getWidth(this);
+                    height =
+                            ball_image.getHeight(this);
                     if (ball_image != null) {
                         g2.drawImage(ball_image, X * C_SQUARE_SIZE + (C_SQUARE_SIZE - width) / 2, Y * C_SQUARE_SIZE + (C_SQUARE_SIZE - height) / 2, this);
                     }
+
                 }
 
                 if (player.hasBomb()) {
@@ -2996,6 +3129,7 @@ public class jdgMatch extends JDialog {
                     if (bomb_image != null) {
                         g2.drawImage(bomb_image.getImage(), X * C_SQUARE_SIZE, Y * C_SQUARE_SIZE, this);
                     }
+
                 }
 
                 if (_selectedPlayer == player) {
@@ -3007,7 +3141,8 @@ public class jdgMatch extends JDialog {
                         switch (action) {
                             case dAction.C_BLITZ:
                                 daBlitz blitz = (daBlitz) _currentAction;
-                                remainingMove = blitz.getAvailableMove();
+                                remainingMove =
+                                        blitz.getAvailableMove();
                                 if (remainingMove > 0) {
                                     g.setColor(new Color(240, 240, 20));
                                     g.drawString("" + remainingMove, X * C_SQUARE_SIZE + 2, (Y + 1) * C_SQUARE_SIZE - 2);
@@ -3017,10 +3152,12 @@ public class jdgMatch extends JDialog {
                                     g.setColor(new Color(240, 20, 20));
                                     g.drawString("" + additionalMove, X * C_SQUARE_SIZE + 2, (Y + 1) * C_SQUARE_SIZE - 2);
                                 }
+
                                 break;
                             case dAction.C_BLITZ_STAB:
                                 daBlitzStab blitz_stab = (daBlitzStab) _currentAction;
-                                remainingMove = blitz_stab.getAvailableMove();
+                                remainingMove =
+                                        blitz_stab.getAvailableMove();
                                 if (remainingMove > 0) {
                                     g.setColor(new Color(240, 240, 20));
                                     g.drawString("" + remainingMove, X * C_SQUARE_SIZE + 2, (Y + 1) * C_SQUARE_SIZE - 2);
@@ -3030,10 +3167,12 @@ public class jdgMatch extends JDialog {
                                     g.setColor(new Color(240, 20, 20));
                                     g.drawString("" + additionalMove, X * C_SQUARE_SIZE + 2, (Y + 1) * C_SQUARE_SIZE - 2);
                                 }
+
                                 break;
                             case dAction.C_FANATIC:
                                 daFanatic fanatic = (daFanatic) _currentAction;
-                                remainingMove = fanatic.getAvailableMove();
+                                remainingMove =
+                                        fanatic.getAvailableMove();
                                 if (remainingMove > 0) {
                                     g.setColor(new Color(240, 240, 20));
                                     g.drawString("" + remainingMove, X * C_SQUARE_SIZE + 2, (Y + 1) * C_SQUARE_SIZE - 2);
@@ -3043,10 +3182,12 @@ public class jdgMatch extends JDialog {
                                     g.setColor(new Color(240, 20, 20));
                                     g.drawString("" + additionalMove, X * C_SQUARE_SIZE + 2, (Y + 1) * C_SQUARE_SIZE - 2);
                                 }
+
                                 break;
                             case dAction.C_FOUL:
                                 daFoul foul = (daFoul) _currentAction;
-                                remainingMove = foul.getAvailableMove();
+                                remainingMove =
+                                        foul.getAvailableMove();
                                 if (remainingMove > 0) {
                                     g.setColor(new Color(240, 240, 20));
                                     g.drawString("" + remainingMove, X * C_SQUARE_SIZE + 2, (Y + 1) * C_SQUARE_SIZE - 2);
@@ -3056,10 +3197,12 @@ public class jdgMatch extends JDialog {
                                     g.setColor(new Color(240, 20, 20));
                                     g.drawString("" + additionalMove, X * C_SQUARE_SIZE + 2, (Y + 1) * C_SQUARE_SIZE - 2);
                                 }
+
                                 break;
                             case dAction.C_HANDOFF:
                                 daHandOff handoff = (daHandOff) _currentAction;
-                                remainingMove = handoff.getAvailableMove();
+                                remainingMove =
+                                        handoff.getAvailableMove();
                                 if (remainingMove > 0) {
                                     g.setColor(new Color(240, 240, 20));
                                     g.drawString("" + remainingMove, X * C_SQUARE_SIZE + 2, (Y + 1) * C_SQUARE_SIZE - 2);
@@ -3069,10 +3212,12 @@ public class jdgMatch extends JDialog {
                                     g.setColor(new Color(240, 20, 20));
                                     g.drawString("" + additionalMove, X * C_SQUARE_SIZE + 2, (Y + 1) * C_SQUARE_SIZE - 2);
                                 }
+
                                 break;
                             case dAction.C_HYPNOTIC_GAZE:
                                 daHypnoticGaze hypno = (daHypnoticGaze) _currentAction;
-                                remainingMove = hypno.getAvailableMove();
+                                remainingMove =
+                                        hypno.getAvailableMove();
                                 if (remainingMove > 0) {
                                     g.setColor(new Color(240, 240, 20));
                                     g.drawString("" + remainingMove, X * C_SQUARE_SIZE + 2, (Y + 1) * C_SQUARE_SIZE - 2);
@@ -3082,10 +3227,12 @@ public class jdgMatch extends JDialog {
                                     g.setColor(new Color(240, 20, 20));
                                     g.drawString("" + additionalMove, X * C_SQUARE_SIZE + 2, (Y + 1) * C_SQUARE_SIZE - 2);
                                 }
+
                                 break;
                             case dAction.C_MOVE:
                                 daMove move = (daMove) _currentAction;
-                                remainingMove = move.getAvailableMove();
+                                remainingMove =
+                                        move.getAvailableMove();
                                 if (remainingMove > 0) {
                                     g.setColor(new Color(240, 240, 20));
                                     g.drawString("" + remainingMove, X * C_SQUARE_SIZE + 2, (Y + 1) * C_SQUARE_SIZE - 2);
@@ -3095,10 +3242,12 @@ public class jdgMatch extends JDialog {
                                     g.setColor(new Color(240, 20, 20));
                                     g.drawString("" + additionalMove, X * C_SQUARE_SIZE + 2, (Y + 1) * C_SQUARE_SIZE - 2);
                                 }
+
                                 break;
                             case dAction.C_PASS:
                                 daPass pass = (daPass) _currentAction;
-                                remainingMove = pass.getAvailableMove();
+                                remainingMove =
+                                        pass.getAvailableMove();
                                 if (remainingMove > 0) {
                                     g.setColor(new Color(240, 240, 20));
                                     g.drawString("" + remainingMove, X * C_SQUARE_SIZE + 2, (Y + 1) * C_SQUARE_SIZE - 2);
@@ -3108,10 +3257,12 @@ public class jdgMatch extends JDialog {
                                     g.setColor(new Color(240, 20, 20));
                                     g.drawString("" + additionalMove, X * C_SQUARE_SIZE + 2, (Y + 1) * C_SQUARE_SIZE - 2);
                                 }
+
                                 break;
                             case dAction.C_THROW_TEAM_MATE:
                                 daThrowTeamMate throwTeamMate = (daThrowTeamMate) _currentAction;
-                                remainingMove = throwTeamMate.getAvailableMove();
+                                remainingMove =
+                                        throwTeamMate.getAvailableMove();
                                 if (remainingMove > 0) {
                                     g.setColor(new Color(240, 240, 20));
                                     g.drawString("" + remainingMove, X * C_SQUARE_SIZE + 2, (Y + 1) * C_SQUARE_SIZE - 2);
@@ -3121,11 +3272,13 @@ public class jdgMatch extends JDialog {
                                     g.setColor(new Color(240, 20, 20));
                                     g.drawString("" + additionalMove, X * C_SQUARE_SIZE + 2, (Y + 1) * C_SQUARE_SIZE - 2);
                                 }
+
                                 break;
                             case dAction.C_BLOCK:
                             case dAction.C_BLOCK_STAB:
                                 break;
                         }
+
                     }
                 }
 
@@ -3170,7 +3323,8 @@ public class jdgMatch extends JDialog {
 
     public void resetSelections() {
         _selectedPlayer = null;
-        _currentAction = null;
+        _currentAction =
+                null;
 
     }
 
@@ -3182,6 +3336,7 @@ public class jdgMatch extends JDialog {
         } catch (RemoteException e) {
             e.printStackTrace();
         }
+
         repaint();
     }
 
@@ -3193,10 +3348,15 @@ public class jdgMatch extends JDialog {
         paintActions();
 
         paintMatchData();
+
         paintPlayers();
+
         paintSquares();
+
         paintDiary();
+
         paintButtons();
+
     }
 
     protected void paintActions() {
@@ -3205,6 +3365,7 @@ public class jdgMatch extends JDialog {
                 if (_selectedPlayer.hasPlayed()) {
                     _currentAction = null;
                 }
+
             }
 
             if (_currentAction != null) {
@@ -3216,15 +3377,18 @@ public class jdgMatch extends JDialog {
                             if (!_model.isWaitingForDiceChoice()) {
                                 block.SelectDice(_model.getBlockDiceChosen());
                             }
+
                         }
                     } catch (RemoteException e) {
                         e.printStackTrace();
                     }
+
                 }
             }
         } catch (RemoteException e) {
             e.printStackTrace();
         }
+
     }
 
     protected void paintButtons() {
@@ -3232,29 +3396,32 @@ public class jdgMatch extends JDialog {
          * Gestion du bouton Next
          */
         try {
-            int mainStep = _model.getMainStep();
-            int subStep = _model.getSubStep();
-            int subSubStep = _model.getSubSubStep();
+            eMainStep mainStep = _model.getMainStep();
+            ieSubStep subStep = _model.getSubStep();
+            ieSubSubStep subSubStep = _model.getSubSubStep();
 
             boolean enabled = false;
             /**
              * Si courant de match
              */
-            if (mainStep == 1) {
-                switch (subStep) {
-                    case 0:
+            if (mainStep == eMainStep.MATCH) {
+                essMatch sStep = (essMatch) subStep;
+                switch (sStep) {
+                    case BUILD_TEAM:
                         /** 
                          * Build team for match
                          */
                         enabled = false;
                         break;
-                    case 1:
+
+                    case TOAS_TEAM:
                         /**
                          * Build class display =>
                          */
                         enabled = false;
                         break;
-                    case 2:
+
+                    case SET_PLAYERS_1:
                         /**
                          * Set players team 1 (challenger)
                          */
@@ -3263,8 +3430,9 @@ public class jdgMatch extends JDialog {
                         } else {
                             enabled = false;
                         }
+
                         break;
-                    case 3:
+                    case SET_PLAYERS_2:
                         /**
                          * Set players team 2 (not challenger)
                          */
@@ -3273,8 +3441,9 @@ public class jdgMatch extends JDialog {
                         } else {
                             enabled = false;
                         }
+
                         break;
-                    case 4:
+                    case PLACE_BALL:
                         /**
                          * Place the ball
                          */
@@ -3284,16 +3453,19 @@ public class jdgMatch extends JDialog {
                         } else {
                             enabled = false;
                         }
+
                         break;
-                    case 5:
+                    case KICKOFF:
                         /**
                          * Kickoff
                          */
-                        if (subSubStep == 2) {
-                            int currentStepData = _model.getCurrentStepData();
-                            kicking = _model.getKickinkgTeam();
+                        esssKickOff ssStep = (esssKickOff) subSubStep;
+                        if (ssStep == esssKickOff.EFFECT) {
+                            esdKickOff currentStepData = (esdKickOff) _model.getCurrentStepData();
+                            kicking =
+                                    _model.getKickinkgTeam();
                             switch (currentStepData) {
-                                case 1:
+                                case HIGH_KICK:
                                     /**
                                      * High Kick
                                      */
@@ -3302,8 +3474,9 @@ public class jdgMatch extends JDialog {
                                     } else {
                                         enabled = false;
                                     }
+
                                     break;
-                                case 2:
+                                case PERFECT_DEFENSE:
                                     /**
                                      * Perfect defense
                                      */
@@ -3312,8 +3485,9 @@ public class jdgMatch extends JDialog {
                                     } else {
                                         enabled = false;
                                     }
+
                                     break;
-                                case 3:
+                                case QUICK_SNAP:
                                     /**
                                      * Quick Snap
                                      */
@@ -3322,8 +3496,9 @@ public class jdgMatch extends JDialog {
                                     } else {
                                         enabled = false;
                                     }
+
                                     break;
-                                case 4:
+                                case BLITZ:
                                     /**
                                      * BLITZ
                                      */
@@ -3332,30 +3507,37 @@ public class jdgMatch extends JDialog {
                                     } else {
                                         enabled = false;
                                     }
+
                                     break;
                                 default:
                                     enabled = false;
                                     break;
+
                             }
+
+
 
 
                         } else {
                             enabled = false;
                         }
+
                         break;
-                    case 6:
+                    case BALL_SCATTER:
                         /**
                          * Ball Falls and scatter
                          */
                         enabled = false;
                         break;
-                    case 7:
+
+                    case CHOOSE_TEAM:
                         /**
                          * select team to play or halftime or end
                          */
                         enabled = false;
                         break;
-                    case 8:
+
+                    case TURN_TEAM_LEFT:
                         /**
                          * Turn team left
                          */
@@ -3364,8 +3546,9 @@ public class jdgMatch extends JDialog {
                         } else {
                             enabled = false;
                         }
+
                         break;
-                    case 9:
+                    case TURN_TEAM_RIGHT:
                         /**
                          * Turn team right
                          */
@@ -3374,19 +3557,25 @@ public class jdgMatch extends JDialog {
                         } else {
                             enabled = false;
                         }
+
                         break;
                     default:
                         enabled = false;
                         break;
+
                 }
+
+
             } else {
                 enabled = false;
             }
+
             jbtNext.setEnabled(enabled);
 
         } catch (RemoteException e) {
             e.printStackTrace();
         }
+
     }
 
     protected void paintDiary() {
@@ -3413,8 +3602,8 @@ public class jdgMatch extends JDialog {
 
                 Vector competences = _flyingPlayer.getCompetences();
                 String[] comps = new String[competences.size()];
-                for (int i = 0; i
-                        < competences.size(); i++) {
+                for (int i = 0; i <
+                        competences.size(); i++) {
                     dCompetence comp = (dCompetence) competences.get(i);
                     comps[i] = comp.getName();
                 }
@@ -3437,10 +3626,10 @@ public class jdgMatch extends JDialog {
             try {
                 dSquareCollection squares = _model.getSquares();
                 if (squares != null) {
-                    for (int i_x = 0; i_x
-                            < squares.getNbX(); i_x++) {
-                        for (int i_y = 0; i_y
-                                < squares.getNbY(); i_y++) {
+                    for (int i_x = 0; i_x <
+                            squares.getNbX(); i_x++) {
+                        for (int i_y = 0; i_y <
+                                squares.getNbY(); i_y++) {
                             dSquare s = squares.getSquare(i_x, i_y);
                             paintSquare(s, g2);
                         }
@@ -3462,13 +3651,15 @@ public class jdgMatch extends JDialog {
                     break;
                 case dSquare.C_SQUARE_OPPONENT_INTERCEPT:
                     // Si le substep et le tour de l'équipe de gauche                
-                    if (_model.getSubStep() == 8) {
+                    if (_model.getSubStep() == essMatch.TURN_TEAM_LEFT) {
                         nbTackleZone = s.getTackleZone(_leftTeam);
                     } else {
                         nbTackleZone = s.getTackleZone(_rightTeam);
                     }
+
                     paintSquareBackground(s, g2, nbTackleZone);
                     break;
+
                 case dSquare.C_SQUARE_OPPONENT_TO_BLOCK:
                     g2.setComposite(java.awt.AlphaComposite.getInstance(java.awt.AlphaComposite.SRC_OVER, 0.7f));
                     switch (s.getBlockDices()) {
@@ -3478,6 +3669,7 @@ public class jdgMatch extends JDialog {
                             g2.setColor(new Color(0, 0, 0));
                             g2.drawRect(s.getX() * C_SQUARE_SIZE + 1 + 10, s.getY() * C_SQUARE_SIZE + 1 + 10, 10, 10);
                             break;
+
                         case daBlock.DICE_TWO_FOR:
                             g2.setColor(new Color(20, 240, 20));
                             g2.fillRect(s.getX() * C_SQUARE_SIZE + 1 + 5, s.getY() * C_SQUARE_SIZE + 1 + 5, 10, 10);
@@ -3486,6 +3678,7 @@ public class jdgMatch extends JDialog {
                             g2.drawRect(s.getX() * C_SQUARE_SIZE + 1 + 5, s.getY() * C_SQUARE_SIZE + 1 + 5, 10, 10);
                             g2.drawRect(s.getX() * C_SQUARE_SIZE + 1 + 15, s.getY() * C_SQUARE_SIZE + 1 + 15, 10, 10);
                             break;
+
                         case daBlock.DICE_TWO_AGAINST:
                             g2.setColor(new Color(240, 20, 20));
                             g2.fillRect(s.getX() * C_SQUARE_SIZE + 1 + 5, s.getY() * C_SQUARE_SIZE + 1 + 5, 10, 10);
@@ -3494,6 +3687,7 @@ public class jdgMatch extends JDialog {
                             g2.drawRect(s.getX() * C_SQUARE_SIZE + 1 + 5, s.getY() * C_SQUARE_SIZE + 1 + 5, 10, 10);
                             g2.drawRect(s.getX() * C_SQUARE_SIZE + 1 + 15, s.getY() * C_SQUARE_SIZE + 1 + 15, 10, 10);
                             break;
+
                         case daBlock.DICE_THREE_FOR:
                             g2.setColor(new Color(20, 240, 20));
                             g2.fillRect(s.getX() * C_SQUARE_SIZE + 1 + 5, s.getY() * C_SQUARE_SIZE + 1 + 5, 10, 10);
@@ -3504,6 +3698,7 @@ public class jdgMatch extends JDialog {
                             g2.drawRect(s.getX() * C_SQUARE_SIZE + 1 + 15, s.getY() * C_SQUARE_SIZE + 1 + 5, 10, 10);
                             g2.drawRect(s.getX() * C_SQUARE_SIZE + 1 + 10, s.getY() * C_SQUARE_SIZE + 1 + 10, 10, 10);
                             break;
+
                         case daBlock.DICE_THREE_AGAINST:
                             g2.setColor(new Color(240, 20, 20));
                             g2.fillRect(s.getX() * C_SQUARE_SIZE + 1 + 5, s.getY() * C_SQUARE_SIZE + 1 + 5, 10, 10);
@@ -3514,13 +3709,17 @@ public class jdgMatch extends JDialog {
                             g2.drawRect(s.getX() * C_SQUARE_SIZE + 1 + 15, s.getY() * C_SQUARE_SIZE + 1 + 5, 10, 10);
                             g2.drawRect(s.getX() * C_SQUARE_SIZE + 1 + 10, s.getY() * C_SQUARE_SIZE + 1 + 10, 10, 10);
                             break;
+
                     }
+
+
 
                     g2.setComposite(java.awt.AlphaComposite.getInstance(java.awt.AlphaComposite.SRC_OVER, 1.0f));
                     break;
+
                 case dSquare.C_SQUARE_PARTNER_TO_PASS:
                     // Si c'est le tour de l'équipe de gauche
-                    if (_model.getSubStep() == 8) {
+                    if (_model.getSubStep() == essMatch.TURN_TEAM_LEFT) {
                         nbTackleZone = s.getTackleZone(_rightTeam);
                     } else {
                         nbTackleZone = s.getTackleZone(_leftTeam);
@@ -3528,12 +3727,13 @@ public class jdgMatch extends JDialog {
 
                     paintSquareBackground(s, g2, nbTackleZone);
                     break;
+
                 case dSquare.C_SQUARE_PUSH_ZONE:
                     paintSquareBackground(s, g2, 0);
                     break;
 
                 case dSquare.C_SQUARE_MOVE:
-                    if (_model.getSubStep() == 8) {
+                    if (_model.getSubStep() == essMatch.TURN_TEAM_LEFT) {
                         nbTackleZone = s.getTackleZone(_rightTeam);
                     } else {
                         nbTackleZone = s.getTackleZone(_leftTeam);
@@ -3541,7 +3741,9 @@ public class jdgMatch extends JDialog {
 
                     paintSquareBackground(s, g2, nbTackleZone);
                     break;
+
                 default:
+
                     break;
             }
 
@@ -3551,6 +3753,7 @@ public class jdgMatch extends JDialog {
                     int heigth = _ballImage.getImage().getHeight(this);
                     g2.drawImage(_ballImage.getImage(), s.getX() * C_SQUARE_SIZE + ((C_SQUARE_SIZE - width) / 2), s.getY() * C_SQUARE_SIZE + (C_SQUARE_SIZE - heigth) / 2, this);
                     break;
+
                 case dSquare.C_SQUARE_BALL_WAIT_BALL:
                     g2.setComposite(java.awt.AlphaComposite.getInstance(java.awt.AlphaComposite.SRC_OVER, 0.6f));
                     int width2 = _ballImage.getImage().getWidth(this);
@@ -3558,7 +3761,10 @@ public class jdgMatch extends JDialog {
                     g2.drawImage(_ballImage.getImage(), s.getX() * C_SQUARE_SIZE + ((C_SQUARE_SIZE - width2) / 2), s.getY() * C_SQUARE_SIZE + (C_SQUARE_SIZE - heigth2) / 2, this);
                     g2.setComposite(java.awt.AlphaComposite.getInstance(java.awt.AlphaComposite.SRC_OVER, 1.0f));
                     break;
+
             }
+
+
 
         } catch (RemoteException e) {
             e.printStackTrace();
@@ -3575,38 +3781,50 @@ public class jdgMatch extends JDialog {
                 case 0:
                     g2.setColor(new Color(7, 119, 39));
                     break;
+
                 case 1:
                     g2.setColor(new Color(237, 239, 27));
                     break;
+
                 case 2:
                     /* Orange */
                     g2.setColor(new Color(239, 147, 27));
                     break;
+
                 case 3:
                     /* Red */
                     g2.setColor(new Color(191, 15, 48));
                     break;
+
                 case 4:
                     /* Light blue */
                     g2.setColor(new Color(36, 215, 236));
                     break;
+
                 case 5:
                     /* Blue */
                     g2.setColor(new Color(36, 69, 236));
                     break;
+
                 case 6:
                     /* Pink */
                     g2.setColor(new Color(236, 36, 201));
                     break;
+
                 case 7:
                     /* Violet */
                     g2.setColor(new Color(163, 33, 97));
                     break;
+
                 default:
                     /* Grey */
+
                     g2.setColor(new Color(100, 100, 100));
                     break;
+
             }
+
+
 
             if (!_model.isAPlayer(s)) {
                 g2.fillRect(s.getX() * C_SQUARE_SIZE + 1, s.getY() * C_SQUARE_SIZE + 1, 28, 28);
@@ -3622,7 +3840,7 @@ public class jdgMatch extends JDialog {
                 // Si substep 8 alors équipe courante est leftTeam.
                 rmiTeam opponent;
 
-                if (_model.getSubStep() == 8) {
+                if (_model.getSubStep() == essMatch.TURN_TEAM_LEFT) {
                     opponent = _rightTeam;
                 } else {
                     opponent = _leftTeam;

@@ -56,8 +56,6 @@ public interface rmiTeam extends Remote{
     public boolean isAPlayer(dSquare s)throws RemoteException;
     public boolean isAPlayerWithTackleZone(dSquare s)throws RemoteException;
     public void setRerollLeft(int reroll)throws RemoteException;
-    public boolean canBeSentOff()throws RemoteException;
-    public void canBeSentOff(boolean sentoff)throws RemoteException;
     public void setPlayerState(int i,int state)throws RemoteException;
     public void setTurn(int turn) throws RemoteException;
     public int getPlayersOK() throws RemoteException;

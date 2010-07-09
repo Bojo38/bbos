@@ -21,6 +21,7 @@ import bbos.General.Views.jdgProgressBar;
 
 import bbos.Match.Automat.BeforeMatch.jdgInducements;
 import bbos.Match.Automat.BeforeMatch.jdgTreasury;
+import bbos.Match.Automat.Steps.SubStep.essPreMatch;
 import bbos.Match.Model.Competences.dCompetencesFactory;
 import bbos.Match.Model.dPlayer;
 import bbos.Match.Model.rmiTeam;
@@ -57,42 +58,42 @@ public class dsBeforeMatch implements bbos.Match.Automat.iSequence {
      *      5 : Toas*/
     public void nextStep() {
         try {
-
-            switch (_model.getSubStep()) {
-                case 0:
+            essPreMatch substep=(essPreMatch)_model.getSubStep();
+            switch (substep) {
+                case JOURNEYMEN:
                     /**
                      * Add JourneyMen
                      */
                     if (_isChallenger||_standalone) {
                         addJourneyMen(_leftTeam,true);
                         addJourneyMen(_rightTeam,false);
-                        _model.setSubStep(1);
+                        _model.setSubStep(essPreMatch.METEO);
                         _model.setHalf(1);
                     }
                     break;
-                case 1:
+                case METEO:
                     /**
                      * Roll Meteo
                      */
                     if (_isChallenger||_standalone) {
                         setMeteo();
-                        _model.setSubStep(2);
+                        _model.setSubStep(essPreMatch.METEO2);
                     }
                     break;
-                case 2:
+                case METEO2:
                     showMeteo();
-                    _model.setSubStep(3);
-                case 3:
+                    _model.setSubStep(essPreMatch.TREASURY);
+                case TREASURY:
                     /**
                      * Select Treasury
                      */
                     selectTreasury();
 
                     if (_rightTeam.isPettyCashChosen() && _leftTeam.isPettyCashChosen()) {
-                        _model.setSubStep(4);
+                        _model.setSubStep(essPreMatch.INDUCEMENTS);
                     }
                     break;
-                case 4:
+                case INDUCEMENTS:
                     /**
                      * Select Inducements 
                      */
@@ -103,20 +104,20 @@ public class dsBeforeMatch implements bbos.Match.Automat.iSequence {
                     }
                     selectInducements();
                     if (_rightTeam.areInducementsChosen() && _leftTeam.areInducementsChosen()) {
-                        _model.setSubStep(5);
+                        _model.setSubStep(essPreMatch.FAME);
                     }
                     break;
-                case 5:
+                case FAME:
                     /**
                      * FAME
                      */
                     if (_isChallenger||_standalone) {
                         setFAME();
                         _model.setActiveCoach(0);
-                        _model.setSubStep(6);
+                        _model.setSubStep(essPreMatch.TOAS);
                     }
                     break;
-                case 6:
+                case TOAS:
                     /**
                      * Toas
                      */
@@ -140,7 +141,7 @@ public class dsBeforeMatch implements bbos.Match.Automat.iSequence {
                                 _model.AddDiary("Left team ("+_leftTeam.getName()+") kicks first.");
                                 _model.setKickinkgTeam(1);
                             }
-                            _model.setSubStep(7);
+                            _model.setSubStep(essPreMatch.WAIT);
                         } else {
                             if (!_waitCreated) {
                                 jdgProgressBar.createSingleton("/resources/images/look/ain_pacte.png", 1);
@@ -166,7 +167,7 @@ public class dsBeforeMatch implements bbos.Match.Automat.iSequence {
                                 _model.AddDiary("Right team ("+_rightTeam.getName()+") kicks first.");
                                 _model.setKickinkgTeam(2);
                             }
-                            _model.setSubStep(7);
+                            _model.setSubStep(essPreMatch.WAIT);
                         } else {
                             if (!_waitCreated) {
                                 jdgProgressBar.createSingleton("/resources/images/look/ain_pacte.png", 1);
@@ -176,7 +177,7 @@ public class dsBeforeMatch implements bbos.Match.Automat.iSequence {
                         }
                     }
                     break;
-                case 7:
+                case WAIT:
                     /**
                      * End of pre-sequence
                      */
@@ -185,7 +186,7 @@ public class dsBeforeMatch implements bbos.Match.Automat.iSequence {
                         _waitCreated = false;
                     }
                     
-                     _model.setSubStep(8);
+                     _model.setSubStep(essPreMatch.END);
                     break;
             }
         } catch (RemoteException e) {
@@ -196,7 +197,7 @@ public class dsBeforeMatch implements bbos.Match.Automat.iSequence {
     public void resetStep() {
         try
         {
-        _model.setSubStep(0);
+        _model.setSubStep(essPreMatch.JOURNEYMEN);
         }
         catch (RemoteException e) {
             e.printStackTrace();
@@ -205,7 +206,7 @@ public class dsBeforeMatch implements bbos.Match.Automat.iSequence {
 
     public boolean isFinished() {
         try {
-            if (_model.getSubStep() == 8) {
+            if (_model.getSubStep() == essPreMatch.END) {
                 return true;
             } else {
                 return false;

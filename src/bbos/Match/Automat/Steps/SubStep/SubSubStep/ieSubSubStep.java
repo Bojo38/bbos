@@ -3,13 +3,12 @@
  * and open the template in the editor.
  */
 
-package bbos.Match.Automat;
+package bbos.Match.Automat.Steps.SubStep.SubSubStep;
 
 /**
  *
  * @author Frederic Berger
  */
-public interface iState {
-    public int execute();
-    public iState next();
+public interface ieSubSubStep {
+
 }

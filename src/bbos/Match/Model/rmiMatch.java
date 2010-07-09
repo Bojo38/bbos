@@ -4,6 +4,10 @@
  */
 package bbos.Match.Model;
 
+import bbos.Match.Automat.Steps.eMainStep;
+import bbos.ieStepData;
+import bbos.Match.Automat.Steps.SubStep.ieSubStep;
+import bbos.Match.Automat.Steps.SubStep.SubSubStep.ieSubSubStep;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.Vector;
@@ -16,21 +20,21 @@ public interface rmiMatch extends Remote {
 
     public int getActiveTeamId() throws RemoteException;
 
-    public int getMainStep() throws RemoteException;
+    public eMainStep getMainStep() throws RemoteException;
 
-    public void setMainStep(int step) throws RemoteException;
+    public void setMainStep(eMainStep step) throws RemoteException;
 
     public void setActiveCoach(int coach) throws RemoteException;
 
     public int getActiveCoach() throws RemoteException;
 
-    public void setSubStep(int step) throws RemoteException;
+    public void setSubStep(ieSubStep step) throws RemoteException;
 
-    public int getSubStep() throws RemoteException;
+    public ieSubStep getSubStep() throws RemoteException;
 
-    public void setSubSubStep(int step) throws RemoteException;
+    public void setSubSubStep(ieSubSubStep step) throws RemoteException;
 
-    public int getSubSubStep() throws RemoteException;
+    public ieSubSubStep getSubSubStep() throws RemoteException;
 
     public int getMeteo() throws RemoteException;
 
@@ -83,14 +87,15 @@ public interface rmiMatch extends Remote {
 
     public dSquare getBallSquare() throws RemoteException;
 
-    public int getCurrentStepData() throws RemoteException;
+    public ieStepData getCurrentStepData() throws RemoteException;
 
-    public void setCurrentStepData(int value) throws RemoteException;
+    public void setCurrentStepData(ieStepData value) throws RemoteException;
 
     public void setSquareState(dSquare square, int state) throws RemoteException;
 
     public void setSquareSpecialState(dSquare square,
             boolean state) throws RemoteException;
+
     public boolean hasThrowableTeammate(int x, int y) throws RemoteException;
 
     public void resetSquareMove() throws RemoteException;

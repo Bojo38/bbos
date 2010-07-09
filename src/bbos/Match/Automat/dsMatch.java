@@ -5,15 +5,16 @@
 package bbos.Match.Automat;
 
 import bbos.Match.Automat.DuringMatch.dsKickOff;
+import bbos.Match.Automat.Steps.StepData.esdScatter;
+import bbos.Match.Automat.Steps.StepData.esdTurn;
+import bbos.Match.Automat.Steps.SubStep.essMatch;
 import bbos.Match.Model.Actions.daBlock;
 import bbos.Match.Model.Roll.Agility.draGetBall;
 import bbos.Match.Model.Roll.drScatter;
-import bbos.Match.Model.dPlayer;
 import bbos.Match.Model.dSquare;
 import bbos.Match.Model.rmiMatch;
 import bbos.Match.Model.rmiPlayer;
 import bbos.Match.Model.rmiTeam;
-import bbos.Match.tDisplayMatch;
 import bbos.Match.tDisplayMatch;
 import bbos.Match.tNetworkConnexion;
 import java.rmi.RemoteException;
@@ -61,24 +62,24 @@ public class dsMatch implements iSequence {
 
             if (tDisplayMatch.getMatchDisplay() == null) {
                 tDisplayMatch display = tDisplayMatch.createMatchDisplay(_model, _leftTeam, _rightTeam, _isChallenger,_standalone);
-                if (!display.isDisplayed()) {
+                if (!tDisplayMatch.isDisplayed()) {
                     display.start();
                 }
             } else {
                 tDisplayMatch.getMatchDisplay().refresh();
             }
 
-            int subStep = _model.getSubStep();
+            essMatch subStep = (essMatch)_model.getSubStep();
 
             switch (subStep) {
-                case 0:
+                case BUILD_TEAM:
                     if (_isChallenger||_standalone) {
                         _leftTeam.buildTeam();
                         _rightTeam.buildTeam();
-                        _model.setSubStep(1);
+                        _model.setSubStep(essMatch.TOAS_TEAM);
                     }
                     break;
-                case 1:
+                case TOAS_TEAM:
                     /*
                      * determine who starts, set active player and next step
                      */
@@ -86,22 +87,22 @@ public class dsMatch implements iSequence {
                         /**
                          * Left team kicks
                          */
-                        _model.setSubStep(2);
+                        _model.setSubStep(essMatch.SET_PLAYERS_1);
                         _model.AddDiary("Team left (" + _leftTeam.getName() + "): set players on the pitch");
                     } else {
                         /**
                          * Right team kicks
                          */
                         _model.AddDiary("Team right (" + _rightTeam.getName() + "): set players on the pitch");
-                        _model.setSubStep(3);
+                        _model.setSubStep(essMatch.SET_PLAYERS_2);
                     }
                     break;
-                case 2:
+                case SET_PLAYERS_1:
 
                     /* Set players team Left */
                     if (_leftTeam.arePlayersOnThePitch()) {
                         if (_rightTeam.arePlayersOnThePitch()) {
-                            _model.setSubStep(4);
+                            _model.setSubStep(essMatch.PLACE_BALL);
                             if (_model.getKickinkgTeam() == 1) {
                                 _model.AddDiary("Team Right (" + _rightTeam.getName() + "): set the ball on the pitch");
                                 _model.setRightRefresh(true);
@@ -112,16 +113,16 @@ public class dsMatch implements iSequence {
                         } else {
                             _model.AddDiary("Team right (" + _rightTeam.getName() + "): set players on the pitch");
                             _model.setLeftRefresh(true);
-                            _model.setSubStep(3);
+                            _model.setSubStep(essMatch.SET_PLAYERS_2);
                         }
                     }
                     break;
-                case 3:
+                case SET_PLAYERS_2:
 
                     /* Set players team Right */
                     if (_rightTeam.arePlayersOnThePitch()) {
                         if (_leftTeam.arePlayersOnThePitch()) {
-                            _model.setSubStep(4);
+                            _model.setSubStep(essMatch.PLACE_BALL);
                             if (_model.getKickinkgTeam() == 1) {
                                 _model.AddDiary("Team Left (" + _leftTeam.getName() + "): set the ball on the pitch");
                                 _model.setRightRefresh(true);
@@ -132,59 +133,59 @@ public class dsMatch implements iSequence {
                         } else {
                             _model.AddDiary("Team Left (" + _leftTeam.getName() + "): set players on the pitch");
                             _model.setRightRefresh(true);
-                            _model.setSubStep(2);
+                            _model.setSubStep(essMatch.SET_PLAYERS_1);
                         }
                     }
                     break;
-                case 4:
+                case PLACE_BALL:
                     /* Choose where the ball has fallen */
                     if (_model.isBallSet()) {
-                        _model.setSubStep(5);
+                        _model.setSubStep(essMatch.KICKOFF);
                          _model.setRightRefresh(true);
                          _model.setLeftRefresh(true);
                         _model.AddDiary("Kickoff roll : ");
                     }
                     break;
-                case 5:
+                case KICKOFF:
                     /* Kickoff roll and its effects */
                     _kickOff.nextStep();
                     if (_kickOff.isFinished()) {
-                        _model.setSubStep(6);
-                        _model.setCurrentStepData(0);
+                        _model.setSubStep(essMatch.BALL_SCATTER);
+                        _model.setCurrentStepData(esdScatter.NONE);
                     }
                     break;
-                case 6:
+                case BALL_SCATTER:
                     /* Ball falls and bounces */
                     if (_isChallenger) {
-                        if (_model.getCurrentStepData() == 0) {
+                        if (_model.getCurrentStepData() == esdScatter.NONE) {
                             ballBounce();
                         }
                         /* Si il n'y a pas de bad kick */
-                        if (_model.getCurrentStepData() != 1) {
-                            _model.setSubStep(7);
+                        if (_model.getCurrentStepData() != esdScatter.BAD_KICK) {
+                            _model.setSubStep(essMatch.CHOOSE_TEAM);
                         }
                     }
                     break;
-                case 7:
+                case CHOOSE_TEAM:
                     if (_isChallenger) {
                         if ((_model.getHalf() == 2) && (_leftTeam.getTurn() == 8) && (_rightTeam.getTurn() == 8)) {
-                            _model.setSubStep(10);
+                            _model.setSubStep(essMatch.END);
                         } else {
                             if (_model.getKickinkgTeam() == 1) {
                                 /* Tour de l'équipe de droite */
                                 _rightTeam.setTurn(_rightTeam.getTurn() + 1);
-                                _model.setSubStep(9);
-                                _model.setCurrentStepData(0);
+                                _model.setSubStep(essMatch.TURN_TEAM_RIGHT);
+                                _model.setCurrentStepData(esdTurn.NONE);
                             } else {
                                 /* Tour de l'équipe de gauche*/
                                 _leftTeam.setTurn(_leftTeam.getTurn() + 1);
-                                _model.setCurrentStepData(0);
-                                _model.setSubStep(8);
+                                _model.setCurrentStepData(esdTurn.NONE);
+                                _model.setSubStep(essMatch.TURN_TEAM_LEFT);
                             }
                         }
                     }
                     break;
-                case 8:
+                case TURN_TEAM_LEFT:
                     if (_model.isWaitingForDiceChoice()) {
                         int chooser = _model.getDiceBlockChooser();
                         if (((chooser == 1) && (_isChallenger)) || ((chooser == 2) && (!_isChallenger))) {
@@ -206,8 +207,9 @@ public class dsMatch implements iSequence {
                     }
 
                     if (_isChallenger || _standalone) {
-                        if (_model.getCurrentStepData() == 0) {
-                            _model.setCurrentStepData(1);
+                        
+                        if (_model.getCurrentStepData() == esdTurn.NONE) {
+                            _model.setCurrentStepData(esdTurn.PLAYERS_ROLLED);
                             _leftTeam.rollsOver();
                             _rightTeam.setTeamHasPlayed(false);
                             _model.setLeftRefresh(true);
@@ -215,7 +217,7 @@ public class dsMatch implements iSequence {
                         }
 
                         if (_leftTeam.isTouchdown()) {
-                            _model.setCurrentStepData(0);
+                            _model.setCurrentStepData(esdTurn.NONE);
                             _model.resetSquareBlock();
                             _model.resetSquareFoul();
                             _model.resetSquareMove();
@@ -229,7 +231,7 @@ public class dsMatch implements iSequence {
                             _leftTeam.rollsKOs();
 
                             _model.setKickinkgTeam(1);
-                            _model.setSubStep(2);
+                            _model.setSubStep(essMatch.TOAS_TEAM);
 
                             if ((_leftTeam.getTurn() == 8) && (_rightTeam.getTurn() == 8)) {
                                 /**
@@ -242,7 +244,7 @@ public class dsMatch implements iSequence {
                                     _model.setKickinkgTeam(2);
 
                                 } else {
-                                    _model.setSubStep(10);
+                                    _model.setSubStep(essMatch.END);
                                 }
                             }
                             _model.setLeftRefresh(true);
@@ -252,7 +254,7 @@ public class dsMatch implements iSequence {
                         if (_rightTeam.isTouchdown()) {
 
                             tDisplayMatch.getMatchDisplay().resetSelections();
-                            _model.setCurrentStepData(0);
+                            _model.setCurrentStepData(esdTurn.NONE);
                             _model.resetSquareBlock();
                             _model.resetSquareFoul();
                             _model.resetSquareMove();
@@ -267,7 +269,7 @@ public class dsMatch implements iSequence {
                             _leftTeam.rollsKOs();
 
                             _model.setKickinkgTeam(2);
-                            _model.setSubStep(3);
+                            _model.setSubStep(essMatch.SET_PLAYERS_1);
 
                             if ((_leftTeam.getTurn() == 8) && (_rightTeam.getTurn() == 8)) {
                                 /**
@@ -280,7 +282,7 @@ public class dsMatch implements iSequence {
                                     _model.setKickinkgTeam(1);
 
                                 } else {
-                                    _model.setSubStep(10);
+                                    _model.setSubStep(essMatch.END);
                                 }
                             }
                             _model.setLeftRefresh(true);
@@ -290,7 +292,7 @@ public class dsMatch implements iSequence {
                         if (_model.isTurnover()) {
 
                             tDisplayMatch.getMatchDisplay().resetSelections();
-                            _model.setCurrentStepData(0);
+                            _model.setCurrentStepData(esdTurn.NONE);
                             _model.resetSquareBlock();
                             _model.resetSquareFoul();
                             _model.resetSquareMove();
@@ -312,15 +314,15 @@ public class dsMatch implements iSequence {
                                     _rightTeam.setTurn(0);
                                     _model.setHalf(2);
                                     _model.setKickinkgTeam(2);
-                                    _model.setSubStep(3);
+                                    _model.setSubStep(essMatch.SET_PLAYERS_1);
                                 } else {
-                                    _model.setSubStep(10);
+                                    _model.setSubStep(essMatch.END);
                                 }
 
                             } else {
                                 int turn = _rightTeam.getTurn();
                                 _rightTeam.setTurn(turn + 1);
-                                _model.setSubStep(9);
+                                _model.setSubStep(essMatch.TURN_TEAM_RIGHT);
                             }
                             _model.setLeftRefresh(true);
                             _model.setRightRefresh(true);
@@ -328,7 +330,7 @@ public class dsMatch implements iSequence {
                         }
                     }
                     break;
-                case 9:
+                case TURN_TEAM_RIGHT:
                     if (_model.isWaitingForDiceChoice()) {
                         int chooser = _model.getDiceBlockChooser();
                         if (((chooser == 1) && (_isChallenger)) || ((chooser == 2) && (!_isChallenger))) {
@@ -350,16 +352,17 @@ public class dsMatch implements iSequence {
                     }
 
                     if (!_isChallenger ||  _standalone) {
-                        if (_model.getCurrentStepData() == 0) {
+                        esdTurn currentStep=(esdTurn)_model.getCurrentStepData();
+                        if (currentStep == esdTurn.NONE) {
                             _model.setLeftRefresh(true);
                             _model.setRightRefresh(true);
-                            _model.setCurrentStepData(1);
+                            _model.setCurrentStepData(esdTurn.PLAYERS_ROLLED);
                             _rightTeam.rollsOver();
                             _leftTeam.setTeamHasPlayed(false);
                         }
 
                         if (_rightTeam.isTouchdown()) {
-                            _model.setCurrentStepData(0);
+                            _model.setCurrentStepData(esdTurn.NONE);
                             _model.resetSquareBlock();
                             _model.resetSquareFoul();
                             _model.resetSquareMove();
@@ -373,7 +376,7 @@ public class dsMatch implements iSequence {
                             _leftTeam.rollsKOs();
 
                             _model.setKickinkgTeam(2);
-                            _model.setSubStep(3);
+                            _model.setSubStep(essMatch.SET_PLAYERS_1);
 
                             if ((_leftTeam.getTurn() == 8) && (_rightTeam.getTurn() == 8)) {
                                 /**
@@ -386,7 +389,7 @@ public class dsMatch implements iSequence {
                                     _model.setKickinkgTeam(1);
 
                                 } else {
-                                    _model.setSubStep(10);
+                                    _model.setSubStep(essMatch.END);
                                 }
                             }
                             _model.setLeftRefresh(true);
@@ -396,7 +399,7 @@ public class dsMatch implements iSequence {
                         if (_leftTeam.isTouchdown()) {
 
                             tDisplayMatch.getMatchDisplay().resetSelections();
-                            _model.setCurrentStepData(0);
+                            _model.setCurrentStepData(esdTurn.NONE);
                             _model.resetSquareBlock();
                             _model.resetSquareFoul();
                             _model.resetSquareMove();
@@ -411,7 +414,7 @@ public class dsMatch implements iSequence {
                             _leftTeam.rollsKOs();
 
                             _model.setKickinkgTeam(1);
-                            _model.setSubStep(2);
+                            _model.setSubStep(essMatch.TOAS_TEAM);
 
                             if ((_leftTeam.getTurn() == 8) && (_rightTeam.getTurn() == 8)) {
                                 /**
@@ -424,7 +427,7 @@ public class dsMatch implements iSequence {
                                     _model.setKickinkgTeam(2);
 
                                 } else {
-                                    _model.setSubStep(10);
+                                    _model.setSubStep(essMatch.END);
                                 }
                             }
                             _model.setLeftRefresh(true);
@@ -434,7 +437,7 @@ public class dsMatch implements iSequence {
                         if (_model.isTurnover()) {
 
                             tDisplayMatch.getMatchDisplay().resetSelections();
-                            _model.setCurrentStepData(0);
+                            _model.setCurrentStepData(esdTurn.NONE);
                             _model.resetSquareBlock();
                             _model.resetSquareFoul();
                             _model.resetSquareMove();
@@ -457,14 +460,14 @@ public class dsMatch implements iSequence {
                                     _rightTeam.setTurn(0);
                                     _model.setHalf(2);
                                     _model.setKickinkgTeam(1);
-                                    _model.setSubStep(3);
+                                    _model.setSubStep(essMatch.SET_PLAYERS_1);
                                 } else {
-                                    _model.setSubStep(10);
+                                    _model.setSubStep(essMatch.END);
                                 }
                             } else {
                                 int turn = _leftTeam.getTurn();
                                 _leftTeam.setTurn(turn + 1);
-                                _model.setSubStep(8);
+                                _model.setSubStep(essMatch.TURN_TEAM_LEFT);
                             }
                             _model.setLeftRefresh(true);
                             _model.setRightRefresh(true);
@@ -472,7 +475,7 @@ public class dsMatch implements iSequence {
                         }
                     }
                     break;
-                case 10:
+                case END:
                     break;
             }
         } catch (RemoteException e) {
@@ -483,7 +486,7 @@ public class dsMatch implements iSequence {
 
     public void resetStep() {
         try {
-            _model.setSubStep(0);
+            _model.setSubStep(essMatch.BUILD_TEAM);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
@@ -491,7 +494,7 @@ public class dsMatch implements iSequence {
 
     public boolean isFinished() {
         try {
-            if (_model.getSubStep() == 10) {
+            if (_model.getSubStep() == essMatch.END) {
                 return true;
             } else {
                 return false;
@@ -520,7 +523,7 @@ public class dsMatch implements iSequence {
                 /* Si la balle est en dehors du terrain */
                 if (!ballOnGround) {
                     /* BAD KICK */
-                    _model.setCurrentStepData(1);
+                    _model.setCurrentStepData(esdScatter.BAD_KICK);
                     _model.AddDiary(receivingTeam.getName() + ": Bad kick, select a player to get the ball");
                     _model.removeBall();
                     ballIsCatched = true;

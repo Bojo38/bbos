@@ -12,6 +12,13 @@ import bbos.Tools.bbTool;
 import bbos.*;
 
 import bbos.General.Model.mTeam;
+import bbos.Match.Automat.Steps.StepData.esdKickOff;
+import bbos.Match.Automat.Steps.SubStep.SubSubStep.esssKickOff;
+import bbos.Match.Automat.Steps.eMainStep;
+import bbos.Match.Automat.Steps.SubStep.essPreMatch;
+import bbos.ieStepData;
+import bbos.Match.Automat.Steps.SubStep.ieSubStep;
+import bbos.Match.Automat.Steps.SubStep.SubSubStep.ieSubSubStep;
 import java.util.*;
 import javax.swing.*;
 import java.awt.*;
@@ -31,7 +38,7 @@ public class dMatch implements rmiMatch, Serializable {
      * 1 : Match
      * 2 : Post match sequence
      */
-    int _mainStep = 0;
+    eMainStep _mainStep = eMainStep.PREMATCH;
     /**
      * Current step depending of MainStep
      * if PreMatch Sequence:
@@ -51,11 +58,19 @@ public class dMatch implements rmiMatch, Serializable {
      *      4 : Spiralling expenses
      *      5 : Hire Journeymen
      */
-    int _currentStep = 0;
-    /**
-     * Sub step of current step
-     */
-    int _subSubStep = 0;
+    ieSubStep _currentStep = essPreMatch.METEO;
+
+    protected ieStepData _currentStepData = esdKickOff.NONE;
+    /*
+     Sub step of current step
+     *  if Kickoff:
+     *      3: Quick Snap
+     *      2: Perfect Defense
+     *      1: High Kick
+     *      4: BLITZ
+     * */
+     
+    ieSubSubStep _subSubStep = esssKickOff.NONE;
     /**
      * Active team
      *  0 : challenger
@@ -91,11 +106,11 @@ public class dMatch implements rmiMatch, Serializable {
         return _teamRight;
     }
 
-    public int getMainStep() {
+    public eMainStep getMainStep() {
         return _mainStep;
     }
 
-    public void setMainStep(int step) {
+    public void setMainStep(eMainStep step) {
         _mainStep = step;
     }
 
@@ -107,19 +122,19 @@ public class dMatch implements rmiMatch, Serializable {
         return _activeCoach;
     }
 
-    public void setSubStep(int step) {
+    public void setSubStep(ieSubStep step) {
         _currentStep = step;
     }
 
-    public int getSubStep() {
+    public ieSubStep getSubStep() {
         return _currentStep;
     }
 
-    public void setSubSubStep(int step) {
+    public void setSubSubStep(ieSubSubStep step) {
         _subSubStep = step;
     }
 
-    public int getSubSubStep() {
+    public ieSubSubStep getSubSubStep() {
         return _subSubStep;
     }
     dMeteo _meteo;
@@ -270,13 +285,13 @@ public class dMatch implements rmiMatch, Serializable {
         }
         return null;
     }
-    protected int _currentStepData = 0;
+    
 
-    public int getCurrentStepData() {
+    public ieStepData getCurrentStepData() {
         return _currentStepData;
     }
 
-    public void setCurrentStepData(int value) {
+    public void setCurrentStepData(ieStepData value) {
         _currentStepData = value;
     }
 

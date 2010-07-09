@@ -9,6 +9,9 @@
 package bbos.Match.Automat;
 
 import bbos.*;
+import bbos.Match.Automat.Steps.eMainStep;
+import bbos.Match.Automat.Steps.SubStep.essMatch;
+import bbos.Match.Automat.Steps.SubStep.essPostMatch;
 import bbos.Match.Model.rmiMatch;
 import bbos.Match.Model.rmiTeam;
 import java.rmi.RemoteException;
@@ -18,17 +21,8 @@ import java.rmi.RemoteException;
  * @author moi
  */
 public class dsWholeMatch implements bbos.Match.Automat.iSequence {
-    /*
-     * Step number
-     */
 
-    /*    public int s_step;
-    public static final int STEP_NONE = 0;
-    public static final int STEP_BEFORE_MATCH = 1;
-    public static final int STEP_KICK_OFF = 2;
-    public static final int STEP_TURN = 3;
-    public static final int STEP_END_MATCH = 4;
-    public static final int STEP_END = 5;*/
+
     rmiMatch _model;
     boolean _isChallenger;
 
@@ -47,8 +41,9 @@ public class dsWholeMatch implements bbos.Match.Automat.iSequence {
     dsEndMatch _endMatch;
 
     public void nextStep() {
-        int mainStep = -1;
+        eMainStep mainStep = eMainStep.PREMATCH;
         try {
+
             mainStep = _model.getMainStep();
         } catch (RemoteException e) {
             e.printStackTrace();
@@ -59,13 +54,13 @@ public class dsWholeMatch implements bbos.Match.Automat.iSequence {
             /**
              * Pre match sequence
              */
-            case 0:
+            case PREMATCH:
                 _beforeMatch.nextStep();
                 if (_beforeMatch.isFinished()) {
                     _match.resetStep();
                     try {
-                        _model.setMainStep(1);
-                        _model.setSubStep(0);
+                        _model.setMainStep(eMainStep.MATCH);
+                        _model.setSubStep(essMatch.BUILD_TEAM);
                     } catch (RemoteException e) {
                         e.printStackTrace();
                     }
@@ -74,13 +69,13 @@ public class dsWholeMatch implements bbos.Match.Automat.iSequence {
             /**
              *  match sequence
              */
-            case 1:
+            case MATCH:
                 _match.nextStep();
                 if (_match.isFinished()) {
                     _endMatch.resetStep();
                     try {
-                        _model.setMainStep(2);
-                        _model.setSubStep(0);
+                        _model.setMainStep(eMainStep.POSTMATCH);
+                        _model.setSubStep(essPostMatch.NONE);
                     } catch (RemoteException e) {
                         e.printStackTrace();
                     }
@@ -89,12 +84,11 @@ public class dsWholeMatch implements bbos.Match.Automat.iSequence {
             /**
              * End match sequence
              */
-            case 2:
+            case POSTMATCH:
                 _endMatch.nextStep();
                 if (_endMatch.isFinished()) {
                     try {
-                        _model.setMainStep(3);
-                        _model.setSubStep(0);
+                        _model.setMainStep(eMainStep.END);
                     } catch (RemoteException e) {
                         e.printStackTrace();
                     }
@@ -103,97 +97,13 @@ public class dsWholeMatch implements bbos.Match.Automat.iSequence {
             /**
              * final sequence
              */
-            case 3:
+            case END:
                 break;
         }
 
         return;
 
 
-
-    /*    if (s_step==STEP_BEFORE_MATCH)
-    {
-    _beforeMatch.nextStep();
-    if (_beforeMatch.isFinished())
-    {
-    _kickOff.resetStep();
-    s_step=STEP_KICK_OFF;
-    }
-    }
-    /*
-     * Coup d'envoi
-     */
-    /*     if (s_step==STEP_KICK_OFF)
-    {
-    _kickOff.nextStep();
-    if (_kickOff.isFinished())
-    {
-    _turn.resetStep();
-    s_step=STEP_TURN;
-    }
-    }
-    /*
-     * Tour
-     */
-    /*        if (s_step==STEP_TURN)
-    {
-    _turn.nextStep();
-    if (_turn.isFinished())
-    {
-    /*
-     * Si Mi-temps, alors kickoff
-     */
-    /*           if ((_model.getLeftTeam().getTurn()==(int)8)&&(_model.getRightTeam().getTurn()==(int)8))
-    {
-    _kickOff.resetStep();
-    s_step=STEP_KICK_OFF;
-    }
-    else
-    {
-    /*
-     * Si fin du match alors séquence d'après match
-     */
-    /*               if ((_model.getLeftTeam().getTurn()==(int)16)&&(_model.getRightTeam().getTurn()==(int)16))
-    {
-    _endMatch.resetStep();
-    s_step=STEP_END_MATCH;
-    }
-    else
-    {
-    /*
-     * Si touchdown, alors kickoff
-     */
-    /*               if (_model._touchdownScored)
-    {
-    _kickOff.resetStep();
-    s_step=STEP_KICK_OFF;
-    }
-    /*
-     * Sinon, prochain tour
-     */
-    /*          else
-    {
-    _model.swapTeam();
-    _model.initTeamTurn();
-    _model._activeTeam.setTurn(_model._activeTeam.getTurn()+1);
-    _turn.resetStep();
-    s_step=STEP_TURN;
-    }
-    }
-    }
-    }
-    }
-    /*
-     * Séquence d'après match
-     */
-    /*  if (s_step==STEP_END_MATCH)
-    {
-    _endMatch.nextStep();
-    if (_endMatch.isFinished())
-    {
-    s_step=STEP_END;
-    }
-    }*/
     }
 
     public void resetStep() {
@@ -202,7 +112,7 @@ public class dsWholeMatch implements bbos.Match.Automat.iSequence {
 
     public boolean isFinished() {
         try {
-            if (_model.getMainStep() == 3) {
+            if (_model.getMainStep() == eMainStep.END) {
                 return true;
             } else {
                 return false;
